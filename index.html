@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPSS Önlisans Çalışma Asistanı</title>
+<meta name="description" content="KPSS Önlisans çalışma takip, analiz ve kişisel AI asistanı">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root{--bg1:#1a0a1e;--bg2:#2d1b2e;--pink:#FF6B9D;--pink2:#E91E63;--accent:#FF80AB;--light-pink:#FFD1DC;--surface:rgba(255,107,157,0.07);--surface-border:rgba(255,107,157,0.13);--text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.4);--success:#4CAF50;--error:#FF5252;--warn:#FFC107;--info:#29B6F6;--radius:16px;--radius-sm:12px;--transition:all .3s cubic-bezier(.4,0,.2,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg1));color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px}
+::selection{background:var(--pink);color:#fff}
+a{color:var(--pink);text-decoration:none}
+.hidden{display:none!important}
+.glass{background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--surface-border);border-radius:var(--radius)}
+.btn{padding:12px 28px;border:none;border-radius:50px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 4px 20px rgba(255,107,157,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,107,157,.5)}
+.btn-secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--surface-border)}
+.btn-secondary:hover{background:rgba(255,255,255,.15)}
+.btn-sm{padding:8px 18px;font-size:.85rem}
+.btn-danger{background:rgba(255,82,82,.15);color:var(--error);border:1px solid rgba(255,82,82,.2)}
+.btn-danger:hover{background:rgba(255,82,82,.3)}
+input,select,textarea{font-family:inherit;font-size:.95rem;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);border-radius:var(--radius-sm);color:var(--text);outline:none;transition:var(--transition);width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,107,157,.15)}
+select option{background:#2d1b2e;color:#fff}
+textarea{resize:vertical;min-height:80px}
+label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-weight:500}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.text-gradient{background:linear-gradient(135deg,var(--pink),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes dotPulse{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 10px rgba(255,107,157,.3)}50%{box-shadow:0 0 25px rgba(255,107,157,.6)}}
+
+/* AUTH */
+#auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{width:100%;max-width:420px;padding:40px;text-align:center;animation:slideUp .5s ease}
+.auth-logo{font-size:3.5rem;margin-bottom:10px}
+.auth-title{font-size:1.8rem;font-weight:700;margin-bottom:6px}
+.auth-subtitle{color:var(--text2);margin-bottom:30px;font-size:.95rem}
+.auth-card .form-group{margin-bottom:16px;text-align:left}
+.auth-card .btn-primary{width:100%;justify-content:center;padding:14px;font-size:1rem;margin-top:8px}
+.auth-toggle{margin-top:20px;color:var(--text2);font-size:.9rem}
+.auth-toggle span{color:var(--pink);cursor:pointer;font-weight:600}
+.auth-toggle span:hover{text-decoration:underline}
+.auth-error{color:var(--error);font-size:.85rem;margin-top:10px;min-height:20px}
+
+/* APP LAYOUT */
+#app-container{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:rgba(26,10,30,.95);backdrop-filter:blur(20px);border-right:1px solid var(--surface-border);display:flex;flex-direction:column;z-index:100;transition:var(--transition)}
+.sidebar-header{padding:24px 20px;border-bottom:1px solid var(--surface-border);display:flex;align-items:center;gap:12px}
+.sidebar-header .logo{font-size:1.8rem}
+.sidebar-header h2{font-size:1.1rem;font-weight:700}
+.sidebar-nav{flex:1;padding:12px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);color:var(--text2);font-weight:500;font-size:.93rem;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,107,157,.08);color:var(--text)}
+.nav-item.active{background:linear-gradient(135deg,rgba(255,107,157,.15),rgba(233,30,99,.1));color:var(--pink);border:1px solid rgba(255,107,157,.15)}
+.nav-item .nav-icon{font-size:1.2rem;width:24px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--surface-border)}
+.user-info{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.user-name{font-size:.9rem;font-weight:600}
+.logout-btn{font-size:.85rem;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--transition)}
+.logout-btn:hover{color:var(--error)}
+.main-content{margin-left:260px;padding:30px;min-height:100vh}
+.mobile-header{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:rgba(26,10,30,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--surface-border);z-index:90;padding:0 16px;align-items:center;gap:12px}
+.hamburger{background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer;padding:4px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .4s ease}
+.page.active{display:block}
+.page-title{font-size:1.8rem;font-weight:700;margin-bottom:4px}
+.page-subtitle{color:var(--text2);margin-bottom:24px;font-size:.95rem}
+
+/* DASHBOARD */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{padding:20px;text-align:center;transition:var(--transition)}
+.stat-card:hover{transform:translateY(-3px);border-color:rgba(255,107,157,.3)}
+.stat-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.2rem}
+.stat-value{font-size:2rem;font-weight:800}
+.stat-label{color:var(--text2);font-size:.82rem;margin-top:2px}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.dash-card{padding:20px}
+.dash-card h3{font-size:1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.countdown-card{padding:24px;text-align:center;position:relative;overflow:hidden}
+.countdown-days{font-size:4rem;font-weight:800;line-height:1}
+.countdown-label{color:var(--text2);font-size:.9rem;margin-top:4px}
+.streak-display{display:flex;align-items:center;gap:8px;font-size:1.1rem;font-weight:600}
+.streak-fire{font-size:1.6rem;animation:pulse 1.5s infinite}
+.motivation-text{font-style:italic;color:var(--text2);line-height:1.6;font-size:.95rem}
+.weak-topic-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--surface-border)}
+.weak-topic-item:last-child{border:none}
+.weak-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.1);flex:1;margin-left:12px;max-width:100px}
+.weak-bar-fill{height:100%;border-radius:3px;background:var(--error);transition:var(--transition)}
+.today-sched-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--surface-border);font-size:.9rem}
+.today-sched-item:last-child{border:none}
+.sched-time{color:var(--pink);font-weight:600;min-width:90px}
+
+/* ENTRY */
+.entry-card{padding:28px;max-width:700px;margin:0 auto}
+.entry-card h3{font-size:1.1rem;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.net-display{text-align:center;padding:16px;border-radius:var(--radius-sm);background:rgba(255,255,255,.04);margin:16px 0}
+.net-value{font-size:2.5rem;font-weight:800}
+.net-label{color:var(--text2);font-size:.85rem}
+.net-positive{color:var(--success)}
+.net-negative{color:var(--error)}
+
+/* DENEME */
+.deneme-card{padding:28px;max-width:800px;margin:0 auto 24px}
+.deneme-section{padding:16px;border-radius:var(--radius-sm);background:rgba(255,255,255,.03);margin-bottom:16px}
+.deneme-section h4{font-size:.95rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.deneme-score{text-align:center;padding:24px;margin:16px 0}
+.deneme-score-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-top:12px}
+.puan-highlight{font-size:2.8rem!important;background:linear-gradient(135deg,#FFD700,#FFA000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(255,215,0,.3))}
+.score-item{text-align:center}
+.score-item .score-val{font-size:1.8rem;font-weight:800}
+.score-item .score-lbl{font-size:.8rem;color:var(--text2)}
+.deneme-history{padding:20px}
+.deneme-chart-container{height:300px;margin-top:16px}
+
+/* ANALYTICS */
+.chart-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.filter-btn{padding:8px 20px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text2);cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:500;transition:var(--transition)}
+.filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border-color:transparent}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{padding:20px}
+.chart-card h3{font-size:.95rem;font-weight:600;margin-bottom:16px}
+.chart-card canvas{max-height:280px}
+.total-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.total-stat{padding:14px;text-align:center;border-radius:var(--radius-sm);background:rgba(255,255,255,.04)}
+.total-stat .ts-val{font-size:1.4rem;font-weight:700}
+.total-stat .ts-lbl{font-size:.78rem;color:var(--text2)}
+.heatmap-card{padding:20px}
+.heatmap-container{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-start}
+.heatmap-week{display:flex;flex-direction:column;gap:3px}
+.heatmap-cell{width:14px;height:14px;border-radius:3px;background:rgba(255,255,255,.06)}
+.heatmap-cell.l1{background:rgba(255,107,157,.2)}.heatmap-cell.l2{background:rgba(255,107,157,.4)}.heatmap-cell.l3{background:rgba(255,107,157,.6)}.heatmap-cell.l4{background:rgba(255,107,157,.85)}
+
+/* SCHEDULE */
+.schedule-container{overflow-x:auto}
+.schedule-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;min-width:750px}
+.schedule-day{min-height:200px}
+.schedule-day-header{text-align:center;padding:10px;font-weight:600;font-size:.9rem;border-radius:var(--radius-sm) var(--radius-sm) 0 0;background:rgba(255,255,255,.04);margin-bottom:8px}
+.schedule-day-header.today{background:linear-gradient(135deg,rgba(255,107,157,.2),rgba(233,30,99,.1));color:var(--pink)}
+.schedule-slot{padding:10px;border-radius:8px;margin-bottom:6px;font-size:.82rem;position:relative;cursor:pointer;transition:var(--transition)}
+.schedule-slot:hover{transform:scale(1.02)}
+.schedule-slot.gy{background:rgba(255,107,157,.15);border-left:3px solid var(--pink)}
+.schedule-slot.gk{background:rgba(171,71,188,.15);border-left:3px solid #AB47BC}
+.schedule-slot.deneme{background:rgba(255,152,0,.15);border-left:3px solid #FF9800}
+.slot-time{font-weight:600;font-size:.78rem;color:var(--text2)}
+.slot-topic{font-weight:600;margin-top:2px}
+.slot-delete{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:.8rem;opacity:0;transition:var(--transition)}
+.schedule-slot:hover .slot-delete{opacity:1}
+.add-slot-btn{width:100%;padding:8px;border:1px dashed var(--surface-border);border-radius:8px;background:none;color:var(--text3);cursor:pointer;font-family:inherit;font-size:.85rem;transition:var(--transition)}
+.add-slot-btn:hover{border-color:var(--pink);color:var(--pink)}
+
+/* HISTORY */
+.history-filters{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:flex-end}
+.history-filters .form-group{min-width:150px}
+.history-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.history-table th{background:rgba(255,107,157,.1);color:var(--pink);padding:12px;text-align:left;font-weight:600;white-space:nowrap}
+.history-table td{padding:10px 12px;border-bottom:1px solid var(--surface-border)}
+.history-table tr:hover td{background:rgba(255,255,255,.03)}
+.history-actions{display:flex;gap:6px}
+.history-actions button{background:none;border:none;cursor:pointer;font-size:.9rem;padding:4px;transition:var(--transition)}
+.btn-export{margin-left:auto}
+
+/* POMODORO */
+.pomodoro-container{display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+.timer-circle{width:260px;height:260px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:30px}
+.timer-svg{position:absolute;width:100%;height:100%;transform:rotate(-90deg)}
+.timer-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:6}
+.timer-progress{fill:none;stroke:url(#timerGrad);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.timer-inner{text-align:center;z-index:1}
+.timer-display{font-size:3.5rem;font-weight:800;letter-spacing:2px}
+.timer-label{color:var(--text2);font-size:.9rem;margin-top:4px}
+.timer-controls{display:flex;gap:12px;margin-bottom:24px}
+.timer-btn{width:56px;height:56px;border-radius:50%;border:none;font-size:1.3rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center}
+.timer-btn.start{background:linear-gradient(135deg,var(--success),#388E3C);color:#fff}
+.timer-btn.pause{background:linear-gradient(135deg,var(--warn),#F57F17);color:#fff}
+.timer-btn.reset{background:rgba(255,255,255,.1);color:var(--text2)}
+.timer-btn:hover{transform:scale(1.1)}
+.session-dots{display:flex;gap:8px;margin-bottom:20px}
+.session-dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.1);transition:var(--transition)}
+.session-dot.done{background:var(--pink);box-shadow:0 0 8px rgba(255,107,157,.5)}
+.pomo-settings{padding:20px;max-width:400px;width:100%;margin-top:16px}
+
+/* BADGES */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.badge-card{padding:20px;text-align:center;transition:var(--transition)}
+.badge-card.locked{opacity:.4;filter:grayscale(1)}
+.badge-card.unlocked{animation:glow 2s ease infinite}
+.badge-card:hover{transform:translateY(-3px)}
+.badge-icon{font-size:2.5rem;margin-bottom:8px}
+.badge-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.badge-desc{color:var(--text2);font-size:.8rem;margin-bottom:8px}
+.badge-progress{height:4px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
+.badge-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--pink),var(--accent));transition:var(--transition)}
+
+/* AI CHAT */
+.ai-bubble{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;box-shadow:0 4px 20px rgba(255,107,157,.4);transition:var(--transition);font-size:1.5rem;animation:pulse 2s infinite;border:none;color:#fff}
+.ai-bubble:hover{transform:scale(1.1)}
+.ai-chat-window{position:fixed;bottom:96px;right:24px;width:400px;height:520px;border-radius:20px;z-index:999;display:flex;flex-direction:column;overflow:hidden;background:rgba(26,10,30,.97);backdrop-filter:blur(30px);border:1px solid var(--surface-border);transition:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.ai-chat-window.fs{position:fixed;inset:0;width:100%;height:100%;border-radius:0;bottom:0;right:0}
+.ai-chat-header{background:linear-gradient(135deg,var(--pink),var(--pink2));padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none}
+.ai-chat-header:active{cursor:grabbing}
+.ai-chat-header h3{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.ai-header-btns{display:flex;gap:8px}
+.ai-header-btns button{background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.85rem;transition:var(--transition);display:flex;align-items:center;justify-content:center}
+.ai-header-btns button:hover{background:rgba(255,255,255,.35)}
+.ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.ai-msg{max-width:85%;padding:12px 16px;border-radius:16px;font-size:.9rem;line-height:1.5;word-break:break-word}
+.ai-msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--pink),var(--pink2));border-bottom-right-radius:4px}
+.ai-msg.assistant{align-self:flex-start;background:rgba(255,255,255,.08);border-bottom-left-radius:4px}
+.ai-msg.assistant p{margin-bottom:8px}
+.ai-msg.assistant p:last-child{margin-bottom:0}
+.ai-msg.assistant strong{color:var(--pink)}
+.ai-msg.assistant ul,.ai-msg.assistant ol{padding-left:18px;margin-bottom:8px}
+.ai-msg.assistant code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:.85rem}
+.ai-typing{display:flex;gap:4px;padding:12px 16px;align-self:flex-start}
+.ai-typing span{width:8px;height:8px;border-radius:50%;background:var(--text3);animation:dotPulse 1.2s infinite}
+.ai-typing span:nth-child(2){animation-delay:.2s}
+.ai-typing span:nth-child(3){animation-delay:.4s}
+.ai-input-area{padding:12px;border-top:1px solid var(--surface-border);display:flex;gap:8px;align-items:flex-end}
+.ai-input-area textarea{flex:1;min-height:40px;max-height:100px;resize:none;border-radius:20px;padding:10px 16px;font-size:.9rem}
+.ai-send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));border:none;color:#fff;cursor:pointer;font-size:1.1rem;transition:var(--transition);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ai-send-btn:hover{transform:scale(1.1)}
+
+/* AI ACTION CARDS */
+.ai-action-card{background:rgba(255,107,157,.08);border:1px solid rgba(255,107,157,.2);border-radius:12px;padding:14px;margin-top:10px;font-size:.85rem}
+.ai-action-card h4{font-size:.9rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--pink)}
+.ai-action-detail{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ai-action-tag{background:rgba(255,255,255,.08);padding:4px 10px;border-radius:20px;font-size:.78rem;color:var(--text2)}
+.ai-action-tag strong{color:var(--text)}
+.ai-action-btns{display:flex;gap:8px}
+.ai-action-btns button{padding:8px 18px;border-radius:20px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:var(--transition)}
+.ai-confirm-btn{background:linear-gradient(135deg,var(--success),#388E3C);color:#fff}
+.ai-confirm-btn:hover{transform:scale(1.05);box-shadow:0 2px 12px rgba(76,175,80,.4)}
+.ai-reject-btn{background:rgba(255,82,82,.15);color:var(--error)}
+.ai-reject-btn:hover{background:rgba(255,82,82,.3)}
+.ai-action-card.done{opacity:.5;pointer-events:none}
+.ai-action-card.done::after{content:'✅ Uygulandı';display:block;margin-top:8px;color:var(--success);font-weight:600;font-size:.82rem}
+.ai-action-card.rejected::after{content:'❌ İptal edildi';display:block;margin-top:8px;color:var(--error);font-weight:600;font-size:.82rem}
+
+/* PROFILE */
+.profile-container{max-width:600px;margin:0 auto}
+.profile-card{padding:28px;margin-bottom:16px}
+.profile-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.profile-avatar-big{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:2rem}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--surface-border)}
+.settings-row:last-child{border:none}
+.settings-row label{margin:0;flex:1}
+.settings-row input,.settings-row select{max-width:200px}
+.avatar-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:10px}
+.avatar-option{font-size:1.5rem;text-align:center;padding:8px;border-radius:8px;cursor:pointer;transition:var(--transition);border:2px solid transparent}
+.avatar-option:hover,.avatar-option.selected{border-color:var(--pink);background:rgba(255,107,157,.1)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-content{width:100%;max-width:480px;padding:28px;max-height:90vh;overflow-y:auto}
+.modal-content h3{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--text3);font-size:1.2rem;cursor:pointer}
+
+/* TOAST */
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:14px 20px;border-radius:var(--radius-sm);font-size:.9rem;font-weight:500;animation:slideUp .3s ease;backdrop-filter:blur(20px);border:1px solid var(--surface-border)}
+.toast.success{background:rgba(76,175,80,.15);color:var(--success);border-color:rgba(76,175,80,.2)}
+.toast.error{background:rgba(255,82,82,.15);color:var(--error);border-color:rgba(255,82,82,.2)}
+.toast.info{background:rgba(41,182,246,.15);color:var(--info);border-color:rgba(41,182,246,.2)}
+
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;background:rgba(26,10,30,.9);z-index:9998;display:flex;align-items:center;justify-content:center}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+.sidebar-overlay.active{display:block}
+.main-content{margin-left:0;padding-top:72px}
+.mobile-header{display:flex}
+.stats-grid{grid-template-columns:1fr 1fr}
+.dashboard-grid,.chart-grid{grid-template-columns:1fr}
+.ai-chat-window{width:calc(100% - 20px);right:10px;bottom:86px;height:60vh}
+}
+@media(max-width:600px){
+.main-content{padding:64px 12px 12px}
+.stats-grid{grid-template-columns:1fr 1fr}
+.form-row{grid-template-columns:1fr}
+.total-stats{grid-template-columns:1fr 1fr}
+.schedule-grid{grid-template-columns:repeat(7,140px)}
+.deneme-score-grid{grid-template-columns:1fr}
+.history-filters{flex-direction:column}
+.history-filters .form-group{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay hidden" id="loadingOverlay"><div class="spinner"></div></div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- AUTH -->
+<div id="auth-container">
+  <div class="auth-card glass">
+    <div class="auth-logo">📚</div>
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <h1 class="auth-title">Hoş Geldin!</h1>
+      <p class="auth-subtitle">KPSS Önlisans Çalışma Asistanına giriş yap</p>
+      <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="ornek@mail.com" required></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="loginPassword" placeholder="••••••" required></div>
+      <button class="btn btn-primary" id="loginBtn">Giriş Yap</button>
+      <div class="auth-error" id="loginError"></div>
+      <p class="auth-toggle">Hesabın yok mu? <span onclick="showRegister()">Kayıt Ol</span></p>
+    </div>
+    <!-- REGISTER -->
+    <div id="registerForm" class="hidden">
+      <h1 class="auth-title">Kayıt Ol</h1>
+      <p class="auth-subtitle">Hemen hesabını oluştur ve çalışmaya başla!</p>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="Adın Soyadın" required></div>
+      <div class="form-group"><label>E-posta</label><input type="email" id="regEmail" placeholder="ornek@mail.com" required></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="regPassword" placeholder="En az 6 karakter" required></div>
+      <button class="btn btn-primary" id="regBtn">Kayıt Ol</button>
+      <div class="auth-error" id="regError"></div>
+      <p class="auth-toggle">Zaten hesabın var mı? <span onclick="showLogin()">Giriş Yap</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-container">
+  <!-- Mobile Header -->
+  <div class="mobile-header">
+    <button class="hamburger" id="menuBtn">☰</button>
+    <span style="font-weight:700;font-size:1.1rem">📚 KPSS Asistan</span>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header"><span class="logo">📚</span><h2>KPSS Asistan</h2></div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">🏠</span>Dashboard</div>
+      <div class="nav-item" data-page="entry"><span class="nav-icon">✏️</span>Veri Girişi</div>
+      <div class="nav-item" data-page="deneme"><span class="nav-icon">📝</span>Deneme Takibi</div>
+      <div class="nav-item" data-page="analytics"><span class="nav-icon">📊</span>Analizler</div>
+      <div class="nav-item" data-page="schedule"><span class="nav-icon">📅</span>Ders Programı</div>
+      <div class="nav-item" data-page="history"><span class="nav-icon">📒</span>Geçmiş</div>
+      <div class="nav-item" data-page="pomodoro"><span class="nav-icon">⏱️</span>Pomodoro</div>
+      <div class="nav-item" data-page="badges"><span class="nav-icon">🏆</span>Rozetler</div>
+      <div class="nav-item" data-page="profile"><span class="nav-icon">👤</span>Profil</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info"><div class="user-avatar" id="sidebarAvatar">👤</div><span class="user-name" id="sidebarName">Kullanıcı</span></div>
+      <div class="logout-btn" id="logoutBtn">🚪 Çıkış Yap</div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle" id="dashGreeting">Merhaba! Bugün harika bir gün çalışmak için.</p>
+      <div class="stats-grid">
+        <div class="stat-card glass"><div class="stat-icon">📝</div><div class="stat-value" id="dToday">0</div><div class="stat-label">Bugün Çözülen</div></div>
+        <div class="stat-card glass"><div class="stat-icon">🎯</div><div class="stat-value" id="dNet">0</div><div class="stat-label">Bugün Net</div></div>
+        <div class="stat-card glass"><div class="stat-icon">⏰</div><div class="stat-value" id="dHours">0</div><div class="stat-label">Bugün Saat</div></div>
+        <div class="stat-card glass"><div class="stat-icon">📈</div><div class="stat-value" id="dTotal">0</div><div class="stat-label">Toplam Soru</div></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dash-card glass countdown-card">
+          <h3>📅 Sınava Geri Sayım</h3>
+          <div class="countdown-days text-gradient" id="dCountdown">--</div>
+          <div class="countdown-label">gün kaldı</div>
+        </div>
+        <div class="dash-card glass">
+          <h3><span class="streak-fire">🔥</span> Çalışma Serisi</h3>
+          <div class="streak-display"><span class="streak-fire">🔥</span><span id="dStreak">0</span> gün üst üste</div>
+          <div style="margin-top:16px"><h3>💬 Motivasyon</h3><p class="motivation-text" id="dQuote">"Başarı, her gün tekrarlanan küçük çabaların toplamıdır."</p></div>
+        </div>
+        <div class="dash-card glass">
+          <h3>⚠️ Zayıf Konular</h3>
+          <div id="dWeakTopics"><p style="color:var(--text3);font-size:.9rem">Henüz yeterli veri yok.</p></div>
+        </div>
+        <div class="dash-card glass">
+          <h3>📅 Bugünkü Program</h3>
+          <div id="dTodaySchedule"><p style="color:var(--text3);font-size:.9rem">Program henüz oluşturulmadı.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENTRY -->
+    <div class="page" id="page-entry">
+      <h1 class="page-title">Veri Girişi</h1>
+      <p class="page-subtitle">Günlük çalışmanı kaydet ve ilerlemeni takip et!</p>
+      <div class="entry-card glass">
+        <h3>✏️ Yeni Çalışma Kaydı</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Tarih</label><input type="date" id="entryDate"></div>
+          <div class="form-group"><label>Çalışma Süresi (dakika)</label><input type="number" id="entryDuration" min="0" placeholder="Ör: 90"></div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group"><label>Ders</label><select id="entrySubject"><option value="">Seçiniz</option><option value="Genel Yetenek">Genel Yetenek</option><option value="Genel Kültür">Genel Kültür</option></select></div>
+          <div class="form-group"><label>Konu</label><select id="entryTopic"><option value="">Önce ders seçin</option></select></div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group"><label>Toplam Soru</label><input type="number" id="entryTotal" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Doğru</label><input type="number" id="entryCorrect" min="0" placeholder="0"></div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group"><label>Yanlış</label><input type="number" id="entryWrong" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Boş</label><input type="number" id="entryBlank" min="0" placeholder="Otomatik" readonly></div>
+        </div>
+        <div class="net-display">
+          <div class="net-label">NET</div>
+          <div class="net-value" id="entryNet">0.00</div>
+        </div>
+        <div class="form-group" style="margin-top:14px"><label>Notlar (isteğe bağlı)</label><textarea id="entryNotes" placeholder="Bu çalışmayla ilgili notlarını yaz..."></textarea></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px" id="entrySubmit">💾 Kaydet</button>
+      </div>
+    </div>
+
+    <!-- DENEME -->
+    <div class="page" id="page-deneme">
+      <h1 class="page-title">Deneme Takibi</h1>
+      <p class="page-subtitle">Deneme sınavı sonuçlarını gir ve ilerlemeyi gör</p>
+      <div class="deneme-card glass">
+        <h3>📝 Yeni Deneme Sonucu</h3>
+        <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="denemeDate"></div><div class="form-group"><label>Deneme Adı (isteğe bağlı)</label><input type="text" id="denemeName" placeholder="Ör: ÖSYM Deneme 3"></div></div>
+        <div class="deneme-section" style="margin-top:16px">
+          <h4>📘 Genel Yetenek (60 Soru)</h4>
+          <div class="form-row"><div class="form-group"><label>Doğru</label><input type="number" id="denGYD" min="0" max="60" placeholder="0"></div><div class="form-group"><label>Yanlış</label><input type="number" id="denGYY" min="0" max="60" placeholder="0"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem"><span style="color:var(--text2)">Boş: <strong id="denGYB">60</strong></span><span>Net: <strong id="denGYN" class="text-gradient">0.00</strong></span></div>
+        </div>
+        <div class="deneme-section">
+          <h4>📗 Genel Kültür (60 Soru)</h4>
+          <div class="form-row"><div class="form-group"><label>Doğru</label><input type="number" id="denGKD" min="0" max="60" placeholder="0"></div><div class="form-group"><label>Yanlış</label><input type="number" id="denGKY" min="0" max="60" placeholder="0"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem"><span style="color:var(--text2)">Boş: <strong id="denGKB">60</strong></span><span>Net: <strong id="denGKN" class="text-gradient">0.00</strong></span></div>
+        </div>
+        <div class="deneme-score glass">
+          <div style="font-size:.85rem;color:var(--text2);margin-bottom:8px">TOPLAM SONUÇ</div>
+          <div class="deneme-score-grid">
+            <div class="score-item"><div class="score-val puan-highlight" id="denPuan">0</div><div class="score-lbl">Tahmini Puan</div></div>
+            <div class="score-item"><div class="score-val text-gradient" id="denTotalNet">0.00</div><div class="score-lbl">Toplam Net</div></div>
+            <div class="score-item"><div class="score-val" style="color:var(--success)" id="denTotalD">0</div><div class="score-lbl">Toplam Doğru</div></div>
+            <div class="score-item"><div class="score-val" style="color:var(--error)" id="denTotalY">0</div><div class="score-lbl">Toplam Yanlış</div></div>
+          </div>
+        </div>
+        <div class="form-group"><label>Notlar</label><textarea id="denemeNotes" placeholder="Denemeyle ilgili notlar..."></textarea></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="denemeSubmit">💾 Kaydet</button>
+      </div>
+      <div class="deneme-history glass">
+        <h3>📈 Genel Deneme Geçmişi & İlerleme</h3>
+        <div class="deneme-chart-container"><canvas id="denemeChart"></canvas></div>
+        <div style="overflow-x:auto;margin-top:16px">
+          <table class="history-table" id="denemeTable"><thead><tr><th>Tarih</th><th>Ad</th><th>GY Net</th><th>GK Net</th><th>Toplam Net</th><th>Puan</th><th>İşlem</th></tr></thead><tbody id="denemeTableBody"></tbody></table>
+        </div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--surface-border);margin:24px 0">
+
+      <!-- BRANŞ DENEME -->
+      <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:8px">📋 Branş Deneme</h2>
+      <p class="page-subtitle">Tek konu üzerinden deneme sınavı sonuçlarını gir</p>
+      <div class="deneme-card glass">
+        <h3>📝 Yeni Branş Deneme</h3>
+        <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="bransDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="bransName" placeholder="Ör: Türkçe Deneme 5"></div></div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group"><label>Konu</label><select id="bransTopic"><option value="Türkçe">Türkçe</option><option value="Paragraf">Paragraf</option><option value="Matematik">Matematik</option><option value="Problem">Problem</option><option value="Tarih">Tarih</option><option value="Coğrafya">Coğrafya</option><option value="Vatandaşlık Bilgisi">Vatandaşlık Bilgisi</option><option value="Güncel Bilgiler">Güncel Bilgiler</option></select></div>
+          <div class="form-group"><label>Toplam Soru</label><input type="number" id="bransTotalQ" min="1" placeholder="30"></div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group"><label>Doğru</label><input type="number" id="bransCorrect" min="0" placeholder="0"></div>
+          <div class="form-group"><label>Yanlış</label><input type="number" id="bransWrong" min="0" placeholder="0"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem">
+          <span style="color:var(--text2)">Boş: <strong id="bransBlank">0</strong></span>
+          <span>Net: <strong id="bransNet" class="text-gradient">0.00</strong></span>
+        </div>
+        <div class="form-group" style="margin-top:14px"><label>Notlar</label><textarea id="bransNotes" placeholder="Branş deneme notları..."></textarea></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="bransSubmit">💾 Branş Deneme Kaydet</button>
+      </div>
+      <div class="deneme-history glass">
+        <h3>📊 Branş Deneme Geçmişi</h3>
+        <div class="deneme-chart-container"><canvas id="bransChart"></canvas></div>
+        <div style="overflow-x:auto;margin-top:16px">
+          <table class="history-table" id="bransTable"><thead><tr><th>Tarih</th><th>Ad</th><th>Konu</th><th>Soru</th><th>Net</th><th>Başarı</th><th>İşlem</th></tr></thead><tbody id="bransTableBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="page" id="page-analytics">
+      <h1 class="page-title">Analizler</h1>
+      <p class="page-subtitle">Performansını detaylı olarak incele</p>
+      <div class="chart-filters">
+        <button class="filter-btn active" data-period="week">Hafta</button>
+        <button class="filter-btn" data-period="month">Ay</button>
+        <button class="filter-btn" data-period="3months">3 Ay</button>
+        <button class="filter-btn" data-period="all">Tümü</button>
+      </div>
+      <div class="total-stats" id="totalStats"></div>
+      <div class="chart-grid">
+        <div class="chart-card glass"><h3>📈 Net Trendi</h3><canvas id="chartNet"></canvas></div>
+        <div class="chart-card glass"><h3>🎯 Ders Performansı</h3><canvas id="chartRadar"></canvas></div>
+        <div class="chart-card glass"><h3>📊 Doğru / Yanlış / Boş</h3><canvas id="chartDonut"></canvas></div>
+        <div class="chart-card glass"><h3>⏰ Günlük Çalışma Süresi</h3><canvas id="chartTime"></canvas></div>
+      </div>
+      <div class="chart-card glass" style="margin-top:16px"><h3>📅 Konu Bazlı Başarı</h3><canvas id="chartTopics"></canvas></div>
+      <div class="heatmap-card glass" style="margin-top:16px">
+        <h3 style="margin-bottom:12px">🗓️ Çalışma Takvimi (Son 90 Gün)</h3>
+        <div class="heatmap-container" id="heatmapContainer"></div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="page" id="page-schedule">
+      <h1 class="page-title">Ders Programı</h1>
+      <p class="page-subtitle">Haftalık ders programını oluştur</p>
+      <div class="schedule-container"><div class="schedule-grid" id="scheduleGrid"></div></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="page" id="page-history">
+      <h1 class="page-title">Geçmiş Kayıtlar</h1>
+      <p class="page-subtitle">Tüm çalışma kayıtlarını görüntüle</p>
+      <div class="history-filters">
+        <div class="form-group"><label>Başlangıç</label><input type="date" id="histStart"></div>
+        <div class="form-group"><label>Bitiş</label><input type="date" id="histEnd"></div>
+        <div class="form-group"><label>Ders</label><select id="histSubject"><option value="">Tümü</option><option>Genel Yetenek</option><option>Genel Kültür</option></select></div>
+        <button class="btn btn-secondary btn-sm" id="histFilter">Filtrele</button>
+        <button class="btn btn-secondary btn-sm btn-export" id="histExport">📥 CSV İndir</button>
+      </div>
+      <div class="glass" style="padding:16px;overflow-x:auto">
+        <table class="history-table"><thead><tr><th>Tarih</th><th>Ders</th><th>Konu</th><th>Soru</th><th>D</th><th>Y</th><th>Net</th><th>Süre</th><th>İşlem</th></tr></thead><tbody id="histBody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- POMODORO -->
+    <div class="page" id="page-pomodoro">
+      <h1 class="page-title">Pomodoro Zamanlayıcı</h1>
+      <p class="page-subtitle">Odaklan ve verimli çalış</p>
+      <div class="pomodoro-container">
+        <div class="timer-circle">
+          <svg class="timer-svg" viewBox="0 0 200 200">
+            <defs><linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--pink)"/><stop offset="100%" stop-color="var(--accent)"/></linearGradient></defs>
+            <circle class="timer-bg" cx="100" cy="100" r="90"/>
+            <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90" stroke-dasharray="565.48" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-inner">
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-label" id="timerLabel">Çalışma</div>
+          </div>
+        </div>
+        <div class="session-dots" id="sessionDots"></div>
+        <div class="timer-controls">
+          <button class="timer-btn start" id="timerStart">▶</button>
+          <button class="timer-btn pause hidden" id="timerPause">⏸</button>
+          <button class="timer-btn reset" id="timerReset">⟳</button>
+        </div>
+        <div class="pomo-settings glass">
+          <h3 style="margin-bottom:12px">⚙️ Ayarlar</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Çalışma (dk)</label><input type="number" id="pomoWork" value="25" min="1" max="90"></div>
+            <div class="form-group"><label>Kısa Mola (dk)</label><input type="number" id="pomoShort" value="5" min="1" max="30"></div>
+          </div>
+          <div class="form-group" style="margin-top:10px;max-width:48%"><label>Uzun Mola (dk)</label><input type="number" id="pomoLong" value="15" min="1" max="60"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="page" id="page-badges">
+      <h1 class="page-title">Rozetler</h1>
+      <p class="page-subtitle">Başarılarını topla ve motivasyonunu artır!</p>
+      <div class="badges-grid" id="badgesGrid"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="page-profile">
+      <h1 class="page-title">Profil & Ayarlar</h1>
+      <p class="page-subtitle">Hesap ayarlarını düzenle</p>
+      <div class="profile-container">
+        <div class="profile-card glass">
+          <div class="profile-header"><div class="profile-avatar-big" id="profileAvatar">👤</div><div><h3 id="profileName">Kullanıcı</h3><p style="color:var(--text2);font-size:.85rem" id="profileEmail">email</p></div></div>
+          <h3 style="margin:16px 0 8px">Avatar Seç</h3>
+          <div class="avatar-grid" id="avatarGrid"></div>
+        </div>
+        <div class="profile-card glass">
+          <h3 style="margin-bottom:12px">📅 Sınav & Hedefler</h3>
+          <div class="settings-row"><label>KPSS Sınav Tarihi</label><input type="date" id="settingExamDate"></div>
+          <div class="settings-row"><label>Günlük Hedef (soru)</label><input type="number" id="settingDailyGoal" min="0" placeholder="100"></div>
+          <div class="settings-row"><label>Haftalık Hedef (soru)</label><input type="number" id="settingWeeklyGoal" min="0" placeholder="500"></div>
+          <button class="btn btn-primary btn-sm" style="margin-top:12px" id="saveSettings">Kaydet</button>
+        </div>
+        <div class="profile-card glass">
+          <h3 style="margin-bottom:12px;color:var(--error)">⚠️ Hesap</h3>
+          <button class="btn btn-danger btn-sm" id="deleteAccount">Hesabı Sil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI BUBBLE -->
+  <button class="ai-bubble" id="aiBubble">🤖</button>
+  <!-- AI CHAT WINDOW -->
+  <div class="ai-chat-window glass hidden" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <h3>🤖 Alni AI</h3>
+      <div class="ai-header-btns">
+        <button id="aiFullscreen" title="Tam Ekran">⛶</button>
+        <button id="aiClose" title="Kapat">✕</button>
+      </div>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+      <div class="ai-msg assistant">Merhaba! Ben <strong>Alni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir ve sorularını yanıtlayabilirim. Ne sormak istersin?</div>
+    </div>
+    <div class="ai-input-area">
+      <textarea id="aiInput" placeholder="Alni AI'a sor..." rows="1"></textarea>
+      <button class="ai-send-btn" id="aiSend">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div class="modal-overlay hidden" id="scheduleModal">
+  <div class="modal-content glass" style="position:relative">
+    <h3>📅 Ders Ekle</h3>
+    <input type="hidden" id="slotDay">
+    <div class="form-row">
+      <div class="form-group"><label>Başlangıç</label><input type="time" id="slotStart"></div>
+      <div class="form-group"><label>Bitiş</label><input type="time" id="slotEnd"></div>
+    </div>
+    <div class="form-row" style="margin-top:12px">
+      <div class="form-group"><label>Ders</label><select id="slotSubject"><option value="Genel Yetenek">Genel Yetenek</option><option value="Genel Kültür">Genel Kültür</option><option value="Deneme">Deneme</option></select></div>
+      <div class="form-group"><label>Konu</label><select id="slotTopic"></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeScheduleModal()">İptal</button>
+      <button class="btn btn-primary btn-sm" id="slotSave">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const firebaseConfig={apiKey:"AIzaSyADoz2XLDeUlSL22X1FmFq53H9DvKSi81k",authDomain:"kpss-f0a85.firebaseapp.com",projectId:"kpss-f0a85",storageBucket:"kpss-f0a85.firebasestorage.app",messagingSenderId:"77072884762",appId:"1:77072884762:web:1597ab73cadbf93da25da3",measurementId:"G-3526VTT0M8"};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(), db=firebase.firestore();
+
+const SUBJECTS={'Genel Yetenek':{color:'#FF6B9D',topics:['Türkçe','Paragraf','Matematik','Problem']},'Genel Kültür':{color:'#AB47BC',topics:['Tarih','Coğrafya','Vatandaşlık Bilgisi','Güncel Bilgiler']},'Deneme':{color:'#FF9800',topics:['Genel Deneme','Branş Deneme']}};
+const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+const AVATARS=['👨‍🎓','👩‍🎓','🦊','🐱','🐼','🦋','🌸','🌺','💜','🎀','🦄','🐰','🌙','⭐','🎯','🏆'];
+const QUOTES=['Başarı, her gün tekrarlanan küçük çabaların toplamıdır.','Bugün yapacağın fedakarlık, yarın seni şampiyon yapacak.','Hedefine odaklan, geri kalan her şey yerli yerine oturacak.','Zorluklar, seni güçlendirmek için var.','Her uzman bir zamanlar amatördü.','Pes etme! Büyük başarılar, sabır ve azimle gelir.','Bugün çalışarak yarını güvence altına alıyorsun.','Kendine inan, sen yapabilirsin!','Disiplin, motivasyonun bittiği yerde başlar.','Küçük adımlar, büyük yolculukların başlangıcıdır.','Başarı bir gece değil, her gece çalışmakla gelir.','Hayallerinin peşinden git, KPSS sadece bir basamak!'];
+const BADGES_DEF=[
+  {id:'first_entry',name:'İlk Adım',icon:'🎯',desc:'İlk veri girişini yap',target:1,key:'totalEntries'},
+  {id:'q100',name:'Çözücü',icon:'📝',desc:'100 soru çöz',target:100,key:'totalQuestions'},
+  {id:'q500',name:'Soru Avcısı',icon:'🏹',desc:'500 soru çöz',target:500,key:'totalQuestions'},
+  {id:'q1000',name:'Soru Canavarı',icon:'🐉',desc:'1000 soru çöz',target:1000,key:'totalQuestions'},
+  {id:'q5000',name:'Efsane',icon:'👑',desc:'5000 soru çöz',target:5000,key:'totalQuestions'},
+  {id:'streak7',name:'Haftalık Seri',icon:'🔥',desc:'7 gün üst üste çalış',target:7,key:'streak'},
+  {id:'streak30',name:'Aylık Seri',icon:'💪',desc:'30 gün üst üste çalış',target:30,key:'streak'},
+  {id:'streak60',name:'Demir İrade',icon:'⚡',desc:'60 gün üst üste çalış',target:60,key:'streak'},
+  {id:'pomo10',name:'Odaklı',icon:'🍅',desc:'10 pomodoro tamamla',target:10,key:'totalPomodoros'},
+  {id:'pomo50',name:'Pomodoro Pro',icon:'⏱️',desc:'50 pomodoro tamamla',target:50,key:'totalPomodoros'},
+  {id:'accuracy80',name:'Keskin Nişancı',icon:'🎯',desc:'Bir derste %80+ doğru',target:80,key:'bestAccuracy'},
+  {id:'marathon',name:'Maratoncu',icon:'🏃',desc:'Tek günde 200+ soru',target:200,key:'maxDailyQuestions'},
+];
+
+// ===== STATE =====
+let currentUser=null,entries=[],denemeList=[],bransDenemeList=[],scheduleSlots=[],userSettings={},pomodoroCount=0,aiHistory=[];
+let charts={};
+
+// ===== AUTH =====
+function showLogin(){document.getElementById('loginForm').classList.remove('hidden');document.getElementById('registerForm').classList.add('hidden')}
+function showRegister(){document.getElementById('loginForm').classList.add('hidden');document.getElementById('registerForm').classList.remove('hidden')}
+window.showLogin=showLogin;window.showRegister=showRegister;
+
+function showLoading(){document.getElementById('loadingOverlay').classList.remove('hidden')}
+function hideLoading(){document.getElementById('loadingOverlay').classList.add('hidden')}
+
+function showToast(msg,type='info'){const c=document.getElementById('toastContainer');const t=document.createElement('div');t.className=`toast ${type}`;t.textContent=msg;c.appendChild(t);setTimeout(()=>t.remove(),3500)}
+
+const errMsgs={'auth/email-already-in-use':'Bu e-posta zaten kullanılıyor.','auth/invalid-email':'Geçersiz e-posta.','auth/weak-password':'Şifre en az 6 karakter olmalı.','auth/user-not-found':'Kullanıcı bulunamadı.','auth/wrong-password':'Yanlış şifre.','auth/too-many-requests':'Çok fazla deneme. Lütfen bekleyin.','auth/invalid-credential':'Geçersiz e-posta veya şifre.'};
+
+document.getElementById('loginBtn').onclick=async()=>{
+  const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;
+  if(!e||!p)return document.getElementById('loginError').textContent='Tüm alanları doldurun.';
+  try{showLoading();await auth.signInWithEmailAndPassword(e,p)}catch(err){document.getElementById('loginError').textContent=errMsgs[err.code]||'Giriş başarısız.';hideLoading()}
+};
+document.getElementById('regBtn').onclick=async()=>{
+  const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPassword').value;
+  if(!n||!e||!p)return document.getElementById('regError').textContent='Tüm alanları doldurun.';
+  try{showLoading();const uc=await auth.createUserWithEmailAndPassword(e,p);await uc.user.updateProfile({displayName:n});await db.collection('users').doc(uc.user.uid).set({name:n,email:e,avatar:'👨‍🎓',createdAt:firebase.firestore.FieldValue.serverTimestamp()})}catch(err){document.getElementById('regError').textContent=errMsgs[err.code]||'Kayıt başarısız.';hideLoading()}
+};
+document.getElementById('logoutBtn').onclick=()=>auth.signOut();
+
+auth.onAuthStateChanged(async user=>{
+  if(user){currentUser=user;showLoading();await loadAllData();hideLoading();document.getElementById('auth-container').style.display='none';document.getElementById('app-container').style.display='block';updateUserUI()}
+  else{currentUser=null;entries=[];denemeList=[];document.getElementById('auth-container').style.display='flex';document.getElementById('app-container').style.display='none';hideLoading()}
+});
+
+function updateUserUI(){
+  const n=currentUser.displayName||currentUser.email.split('@')[0];
+  document.getElementById('sidebarName').textContent=n;document.getElementById('profileName').textContent=n;
+  document.getElementById('profileEmail').textContent=currentUser.email;
+  const av=userSettings.avatar||'👨‍🎓';
+  document.getElementById('sidebarAvatar').textContent=av;document.getElementById('profileAvatar').textContent=av;
+  document.getElementById('dashGreeting').textContent=`Merhaba ${n}! Bugün harika bir gün çalışmak için. 💪`;
+}
+
+// ===== DATA LOADING =====
+async function loadAllData(){
+  try{
+    const uid=currentUser.uid;
+    // Settings
+    const settDoc=await db.collection('users').doc(uid).get();
+    if(settDoc.exists){const d=settDoc.data();userSettings=d;document.getElementById('settingExamDate').value=d.examDate||'';document.getElementById('settingDailyGoal').value=d.dailyGoal||'';document.getElementById('settingWeeklyGoal').value=d.weeklyGoal||''}
+    // Entries
+    const entSnap=await db.collection('users').doc(uid).collection('entries').orderBy('date','desc').get();
+    entries=entSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Deneme
+    const denSnap=await db.collection('users').doc(uid).collection('deneme').orderBy('date','desc').get();
+    denemeList=denSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Branş Deneme
+    const bransSnap=await db.collection('users').doc(uid).collection('bransDeneme').orderBy('date','desc').get();
+    bransDenemeList=bransSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Schedule
+    const schSnap=await db.collection('users').doc(uid).collection('schedule').get();
+    scheduleSlots=schSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Pomodoro count
+    pomodoroCount=userSettings.pomodoroCount||0;
+    // AI history from localStorage
+    aiHistory=JSON.parse(localStorage.getItem(`ai_${uid}`)||'[]');
+    // Clean old action markers from history
+    aiHistory.forEach(m=>{if(m.role==='assistant'){m.content=(m.content||'').replace(/\|\|\|ACTION:[\s\S]*?\|\|\|/g,'').replace(/\[EYLEM\][\s\S]*?\[\/EYLEM\]/gi,'').trim()}});
+    renderAIChatHistory();
+    // Render
+    renderDashboard();renderDenemeTable();
+  }catch(e){console.error('Load error:',e);showToast('Veri yükleme hatası','error')}
+}
+
+// ===== ROUTER =====
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    const page=item.dataset.page;navigateTo(page);
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+  });
+});
+document.getElementById('menuBtn').onclick=()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')};
+document.getElementById('sidebarOverlay').onclick=()=>{document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')};
+
+function navigateTo(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`page-${pageId}`)?.classList.add('active');
+  document.querySelector(`.nav-item[data-page="${pageId}"]`)?.classList.add('active');
+  if(pageId==='dashboard')renderDashboard();
+  if(pageId==='analytics')renderAnalytics('week');
+  if(pageId==='schedule')renderSchedule();
+  if(pageId==='history')renderHistory();
+  if(pageId==='badges')renderBadges();
+  if(pageId==='deneme'){renderDenemeChart();renderDenemeTable();renderBransChart();renderBransTable()}
+  if(pageId==='profile')renderProfile();
+}
+
+// ===== DASHBOARD =====
+function renderDashboard(){
+  const today=new Date().toISOString().slice(0,10);
+  const todayEntries=entries.filter(e=>e.date===today);
+  const tQ=todayEntries.reduce((s,e)=>s+(e.total||0),0);
+  const tN=todayEntries.reduce((s,e)=>s+(e.net||0),0);
+  const tD=todayEntries.reduce((s,e)=>s+(e.duration||0),0);
+  const allQ=entries.reduce((s,e)=>s+(e.total||0),0);
+  document.getElementById('dToday').textContent=tQ;
+  document.getElementById('dNet').textContent=tN.toFixed(1);
+  document.getElementById('dHours').textContent=(tD/60).toFixed(1);
+  document.getElementById('dTotal').textContent=allQ;
+  // Streak
+  document.getElementById('dStreak').textContent=calculateStreak();
+  // Countdown
+  if(userSettings.examDate){const diff=Math.ceil((new Date(userSettings.examDate)-new Date())/(1000*60*60*24));document.getElementById('dCountdown').textContent=diff>0?diff:'Geçti'}
+  else document.getElementById('dCountdown').textContent='--';
+  // Quote
+  document.getElementById('dQuote').textContent=`"${QUOTES[Math.floor(Math.random()*QUOTES.length)]}"`;
+  // Weak topics
+  renderWeakTopics();
+  // Today schedule
+  renderTodaySchedule();
+}
+
+function calculateStreak(){
+  if(!entries.length)return 0;
+  const dates=[...new Set(entries.map(e=>e.date))].sort().reverse();
+  let streak=0,check=new Date();
+  check.setHours(0,0,0,0);
+  for(let i=0;i<400;i++){
+    const ds=check.toISOString().slice(0,10);
+    if(dates.includes(ds)){streak++;check.setDate(check.getDate()-1)}
+    else if(i===0){check.setDate(check.getDate()-1);const ds2=check.toISOString().slice(0,10);if(dates.includes(ds2)){streak++;check.setDate(check.getDate()-1)}else break}
+    else break;
+  }
+  return streak;
+}
+
+function renderWeakTopics(){
+  const topicStats={};
+  entries.forEach(e=>{if(!topicStats[e.topic])topicStats[e.topic]={correct:0,total:0};topicStats[e.topic].correct+=(e.correct||0);topicStats[e.topic].total+=(e.total||0)});
+  const weak=Object.entries(topicStats).filter(([,s])=>s.total>=10&&(s.correct/s.total)<0.5).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total)).slice(0,4);
+  const el=document.getElementById('dWeakTopics');
+  if(!weak.length){el.innerHTML='<p style="color:var(--text3);font-size:.9rem">Zayıf konu tespit edilmedi. Harika! 🎉</p>';return}
+  el.innerHTML=weak.map(([name,s])=>{const pct=Math.round((s.correct/s.total)*100);return`<div class="weak-topic-item"><span>${name}</span><span style="color:var(--error);font-weight:600">%${pct}</span><div class="weak-bar"><div class="weak-bar-fill" style="width:${pct}%"></div></div></div>`}).join('');
+}
+
+function renderTodaySchedule(){
+  const todayIdx=(new Date().getDay()+6)%7;
+  const todaySlots=scheduleSlots.filter(s=>s.day===todayIdx).sort((a,b)=>a.startTime.localeCompare(b.startTime));
+  const el=document.getElementById('dTodaySchedule');
+  if(!todaySlots.length){el.innerHTML='<p style="color:var(--text3);font-size:.9rem">Bugün için program yok.</p>';return}
+  el.innerHTML=todaySlots.map(s=>`<div class="today-sched-item"><span class="sched-time">${s.startTime}-${s.endTime}</span><span>${s.topic} (${s.subject})</span></div>`).join('');
+}
+
+// ===== ENTRY =====
+document.getElementById('entryDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('entrySubject').onchange=function(){
+  const sel=this.value,topicSel=document.getElementById('entryTopic');
+  topicSel.innerHTML='<option value="">Seçiniz</option>';
+  if(SUBJECTS[sel])SUBJECTS[sel].topics.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;topicSel.appendChild(o)});
+};
+['entryTotal','entryCorrect','entryWrong'].forEach(id=>{document.getElementById(id).oninput=calcEntryNet});
+
+function calcEntryNet(){
+  const t=parseInt(document.getElementById('entryTotal').value)||0;
+  const c=parseInt(document.getElementById('entryCorrect').value)||0;
+  const w=parseInt(document.getElementById('entryWrong').value)||0;
+  const b=Math.max(0,t-c-w);document.getElementById('entryBlank').value=b;
+  const net=c-(w/4);const el=document.getElementById('entryNet');el.textContent=net.toFixed(2);
+  el.className='net-value '+(net>=0?'net-positive':'net-negative');
+}
+
+document.getElementById('entrySubmit').onclick=async()=>{
+  const subject=document.getElementById('entrySubject').value;
+  const topic=document.getElementById('entryTopic').value;
+  const date=document.getElementById('entryDate').value;
+  const total=parseInt(document.getElementById('entryTotal').value)||0;
+  const correct=parseInt(document.getElementById('entryCorrect').value)||0;
+  const wrong=parseInt(document.getElementById('entryWrong').value)||0;
+  const blank=Math.max(0,total-correct-wrong);
+  const duration=parseInt(document.getElementById('entryDuration').value)||0;
+  const notes=document.getElementById('entryNotes').value;
+  const net=correct-(wrong/4);
+  if(!subject||!topic||!date||total<=0)return showToast('Lütfen tüm zorunlu alanları doldurun.','error');
+  if(correct+wrong>total)return showToast('Doğru+Yanlış toplamdan büyük olamaz.','error');
+  try{
+    showLoading();
+    const doc=await db.collection('users').doc(currentUser.uid).collection('entries').add({subject,topic,date,total,correct,wrong,blank,net,duration,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    entries.unshift({id:doc.id,subject,topic,date,total,correct,wrong,blank,net,duration,notes});
+    hideLoading();showToast('Kayıt başarıyla eklendi! 🎉','success');
+    document.getElementById('entryTotal').value='';document.getElementById('entryCorrect').value='';document.getElementById('entryWrong').value='';document.getElementById('entryBlank').value='';document.getElementById('entryNotes').value='';document.getElementById('entryDuration').value='';document.getElementById('entryNet').textContent='0.00';
+    checkAndAwardBadges();
+  }catch(e){hideLoading();showToast('Kayıt hatası: '+e.message,'error')}
+};
+
+// ===== DENEME =====
+document.getElementById('denemeDate').value=new Date().toISOString().slice(0,10);
+['denGYD','denGYY','denGKD','denGKY'].forEach(id=>{document.getElementById(id).oninput=calcDenemeNet});
+
+function calcDenemeNet(){
+  const gyd=parseInt(document.getElementById('denGYD').value)||0;
+  const gyy=parseInt(document.getElementById('denGYY').value)||0;
+  const gkd=parseInt(document.getElementById('denGKD').value)||0;
+  const gky=parseInt(document.getElementById('denGKY').value)||0;
+  const gyb=60-gyd-gyy,gkb=60-gkd-gky;
+  const gyn=gyd-(gyy/4),gkn=gkd-(gky/4);
+  const totalNet=gyn+gkn;
+  const puan=calcKPSSPuan(totalNet);
+  document.getElementById('denGYB').textContent=Math.max(0,gyb);
+  document.getElementById('denGKB').textContent=Math.max(0,gkb);
+  document.getElementById('denGYN').textContent=gyn.toFixed(2);
+  document.getElementById('denGKN').textContent=gkn.toFixed(2);
+  document.getElementById('denTotalNet').textContent=totalNet.toFixed(2);
+  document.getElementById('denTotalD').textContent=gyd+gkd;
+  document.getElementById('denTotalY').textContent=gyy+gky;
+  document.getElementById('denPuan').textContent=puan.toFixed(1);
+}
+
+function calcKPSSPuan(totalNet){
+  // KPSS Önlisans P93 tahmini puan hesaplama
+  // Geçmiş yıl verileriyle interpolasyon:
+  // 0 net ≈ 40, 30 net ≈ 56, 50 net ≈ 69, 60 net ≈ 75, 
+  // 75 net ≈ 84, 80 net ≈ 87, 85 net ≈ 89.5, 90 net ≈ 91.5,
+  // 95 net ≈ 93.5, 100 net ≈ 95, 110 net ≈ 97.5, 120 net ≈ 100
+  if(totalNet<=0) return Math.max(0, 40 + (totalNet * 0.2));
+  const points=[[0,40],[30,56],[50,69],[60,75],[75,84],[80,87],[85,89.5],[90,91.5],[95,93.5],[100,95],[110,97.5],[120,100]];
+  for(let i=0;i<points.length-1;i++){
+    if(totalNet>=points[i][0] && totalNet<=points[i+1][0]){
+      const ratio=(totalNet-points[i][0])/(points[i+1][0]-points[i][0]);
+      return points[i][1]+ratio*(points[i+1][1]-points[i][1]);
+    }
+  }
+  return Math.min(100, 95 + (totalNet-100)*0.25);
+}
+
+document.getElementById('denemeSubmit').onclick=async()=>{
+  const date=document.getElementById('denemeDate').value;
+  const name=document.getElementById('denemeName').value||'Deneme';
+  const gyd=parseInt(document.getElementById('denGYD').value)||0;
+  const gyy=parseInt(document.getElementById('denGYY').value)||0;
+  const gkd=parseInt(document.getElementById('denGKD').value)||0;
+  const gky=parseInt(document.getElementById('denGKY').value)||0;
+  if(!date)return showToast('Tarih seçin','error');
+  if(gyd+gyy>60||gkd+gky>60)return showToast('Doğru+Yanlış 60\'ı geçemez','error');
+  const gyNet=gyd-(gyy/4),gkNet=gkd-(gky/4),totalNet=gyNet+gkNet;
+  const puan=calcKPSSPuan(totalNet);
+  const notes=document.getElementById('denemeNotes').value;
+  try{
+    showLoading();
+    const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({date,name,gyd,gyy,gyBlank:60-gyd-gyy,gyNet,gkd,gky,gkBlank:60-gkd-gky,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    denemeList.unshift({id:doc.id,date,name,gyNet,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,gyd,gyy,gkd,gky});
+    hideLoading();showToast('Deneme kaydedildi! 📝','success');
+    renderDenemeChart();renderDenemeTable();
+    ['denGYD','denGYY','denGKD','denGKY'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('denemeName').value='';document.getElementById('denemeNotes').value='';calcDenemeNet();
+  }catch(e){hideLoading();showToast('Hata: '+e.message,'error')}
+};
+
+function renderDenemeChart(){
+  const sorted=[...denemeList].sort((a,b)=>a.date.localeCompare(b.date));
+  if(charts.deneme)charts.deneme.destroy();
+  const ctx=document.getElementById('denemeChart');
+  if(!sorted.length){ctx.style.display='none';return}
+  ctx.style.display='block';
+  charts.deneme=new Chart(ctx,{type:'line',data:{labels:sorted.map(d=>formatDateShort(d.date)),datasets:[
+    {label:'Puan',data:sorted.map(d=>d.puan||calcKPSSPuan(d.totalNet||0)),borderColor:'#FFD700',backgroundColor:'rgba(255,215,0,.08)',tension:.3,fill:false,borderWidth:3,borderDash:[],pointBackgroundColor:'#FFD700',pointRadius:5},
+    {label:'GY Net',data:sorted.map(d=>d.gyNet),borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.1)',tension:.3,fill:true},
+    {label:'GK Net',data:sorted.map(d=>d.gkNet),borderColor:'#AB47BC',backgroundColor:'rgba(171,71,188,.1)',tension:.3,fill:true},
+    {label:'Toplam Net',data:sorted.map(d=>d.totalNet),borderColor:'#FFD1DC',backgroundColor:'rgba(255,209,220,.1)',tension:.3,fill:false,borderWidth:2}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}});
+}
+
+function renderDenemeTable(){
+  const body=document.getElementById('denemeTableBody');
+  body.innerHTML=denemeList.map(d=>{const p=d.puan||calcKPSSPuan(d.totalNet||0);return`<tr><td>${formatDateShort(d.date)}</td><td>${d.name||'-'}</td><td>${(d.gyNet||0).toFixed(1)}</td><td>${(d.gkNet||0).toFixed(1)}</td><td><strong class="text-gradient">${(d.totalNet||0).toFixed(1)}</strong></td><td><strong style="color:#FFD700">${p.toFixed(1)}</strong></td><td><button onclick="deleteDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`}).join('');
+}
+window.deleteDeneme=async function(id){
+  if(!confirm('Bu denemeyi silmek istediğine emin misin?'))return;
+  try{await db.collection('users').doc(currentUser.uid).collection('deneme').doc(id).delete();denemeList=denemeList.filter(d=>d.id!==id);renderDenemeChart();renderDenemeTable();showToast('Deneme silindi','info')}catch(e){showToast('Hata','error')}
+};
+
+// ===== BRANŞ DENEME =====
+['bransCorrect','bransWrong','bransTotalQ'].forEach(id=>{const el=document.getElementById(id);if(el)el.oninput=calcBransNet});
+
+function calcBransNet(){
+  const total=parseInt(document.getElementById('bransTotalQ').value)||0;
+  const correct=parseInt(document.getElementById('bransCorrect').value)||0;
+  const wrong=parseInt(document.getElementById('bransWrong').value)||0;
+  const blank=Math.max(0,total-correct-wrong);
+  const net=correct-(wrong/4);
+  document.getElementById('bransBlank').textContent=blank;
+  document.getElementById('bransNet').textContent=net.toFixed(2);
+}
+
+document.getElementById('bransSubmit').onclick=async()=>{
+  const date=document.getElementById('bransDate').value;
+  const name=document.getElementById('bransName').value||'Branş Deneme';
+  const topic=document.getElementById('bransTopic').value;
+  const total=parseInt(document.getElementById('bransTotalQ').value)||0;
+  const correct=parseInt(document.getElementById('bransCorrect').value)||0;
+  const wrong=parseInt(document.getElementById('bransWrong').value)||0;
+  if(!date)return showToast('Tarih seçin','error');
+  if(!total)return showToast('Soru sayısı girin','error');
+  if(correct+wrong>total)return showToast('Doğru+Yanlış toplam soruyu geçemez','error');
+  const blank=total-correct-wrong;
+  const net=correct-(wrong/4);
+  const accuracy=total>0?Math.round((correct/total)*100):0;
+  const subject=['Türkçe','Paragraf','Matematik','Problem'].includes(topic)?'Genel Yetenek':'Genel Kültür';
+  const notes=document.getElementById('bransNotes').value;
+  try{
+    showLoading();
+    const doc=await db.collection('users').doc(currentUser.uid).collection('bransDeneme').add({date,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    bransDenemeList.unshift({id:doc.id,date,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes});
+    hideLoading();showToast('Branş deneme kaydedildi! 📋','success');
+    renderBransChart();renderBransTable();
+    ['bransCorrect','bransWrong','bransTotalQ'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('bransName').value='';document.getElementById('bransNotes').value='';calcBransNet();
+  }catch(e){hideLoading();showToast('Hata: '+e.message,'error')}
+};
+
+function renderBransChart(){
+  const sorted=[...bransDenemeList].sort((a,b)=>a.date.localeCompare(b.date));
+  if(charts.brans)charts.brans.destroy();
+  const ctx=document.getElementById('bransChart');
+  if(!sorted.length){ctx.style.display='none';return}
+  ctx.style.display='block';
+  const topics=[...new Set(sorted.map(d=>d.topic))];
+  const colors={'Türkçe':'#FF6B9D','Paragraf':'#F48FB1','Matematik':'#CE93D8','Problem':'#BA68C8','Tarih':'#FFB74D','Coğrafya':'#81C784','Vatandaşlık Bilgisi':'#4FC3F7','Güncel Bilgiler':'#FFD54F'};
+  const datasets=topics.map(t=>{
+    const topicData=sorted.filter(d=>d.topic===t);
+    return{label:t+' Net',data:topicData.map(d=>d.net),borderColor:colors[t]||'#FF6B9D',backgroundColor:(colors[t]||'#FF6B9D')+'18',tension:.3,fill:false,pointRadius:4}
+  });
+  charts.brans=new Chart(ctx,{type:'line',data:{labels:sorted.map(d=>formatDateShort(d.date)+' '+d.topic.substring(0,3)),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)',maxRotation:45},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}});
+}
+
+function renderBransTable(){
+  const body=document.getElementById('bransTableBody');
+  body.innerHTML=bransDenemeList.map(d=>`<tr><td>${formatDateShort(d.date)}</td><td>${d.name||'-'}</td><td>${d.topic}</td><td>${d.total}</td><td><strong class="text-gradient">${(d.net||0).toFixed(1)}</strong></td><td>%${d.accuracy||0}</td><td><button onclick="deleteBransDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
+}
+
+window.deleteBransDeneme=async function(id){
+  if(!confirm('Bu branş denemeyi silmek istediğine emin misin?'))return;
+  try{await db.collection('users').doc(currentUser.uid).collection('bransDeneme').doc(id).delete();bransDenemeList=bransDenemeList.filter(d=>d.id!==id);renderBransChart();renderBransTable();showToast('Branş deneme silindi','info')}catch(e){showToast('Hata','error')}
+};
+
+// ===== ANALYTICS =====
+Chart.defaults.color='rgba(255,255,255,.7)';
+
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.onclick=function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');renderAnalytics(this.dataset.period)}
+});
+
+function getFilteredEntries(period){
+  const now=new Date();let cutoff=new Date(0);
+  if(period==='week'){cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-7)}
+  else if(period==='month'){cutoff=new Date(now);cutoff.setMonth(cutoff.getMonth()-1)}
+  else if(period==='3months'){cutoff=new Date(now);cutoff.setMonth(cutoff.getMonth()-3)}
+  const cs=cutoff.toISOString().slice(0,10);
+  return period==='all'?[...entries]:entries.filter(e=>e.date>=cs);
+}
+
+function renderAnalytics(period){
+  const data=getFilteredEntries(period);
+  // Total stats
+  const tQ=data.reduce((s,e)=>s+(e.total||0),0);
+  const tN=data.reduce((s,e)=>s+(e.net||0),0);
+  const tC=data.reduce((s,e)=>s+(e.correct||0),0);
+  const tD=data.reduce((s,e)=>s+(e.duration||0),0);
+  const avgAcc=tQ>0?Math.round((tC/tQ)*100):0;
+  document.getElementById('totalStats').innerHTML=`
+    <div class="total-stat"><div class="ts-val">${tQ}</div><div class="ts-lbl">Toplam Soru</div></div>
+    <div class="total-stat"><div class="ts-val">${tN.toFixed(1)}</div><div class="ts-lbl">Toplam Net</div></div>
+    <div class="total-stat"><div class="ts-val">%${avgAcc}</div><div class="ts-lbl">Doğru Oranı</div></div>
+    <div class="total-stat"><div class="ts-val">${(tD/60).toFixed(1)}h</div><div class="ts-lbl">Toplam Süre</div></div>`;
+  renderNetChart(data);renderRadarChart(data);renderDonutChart(data);renderTimeChart(data);renderTopicChart(data);renderHeatmap();
+}
+
+function renderNetChart(data){
+  if(charts.net)charts.net.destroy();
+  const byDate={};data.forEach(e=>{if(!byDate[e.date])byDate[e.date]=0;byDate[e.date]+=e.net||0});
+  const sorted=Object.entries(byDate).sort((a,b)=>a[0].localeCompare(b[0]));
+  charts.net=new Chart(document.getElementById('chartNet'),{type:'line',data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Günlük Net',data:sorted.map(s=>parseFloat(s[1].toFixed(2))),borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.15)',tension:.3,fill:true,pointBackgroundColor:'#FF6B9D'}]},options:chartOpts()});
+}
+
+function renderRadarChart(data){
+  if(charts.radar)charts.radar.destroy();
+  const topics=Object.values(SUBJECTS).flatMap(s=>s.topics);
+  const vals=topics.map(t=>{const te=data.filter(e=>e.topic===t);const tQ=te.reduce((s,e)=>s+(e.total||0),0);const tC=te.reduce((s,e)=>s+(e.correct||0),0);return tQ>0?Math.round((tC/tQ)*100):0});
+  charts.radar=new Chart(document.getElementById('chartRadar'),{type:'radar',data:{labels:topics,datasets:[{label:'Doğru %',data:vals,borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.2)',pointBackgroundColor:'#FF6B9D'}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{r:{angleLines:{color:'rgba(255,255,255,.1)'},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'rgba(255,255,255,.7)',font:{size:11}},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
+}
+
+function renderDonutChart(data){
+  if(charts.donut)charts.donut.destroy();
+  const c=data.reduce((s,e)=>s+(e.correct||0),0),w=data.reduce((s,e)=>s+(e.wrong||0),0),b=data.reduce((s,e)=>s+(e.blank||0),0);
+  charts.donut=new Chart(document.getElementById('chartDonut'),{type:'doughnut',data:{labels:['Doğru','Yanlış','Boş'],datasets:[{data:[c,w,b],backgroundColor:['#4CAF50','#FF5252','rgba(255,255,255,.15)'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}}}});
+}
+
+function renderTimeChart(data){
+  if(charts.time)charts.time.destroy();
+  const byDate={};data.forEach(e=>{if(!byDate[e.date])byDate[e.date]=0;byDate[e.date]+=(e.duration||0)/60});
+  const sorted=Object.entries(byDate).sort((a,b)=>a[0].localeCompare(b[0]));
+  charts.time=new Chart(document.getElementById('chartTime'),{type:'bar',data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Saat',data:sorted.map(s=>parseFloat(s[1].toFixed(1))),backgroundColor:'rgba(255,107,157,.4)',borderColor:'#FF6B9D',borderWidth:1,borderRadius:6}]},options:chartOpts()});
+}
+
+function renderTopicChart(data){
+  if(charts.topics)charts.topics.destroy();
+  const topics=Object.values(SUBJECTS).flatMap(s=>s.topics);
+  const accs=topics.map(t=>{const te=data.filter(e=>e.topic===t);const tQ=te.reduce((s,e)=>s+(e.total||0),0);const tC=te.reduce((s,e)=>s+(e.correct||0),0);return tQ>0?Math.round((tC/tQ)*100):0});
+  charts.topics=new Chart(document.getElementById('chartTopics'),{type:'bar',data:{labels:topics,datasets:[{label:'Doğru %',data:accs,backgroundColor:topics.map((_,i)=>i<2?'rgba(255,107,157,.5)':'rgba(171,71,188,.5)'),borderColor:topics.map((_,i)=>i<2?'#FF6B9D':'#AB47BC'),borderWidth:1,borderRadius:6}]},options:{...chartOpts(),indexAxis:'y'}});
+}
+
+function renderHeatmap(){
+  const container=document.getElementById('heatmapContainer');container.innerHTML='';
+  const today=new Date();const dateCounts={};
+  entries.forEach(e=>{dateCounts[e.date]=(dateCounts[e.date]||0)+(e.total||0)});
+  const maxQ=Math.max(1,...Object.values(dateCounts));
+  // 13 weeks (91 days)
+  for(let w=12;w>=0;w--){
+    const weekDiv=document.createElement('div');weekDiv.className='heatmap-week';
+    for(let d=0;d<7;d++){
+      const date=new Date(today);date.setDate(date.getDate()-(w*7+(6-d)));
+      const ds=date.toISOString().slice(0,10);const count=dateCounts[ds]||0;
+      const cell=document.createElement('div');cell.className='heatmap-cell';cell.title=`${ds}: ${count} soru`;
+      if(count>0){const ratio=count/maxQ;cell.classList.add(ratio>.75?'l4':ratio>.5?'l3':ratio>.25?'l2':'l1')}
+      weekDiv.appendChild(cell);
+    }
+    container.appendChild(weekDiv);
+  }
+}
+
+function chartOpts(){return{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)',maxTicksLimit:10},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}}
+
+// ===== SCHEDULE =====
+function renderSchedule(){
+  const grid=document.getElementById('scheduleGrid');grid.innerHTML='';
+  const todayIdx=(new Date().getDay()+6)%7;
+  DAYS.forEach((day,i)=>{
+    const col=document.createElement('div');col.className='schedule-day glass';
+    const hdr=document.createElement('div');hdr.className='schedule-day-header'+(i===todayIdx?' today':'');hdr.textContent=day;col.appendChild(hdr);
+    const daySlots=scheduleSlots.filter(s=>s.day===i).sort((a,b)=>a.startTime.localeCompare(b.startTime));
+    daySlots.forEach(s=>{
+      const slot=document.createElement('div');slot.className='schedule-slot '+(s.subject==='Genel Yetenek'?'gy':s.subject==='Deneme'?'deneme':'gk');
+      slot.innerHTML=`<div class="slot-time">${s.startTime}-${s.endTime}</div><div class="slot-topic">${s.topic}</div><button class="slot-delete" onclick="deleteSlot('${s.id}')">✕</button>`;
+      col.appendChild(slot);
+    });
+    const addBtn=document.createElement('button');addBtn.className='add-slot-btn';addBtn.textContent='+ Ekle';addBtn.onclick=()=>openScheduleModal(i);
+    col.appendChild(addBtn);grid.appendChild(col);
+  });
+}
+
+function openScheduleModal(day){
+  document.getElementById('slotDay').value=day;
+  document.getElementById('scheduleModal').classList.remove('hidden');
+  populateSlotTopics();
+}
+window.closeScheduleModal=function(){document.getElementById('scheduleModal').classList.add('hidden')};
+document.getElementById('slotSubject').onchange=populateSlotTopics;
+function populateSlotTopics(){
+  const sub=document.getElementById('slotSubject').value;
+  const sel=document.getElementById('slotTopic');sel.innerHTML='';
+  if(SUBJECTS[sub])SUBJECTS[sub].topics.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o)});
+}
+document.getElementById('slotSave').onclick=async()=>{
+  const day=parseInt(document.getElementById('slotDay').value);
+  const startTime=document.getElementById('slotStart').value;
+  const endTime=document.getElementById('slotEnd').value;
+  const subject=document.getElementById('slotSubject').value;
+  const topic=document.getElementById('slotTopic').value;
+  if(!startTime||!endTime)return showToast('Saat girin','error');
+  try{const doc=await db.collection('users').doc(currentUser.uid).collection('schedule').add({day,startTime,endTime,subject,topic});
+  scheduleSlots.push({id:doc.id,day,startTime,endTime,subject,topic});closeScheduleModal();renderSchedule();showToast('Program eklendi','success')}catch(e){showToast('Hata','error')}
+};
+window.deleteSlot=async function(id){
+  try{await db.collection('users').doc(currentUser.uid).collection('schedule').doc(id).delete();scheduleSlots=scheduleSlots.filter(s=>s.id!==id);renderSchedule();showToast('Silindi','info')}catch(e){showToast('Hata','error')}
+};
+
+// ===== HISTORY =====
+function renderHistory(){
+  const startVal=document.getElementById('histStart').value;
+  const endVal=document.getElementById('histEnd').value;
+  const subVal=document.getElementById('histSubject').value;
+  let filtered=[...entries];
+  if(startVal)filtered=filtered.filter(e=>e.date>=startVal);
+  if(endVal)filtered=filtered.filter(e=>e.date<=endVal);
+  if(subVal)filtered=filtered.filter(e=>e.subject===subVal);
+  const body=document.getElementById('histBody');
+  body.innerHTML=filtered.map(e=>`<tr><td>${formatDateShort(e.date)}</td><td>${e.subject}</td><td>${e.topic}</td><td>${e.total}</td><td style="color:var(--success)">${e.correct}</td><td style="color:var(--error)">${e.wrong}</td><td><strong>${(e.net||0).toFixed(1)}</strong></td><td>${formatDuration(e.duration)}</td><td><button onclick="deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
+}
+document.getElementById('histFilter').onclick=renderHistory;
+document.getElementById('histExport').onclick=()=>{
+  const csv='Tarih,Ders,Konu,Soru,Doğru,Yanlış,Boş,Net,Süre(dk),Not\n'+entries.map(e=>`${e.date},${e.subject},${e.topic},${e.total},${e.correct},${e.wrong},${e.blank},${e.net?.toFixed(2)},${e.duration},"${(e.notes||'').replace(/"/g,'""')}"`).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kpss_kayitlar.csv';a.click();showToast('CSV indirildi','success');
+};
+window.deleteEntry=async function(id){
+  if(!confirm('Bu kaydı silmek istediğine emin misin?'))return;
+  try{await db.collection('users').doc(currentUser.uid).collection('entries').doc(id).delete();entries=entries.filter(e=>e.id!==id);renderHistory();showToast('Kayıt silindi','info')}catch(e){showToast('Hata','error')}
+};
+
+// ===== POMODORO =====
+let timerInterval=null,timeLeft=25*60,isRunning=false,isBreak=false,sessionCount=0;
+function updateTimerDisplay(){
+  const m=Math.floor(timeLeft/60).toString().padStart(2,'0');
+  const s=(timeLeft%60).toString().padStart(2,'0');
+  document.getElementById('timerDisplay').textContent=`${m}:${s}`;
+  // Progress circle
+  const total=isBreak?(sessionCount%4===0?parseInt(document.getElementById('pomoLong').value||15)*60:parseInt(document.getElementById('pomoShort').value||5)*60):parseInt(document.getElementById('pomoWork').value||25)*60;
+  const pct=timeLeft/total;const circumference=565.48;
+  document.getElementById('timerProgress').style.strokeDashoffset=circumference*(1-pct);
+}
+function renderSessionDots(){
+  const el=document.getElementById('sessionDots');el.innerHTML='';
+  for(let i=0;i<Math.max(4,sessionCount+1);i++){const dot=document.createElement('div');dot.className='session-dot'+(i<sessionCount?' done':'');el.appendChild(dot)}
+}
+renderSessionDots();updateTimerDisplay();
+
+document.getElementById('timerStart').onclick=()=>{
+  if(isRunning)return;isRunning=true;
+  document.getElementById('timerStart').classList.add('hidden');document.getElementById('timerPause').classList.remove('hidden');
+  timerInterval=setInterval(()=>{
+    timeLeft--;updateTimerDisplay();
+    if(timeLeft<=0){clearInterval(timerInterval);isRunning=false;playBeep();
+      if(!isBreak){sessionCount++;pomodoroCount++;savePomodoroCount();renderSessionDots();checkAndAwardBadges();
+        isBreak=true;document.getElementById('timerLabel').textContent='Mola';
+        timeLeft=sessionCount%4===0?parseInt(document.getElementById('pomoLong').value||15)*60:parseInt(document.getElementById('pomoShort').value||5)*60;
+      }else{isBreak=false;document.getElementById('timerLabel').textContent='Çalışma';timeLeft=parseInt(document.getElementById('pomoWork').value||25)*60}
+      document.getElementById('timerStart').classList.remove('hidden');document.getElementById('timerPause').classList.add('hidden');updateTimerDisplay();
+    }
+  },1000);
+};
+document.getElementById('timerPause').onclick=()=>{clearInterval(timerInterval);isRunning=false;document.getElementById('timerStart').classList.remove('hidden');document.getElementById('timerPause').classList.add('hidden')};
+document.getElementById('timerReset').onclick=()=>{clearInterval(timerInterval);isRunning=false;isBreak=false;timeLeft=parseInt(document.getElementById('pomoWork').value||25)*60;document.getElementById('timerLabel').textContent='Çalışma';document.getElementById('timerStart').classList.remove('hidden');document.getElementById('timerPause').classList.add('hidden');updateTimerDisplay()};
+
+function playBeep(){try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=800;o.type='sine';g.gain.value=0.3;o.start();o.stop(ac.currentTime+0.3)}catch(e){}}
+
+async function savePomodoroCount(){
+  try{await db.collection('users').doc(currentUser.uid).update({pomodoroCount})}catch(e){}
+}
+
+// ===== BADGES =====
+function getUserStats(){
+  const totalEntries=entries.length;
+  const totalQuestions=entries.reduce((s,e)=>s+(e.total||0),0);
+  const streak=calculateStreak();
+  const totalPomodoros=pomodoroCount;
+  const topicAccs={};entries.forEach(e=>{if(!topicAccs[e.topic])topicAccs[e.topic]={c:0,t:0};topicAccs[e.topic].c+=(e.correct||0);topicAccs[e.topic].t+=(e.total||0)});
+  const bestAccuracy=Math.max(0,...Object.values(topicAccs).filter(t=>t.t>=5).map(t=>Math.round((t.c/t.t)*100)));
+  const dailyQ={};entries.forEach(e=>{dailyQ[e.date]=(dailyQ[e.date]||0)+(e.total||0)});
+  const maxDailyQuestions=Math.max(0,...Object.values(dailyQ));
+  return{totalEntries,totalQuestions,streak,totalPomodoros,bestAccuracy,maxDailyQuestions};
+}
+
+function renderBadges(){
+  const stats=getUserStats();const grid=document.getElementById('badgesGrid');grid.innerHTML='';
+  BADGES_DEF.forEach(b=>{
+    const val=stats[b.key]||0;const unlocked=val>=b.target;const pct=Math.min(100,Math.round((val/b.target)*100));
+    const card=document.createElement('div');card.className=`badge-card glass ${unlocked?'unlocked':'locked'}`;
+    card.innerHTML=`<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-desc">${b.desc}</div><div class="badge-progress"><div class="badge-progress-fill" style="width:${pct}%"></div></div><div style="font-size:.75rem;color:var(--text3);margin-top:4px">${val}/${b.target}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+async function checkAndAwardBadges(){
+  const stats=getUserStats();const unlocked=[];
+  BADGES_DEF.forEach(b=>{if((stats[b.key]||0)>=b.target)unlocked.push(b.id)});
+  const prev=userSettings.badges||[];const newBadges=unlocked.filter(id=>!prev.includes(id));
+  if(newBadges.length){
+    newBadges.forEach(id=>{const b=BADGES_DEF.find(x=>x.id===id);if(b)showToast(`🏆 Rozet Kazandın: ${b.name}!`,'success')});
+    userSettings.badges=unlocked;
+    try{await db.collection('users').doc(currentUser.uid).update({badges:unlocked})}catch(e){}
+  }
+}
+
+// ===== PROFILE =====
+function renderProfile(){
+  const grid=document.getElementById('avatarGrid');grid.innerHTML='';
+  AVATARS.forEach(a=>{const div=document.createElement('div');div.className='avatar-option'+(userSettings.avatar===a?' selected':'');div.textContent=a;div.onclick=()=>{document.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));div.classList.add('selected');userSettings.avatar=a};grid.appendChild(div)});
+}
+document.getElementById('saveSettings').onclick=async()=>{
+  const examDate=document.getElementById('settingExamDate').value;
+  const dailyGoal=parseInt(document.getElementById('settingDailyGoal').value)||0;
+  const weeklyGoal=parseInt(document.getElementById('settingWeeklyGoal').value)||0;
+  const avatar=userSettings.avatar||'👨‍🎓';
+  try{await db.collection('users').doc(currentUser.uid).update({examDate,dailyGoal,weeklyGoal,avatar});
+  userSettings={...userSettings,examDate,dailyGoal,weeklyGoal,avatar};updateUserUI();showToast('Ayarlar kaydedildi! ✅','success')}catch(e){showToast('Hata','error')}
+};
+document.getElementById('deleteAccount').onclick=async()=>{
+  if(!confirm('Hesabını ve tüm verileri silmek istediğine emin misin? Bu işlem geri alınamaz!'))return;
+  try{showLoading();await db.collection('users').doc(currentUser.uid).delete();await currentUser.delete();hideLoading()}catch(e){hideLoading();showToast('Hata: '+e.message,'error')}
+};
+
+// ===== ALNI AI =====
+const AI_URL='https://hub.malson.eu/api/products/deepseek_ai/chat/completions/openai/gpt-5.1-chat';
+let aiGenerating=false;
+
+document.getElementById('aiBubble').onclick=()=>{
+  const win=document.getElementById('aiChatWindow');
+  win.classList.toggle('hidden');
+  if(!win.classList.contains('hidden')){
+    setTimeout(()=>{const m=document.getElementById('aiMessages');m.scrollTop=m.scrollHeight},50);
+  }
+};
+document.getElementById('aiClose').onclick=()=>{document.getElementById('aiChatWindow').classList.add('hidden');document.getElementById('aiChatWindow').classList.remove('fs')};
+document.getElementById('aiFullscreen').onclick=()=>{document.getElementById('aiChatWindow').classList.toggle('fs')};
+
+document.getElementById('aiSend').onclick=sendAIMessage;
+document.getElementById('aiInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAIMessage()}};
+
+// Draggable AI chat window
+(function(){
+  const win=document.getElementById('aiChatWindow');
+  const hdr=document.querySelector('.ai-chat-header');
+  let isDragging=false,startX,startY,startLeft,startTop;
+  hdr.addEventListener('mousedown',e=>{
+    if(win.classList.contains('fs'))return;
+    if(e.target.closest('.ai-header-btns'))return;
+    isDragging=true;startX=e.clientX;startY=e.clientY;
+    const rect=win.getBoundingClientRect();
+    startLeft=rect.left;startTop=rect.top;
+    win.style.transition='none';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!isDragging)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    win.style.left=(startLeft+dx)+'px';
+    win.style.top=(startTop+dy)+'px';
+    win.style.right='auto';win.style.bottom='auto';
+  });
+  document.addEventListener('mouseup',()=>{isDragging=false});
+})();
+
+function renderAIChatHistory(){
+  const el=document.getElementById('aiMessages');
+  el.innerHTML='<div class="ai-msg assistant">Merhaba! Ben <strong>Alni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir, çalışma kaydı ekleyebilir ve ders programını düzenleyebilirim. Ne yapmamı istersin?</div>';
+  aiHistory.forEach(m=>{const div=document.createElement('div');div.className=`ai-msg ${m.role}`;div.innerHTML=m.role==='assistant'?(typeof marked!=='undefined'?marked.parse(m.content):m.content):escapeHtml(m.content);el.appendChild(div)});
+  el.scrollTop=el.scrollHeight;
+}
+
+async function sendAIMessage(){
+  const input=document.getElementById('aiInput');const text=input.value.trim();
+  if(!text||aiGenerating)return;input.value='';input.style.height='40px';aiGenerating=true;
+  const msgEl=document.getElementById('aiMessages');
+  const userDiv=document.createElement('div');userDiv.className='ai-msg user';userDiv.textContent=text;msgEl.appendChild(userDiv);
+  aiHistory.push({role:'user',content:text});
+  const typing=document.createElement('div');typing.className='ai-typing';typing.innerHTML='<span></span><span></span><span></span>';msgEl.appendChild(typing);msgEl.scrollTop=msgEl.scrollHeight;
+
+  // === BUILD COMPREHENSIVE DATA ===
+  const stats=getUserStats();
+  const today=new Date().toISOString().slice(0,10);
+  const todayEntries=entries.filter(e=>e.date===today);
+  const todayQ=todayEntries.reduce((s,e)=>s+(e.total||0),0);
+  const todayNet=todayEntries.reduce((s,e)=>s+(e.net||0),0);
+  const todayDur=todayEntries.reduce((s,e)=>s+(e.duration||0),0);
+  const todayHours=(todayDur/60).toFixed(1);
+
+  // Topic stats
+  const topicStats={};entries.forEach(e=>{if(!topicStats[e.topic])topicStats[e.topic]={c:0,w:0,t:0,net:0,dur:0,count:0};topicStats[e.topic].c+=(e.correct||0);topicStats[e.topic].w+=(e.wrong||0);topicStats[e.topic].t+=(e.total||0);topicStats[e.topic].net+=(e.net||0);topicStats[e.topic].dur+=(e.duration||0);topicStats[e.topic].count++});
+  const topicSummary=Object.entries(topicStats).map(([k,v])=>`  - ${k}: ${v.t} soru, ${v.c} doğru, ${v.w} yanlış, %${v.t>0?Math.round((v.c/v.t)*100):0} başarı, ${v.net.toFixed(1)} net, ${(v.dur/60).toFixed(1)} saat, ${v.count} oturum`).join('\n');
+
+  // Last 7 days daily breakdown
+  const last7Days=[];for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);const de=entries.filter(e=>e.date===ds);const q=de.reduce((s,e)=>s+(e.total||0),0);const n=de.reduce((s,e)=>s+(e.net||0),0);const dur=de.reduce((s,e)=>s+(e.duration||0),0);if(q>0)last7Days.push(`  - ${ds}: ${q} soru, ${n.toFixed(1)} net, ${(dur/60).toFixed(1)} saat`)}
+  const last7Str=last7Days.length?last7Days.join('\n'):'  Veri yok';
+
+  // Deneme summary
+  const denSummary=denemeList.slice(0,10).map(d=>`  - ${d.date} "${d.name}": GY=${d.gyNet?.toFixed(1)}, GK=${d.gkNet?.toFixed(1)}, Toplam=${d.totalNet?.toFixed(1)}, Puan=${(d.puan||calcKPSSPuan(d.totalNet||0)).toFixed(1)}`).join('\n');
+
+  // Schedule
+  const schedStr=DAYS.map((day,i)=>{const slots=scheduleSlots.filter(s=>s.day===i).sort((a,b)=>a.startTime.localeCompare(b.startTime));if(!slots.length)return`  - ${day}: Boş`;return`  - ${day}: ${slots.map(s=>`[ID: ${s.id}] ${s.startTime}-${s.endTime} ${s.subject}/${s.topic}`).join(', ')}`}).join('\n');
+
+  // Recent entries (last 10)
+  const recentEntries=entries.slice(0,10).map(e=>`  - ${e.date}: ${e.subject}/${e.topic}, ${e.total} soru, ${e.correct}D/${e.wrong}Y, ${(e.net||0).toFixed(1)} net, ${e.duration||0}dk`).join('\n');
+
+  // Total study hours
+  const totalHours=(entries.reduce((s,e)=>s+(e.duration||0),0)/60).toFixed(1);
+
+  // Badges
+  const unlockedBadges=(userSettings.badges||[]).map(id=>{const b=BADGES_DEF.find(x=>x.id===id);return b?b.name+' '+b.icon:id}).join(', ');
+
+  // Weak topics
+  const weakTopics=Object.entries(topicStats).filter(([,s])=>s.t>=10&&(s.c/s.t)<0.5).map(([k,v])=>`${k} (%${Math.round((v.c/v.t)*100)})`).join(', ');
+
+  const systemPrompt=`Sen Alni AI'sın — kullanıcının kişisel KPSS Önlisans çalışma koçu ve asistanısın.
+Kullanıcının adı: ${currentUser.displayName||'Kullanıcı'}
+Bugünün tarihi: ${today}
+
+═══ TÜM VERİLER ═══
+
+📊 GENEL İSTATİSTİKLER:
+- Toplam çözülen soru: ${stats.totalQuestions}
+- Toplam giriş sayısı: ${stats.totalEntries}
+- Toplam çalışma süresi: ${totalHours} saat
+- Çalışma serisi (streak): ${stats.streak} gün
+- Toplam pomodoro: ${stats.totalPomodoros}
+- En iyi doğru oranı: %${stats.bestAccuracy}
+- Tek günde max soru: ${stats.maxDailyQuestions}
+
+📅 BUGÜN (${today}):
+- Çözülen soru: ${todayQ}
+- Net: ${todayNet.toFixed(1)}
+- Çalışma süresi: ${todayHours} saat (${todayDur} dakika)
+- Girişler: ${todayEntries.map(e=>`${e.topic}: ${e.total}soru ${e.correct}D/${e.wrong}Y`).join(', ')||'Henüz giriş yok'}
+
+📈 SON 7 GÜN DETAYI:
+${last7Str}
+
+📚 KONU BAZLI DETAYLI PERFORMANS:
+${topicSummary||'  Henüz veri yok'}
+
+⚠️ ZAYIF KONULAR (<%50 başarı):
+${weakTopics||'  Tespit edilmedi'}
+
+📝 SON 10 GENEL DENEME SONUCU:
+${denSummary||'  Henüz deneme yok'}
+
+📋 BRANŞ DENEME SONUÇLARI (son 10):
+${bransDenemeList.slice(0,10).map(d=>`  - ${d.date} "${d.name}": ${d.topic}, ${d.total} soru, ${d.correct}D/${d.wrong}Y, ${(d.net||0).toFixed(1)} net, %${d.accuracy||0}`).join('\n')||'  Henüz branş deneme yok'}
+
+📒 SON 10 ÇALIŞMA KAYDI:
+${recentEntries||'  Henüz kayıt yok'}
+
+📅 HAFTALIK DERS PROGRAMI:
+${schedStr}
+
+🏆 KAZANILAN ROZETLER: ${unlockedBadges||'Henüz yok'}
+⏱️ POMODORO SAYISI: ${pomodoroCount}
+📅 SINAV TARİHİ: ${userSettings.examDate||'Belirlenmedi'}
+🎯 GÜNLÜK HEDEF: ${userSettings.dailyGoal||'Belirlenmedi'} soru
+🎯 HAFTALIK HEDEF: ${userSettings.weeklyGoal||'Belirlenmedi'} soru
+
+═══ EYLEM SİSTEMİ ═══
+
+Kullanıcı senden bir İŞLEM yapmanı istediğinde (çalışma kaydı ekle, ders programı değiştir vb.):
+
+⚠️ ADIM 1 — EKSİK BİLGİ KONTROLÜ:
+Bir işlem için gerekli TÜM bilgiler verilmediyse, ACTION bloğu EKLEME. Bunun yerine eksik bilgileri TEK TEK sor.
+
+Çalışma kaydı için ZORUNLU bilgiler:
+- Konu (Türkçe/Paragraf/Matematik/Problem/Tarih/Coğrafya/Vatandaşlık Bilgisi/Güncel Bilgiler)
+- Toplam soru sayısı
+- Doğru sayısı
+- Yanlış sayısı
+- Çalışma süresi (dakika) — belirtilmediyse sor
+
+Ders programı için ZORUNLU bilgiler:
+- Gün (Pazartesi-Pazar)
+- Başlangıç saati
+- Bitiş saati
+- Konu
+
+⚠️ ADIM 2 — BİLGİLER TAMAMSA:
+Tüm bilgiler mevcutsa, yanıtının EN SONUNA (metin bittikten sonra) şu formatta eylem bloğu ekle.
+
+ÖNEMLİ: Eylem bloğunu AŞAĞIDAKİ formatta BİREBIR kullan. Hiçbir değişiklik yapma. Sadece değerleri değiştir.
+
+ÇALIŞMA KAYDI EKLEME örneği:
+[EYLEM]{"type":"add_entry","data":{"subject":"Genel Yetenek","topic":"Turkce","total":50,"correct":40,"wrong":5,"duration":90,"date":"${today}","notes":""}}[/EYLEM]
+
+Kurallar:
+- subject ve topic değerleri SADECE aşağıdaki listeden seçilmeli:
+  * subject: "Genel Yetenek" → topic: "Turkce", "Paragraf", "Matematik", "Problem"
+  * subject: "Genel Kultur" → topic: "Tarih", "Cografya", "Vatandaslik Bilgisi", "Guncel Bilgiler"
+- topic değerlerinde Türkçe karakter KULLANMA, yukarıdaki ASCII değerleri kullan
+- Kullanıcı tarih belirtmediyse bugünün tarihini kullan
+- Birden fazla konu girdiyse HER BİRİ İÇİN ayrı [EYLEM]...[/EYLEM] bloğu oluştur
+
+DERS PROGRAMI EKLEME örneği:
+[EYLEM]{"type":"add_schedule","data":{"day":0,"startTime":"09:00","endTime":"10:30","subject":"Genel Yetenek","topic":"Turkce"}}[/EYLEM]
+(day: 0=Pazartesi, 1=Salı, 2=Çarşamba, 3=Perşembe, 4=Cuma, 5=Cumartesi, 6=Pazar)
+
+DERS PROGRAMI İÇİN subject ve topic değerleri:
+  * subject: "Genel Yetenek" → topic: "Turkce", "Paragraf", "Matematik", "Problem"
+  * subject: "Genel Kultur" → topic: "Tarih", "Cografya", "Vatandaslik Bilgisi", "Guncel Bilgiler"
+  * subject: "Deneme" → topic: "Genel Deneme", "Brans Deneme"
+Kullanıcı "deneme" veya "genel deneme" veya "branş deneme" yazarsa subject="Deneme" kullan!
+
+DERS PROGRAMI SİLME örneği:
+(ÖNEMLİ: id olarak sadece yukarıdaki program listesinde yazan [ID: xyz] kısmındaki gerçek id'yi kullan!)
+[EYLEM]{"type":"delete_schedule","data":{"id":"gercek_id_buraya"}}[/EYLEM]
+
+GENEL KURALLAR:
+- [EYLEM] ve [/EYLEM] etiketlerini MUTLAKA kullan, başka format kullanma
+- JSON içinde Türkçe karakter (ç, ş, ğ, ü, ö, ı, İ) KULLANMA, ASCII yaz
+- Eksik bilgi varsa ASLA eylem bloğu ekleme, önce sor
+- Her zaman Türkçe konuş, samimi ve motive edici ol
+- Markdown formatı kullan`;
+
+  const convHistory=aiHistory.slice(-12).map(m=>`${m.role==='user'?'Kullanıcı':'Asistan'}: ${m.content}`).join('\n');
+  const fullPrompt=`${systemPrompt}\n\nSohbet Geçmişi:\n${convHistory}\n\nKullanıcı: ${text}`;
+
+  try{
+    const response=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:fullPrompt}),redirect:'follow',mode:'cors'});
+    if(!response.ok)throw new Error(`API ${response.status}`);
+    const respText=await response.text();const parsed=parseSSEResponse(respText);
+    typing.remove();
+    let content=parsed.content||'Üzgünüm, yanıt oluşturulamadı.';
+
+    // Parse actions from content - ultra robust parsing
+    const actions=[];
+    
+    // Fix topic names that AI might write with Turkish chars
+    function fixTopicName(t){
+      if(!t)return t;
+      const map={'Türkçe':'Turkce','Türkce':'Turkce','T\u00fcrk\u00e7e':'Turkce','Turkce':'Turkce',
+        'Coğrafya':'Cografya','Co\u011frafya':'Cografya','Cografya':'Cografya',
+        'Güncel Bilgiler':'Guncel Bilgiler','G\u00fcncel':'Guncel Bilgiler',
+        'Vatandaşlık Bilgisi':'Vatandaslik Bilgisi','Vatanda\u015fl\u0131k':'Vatandaslik Bilgisi'};
+      for(const[k,v]of Object.entries(map)){if(t.includes(k))return v}
+      return t;
+    }
+    
+    // Method 1: [EYLEM]...[/EYLEM] tags
+    content=content.replace(/\[EYLEM\]\s*([\s\S]*?)\s*\[\/EYLEM\]/gi,(match,json)=>{
+      try{
+        let cleaned=json.trim().replace(/[\u201C\u201D\u2018\u2019]/g,'"').replace(/\n/g,' ');
+        const jm=cleaned.match(/\{[\s\S]*\}/);
+        if(jm){const a=JSON.parse(jm[0]);actions.push(a)}
+      }catch(e){console.warn('EYLEM parse:',e.message)}
+      return '';
+    });
+    
+    // Method 2: |||ACTION:...|||
+    if(!actions.length){
+      content=content.replace(/\|{2,3}\s*ACTION\s*:?\s*([\s\S]*?)\|{2,3}/gi,(match,json)=>{
+        try{
+          let cleaned=json.trim().replace(/[\u201C\u201D\u2018\u2019]/g,'"').replace(/\n/g,' ');
+          const jm=cleaned.match(/\{[\s\S]*\}/);
+          if(jm){const a=JSON.parse(jm[0]);actions.push(a)}
+        }catch(e){console.warn('ACTION parse:',e.message)}
+        return '';
+      });
+    }
+    
+    // Method 3: Raw JSON with type field anywhere in content
+    if(!actions.length){
+      const jsonPattern=/\{\s*["']type["']\s*:\s*["'](add_entry|add_schedule|delete_schedule)["'][\s\S]*?\{[\s\S]*?\}\s*\}/g;
+      let m;
+      while((m=jsonPattern.exec(content))!==null){
+        try{
+          let cleaned=m[0].replace(/[\u201C\u201D\u2018\u2019]/g,'"').replace(/'/g,'"');
+          actions.push(JSON.parse(cleaned));
+          content=content.replace(m[0],'');
+        }catch(e){}
+      }
+    }
+    
+    // Fix topic names in parsed actions
+    actions.forEach(a=>{
+      if(a.data&&a.data.topic){
+        const orig=a.data.topic;
+        // Map ASCII back to proper Turkish for display
+        const displayMap={'Turkce':'Türkçe','Cografya':'Coğrafya','Guncel Bilgiler':'Güncel Bilgiler','Vatandaslik Bilgisi':'Vatandaşlık Bilgisi','Brans Deneme':'Branş Deneme'};
+        a.data.topic=displayMap[orig]||orig;
+        // Fix subject based on topic
+        if(['Türkçe','Paragraf','Matematik','Problem'].includes(a.data.topic))a.data.subject='Genel Yetenek';
+        else if(['Tarih','Coğrafya','Vatandaşlık Bilgisi','Güncel Bilgiler'].includes(a.data.topic))a.data.subject='Genel Kültür';
+        else if(['Genel Deneme','Branş Deneme','Brans Deneme'].includes(a.data.topic))a.data.subject='Deneme';
+      }
+    });
+    
+    content=content.trim();
+
+    // Render AI message
+    const aiDiv=document.createElement('div');aiDiv.className='ai-msg assistant';
+    aiDiv.innerHTML=typeof marked!=='undefined'?marked.parse(content):content;
+
+    // Render action cards
+    actions.forEach((action,idx)=>{
+      const card=document.createElement('div');card.className='ai-action-card';
+      const actionId='action_'+Date.now()+'_'+idx;
+      card.id=actionId;
+
+      if(action.type==='add_entry'){
+        const d=action.data;
+        const net=(d.correct||0)-((d.wrong||0)/4);
+        card.innerHTML=`<h4>✏️ Çalışma Kaydı Ekle</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag">📅 <strong>${d.date}</strong></span>
+            <span class="ai-action-tag">📘 <strong>${d.subject}</strong></span>
+            <span class="ai-action-tag">📖 <strong>${d.topic}</strong></span>
+            <span class="ai-action-tag">📝 <strong>${d.total}</strong> soru</span>
+            <span class="ai-action-tag" style="color:var(--success)">✅ <strong>${d.correct}</strong> doğru</span>
+            <span class="ai-action-tag" style="color:var(--error)">❌ <strong>${d.wrong}</strong> yanlış</span>
+            <span class="ai-action-tag">🎯 <strong>${net.toFixed(1)}</strong> net</span>
+            ${d.duration?`<span class="ai-action-tag">⏰ <strong>${d.duration}</strong> dk</span>`:''}
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Onayla & Kaydet</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
+      } else if(action.type==='add_schedule'){
+        const d=action.data;
+        card.innerHTML=`<h4>📅 Ders Programı Ekle</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag">📆 <strong>${DAYS[d.day]}</strong></span>
+            <span class="ai-action-tag">⏰ <strong>${d.startTime}-${d.endTime}</strong></span>
+            <span class="ai-action-tag">📘 <strong>${d.subject}</strong></span>
+            <span class="ai-action-tag">📖 <strong>${d.topic}</strong></span>
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Onayla & Ekle</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
+      } else if(action.type==='delete_schedule'){
+        const d=action.data;
+        const slot=scheduleSlots.find(s=>s.id===d.id);
+        card.innerHTML=`<h4>🗑️ Program Sil</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag">${slot?`${DAYS[slot.day]} ${slot.startTime}-${slot.endTime} ${slot.topic}`:d.id}</span>
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Sil</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
+      }
+      aiDiv.appendChild(card);
+    });
+
+    msgEl.appendChild(aiDiv);msgEl.scrollTop=msgEl.scrollHeight;
+    aiHistory.push({role:'assistant',content});
+    localStorage.setItem(`ai_${currentUser.uid}`,JSON.stringify(aiHistory.slice(-50)));
+  }catch(e){
+    typing.remove();
+    const errDiv=document.createElement('div');errDiv.className='ai-msg assistant';errDiv.textContent='⚠️ Hata: '+e.message;msgEl.appendChild(errDiv);
+  }
+  aiGenerating=false;
+}
+
+// ===== AI ACTION EXECUTION =====
+window.executeAIAction=async function(cardId,actionStr,type){
+  const card=document.getElementById(cardId);
+  if(!card)return;
+  if(type==='reject'){card.classList.add('rejected');card.querySelector('.ai-action-btns').remove();showToast('İşlem iptal edildi','info');return}
+
+  try{
+    const action = JSON.parse(decodeURIComponent(actionStr));
+    if(action.type==='add_entry'){
+      const d=action.data;
+      const blank=Math.max(0,(d.total||0)-(d.correct||0)-(d.wrong||0));
+      const net=(d.correct||0)-((d.wrong||0)/4);
+      const doc=await db.collection('users').doc(currentUser.uid).collection('entries').add({
+        subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Alni AI ile eklendi',createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+      entries.unshift({id:doc.id,subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Alni AI ile eklendi'});
+      showToast('✅ Çalışma kaydı eklendi!','success');
+      checkAndAwardBadges();
+      renderDashboard(); // UI güncelle
+    } else if(action.type==='add_schedule'){
+      const d=action.data;
+      const doc=await db.collection('users').doc(currentUser.uid).collection('schedule').add({day:d.day,startTime:d.startTime,endTime:d.endTime,subject:d.subject,topic:d.topic});
+      scheduleSlots.push({id:doc.id,day:d.day,startTime:d.startTime,endTime:d.endTime,subject:d.subject,topic:d.topic});
+      showToast('✅ Ders programına eklendi!','success');
+      renderSchedule(); renderDashboard(); // UI güncelle
+    } else if(action.type==='delete_schedule'){
+      await db.collection('users').doc(currentUser.uid).collection('schedule').doc(action.data.id).delete();
+      scheduleSlots=scheduleSlots.filter(s=>s.id!==action.data.id);
+      showToast('✅ Program silindi!','success');
+      renderSchedule(); renderDashboard(); // UI güncelle
+    }
+    card.classList.add('done');card.querySelector('.ai-action-btns').remove();
+  }catch(e){showToast('Hata: '+e.message,'error')}
+};
+
+function parseSSEResponse(text){
+  const lines=text.split('\n');let contentParts=[],thinkingParts=[];let isContent=false,isThinking=false;
+  for(const line of lines){
+    if(line==='event: content'){isContent=true;isThinking=false;continue}
+    if(line==='event: thinking'||line==='event: reasoning'){isThinking=true;isContent=false;continue}
+    if((isContent||isThinking)&&line.startsWith('data: ')){
+      try{
+        const data=line.substring(6);
+        if(data.includes('<START_STREAMING_SSE>')||data.includes('<END_STREAMING_SSE>'))continue;
+        // Try JSON parse first (API sends JSON-encoded strings)
+        try{
+          const parsed=JSON.parse(data);
+          if(typeof parsed==='string'){if(isThinking)thinkingParts.push(parsed);else contentParts.push(parsed)}
+        }catch(je){
+          // If not valid JSON, use raw data (handles action blocks with { })
+          if(isThinking)thinkingParts.push(data);else contentParts.push(data);
+        }
+      }catch(e){}
+    }
+  }
+  let content=fixTurkish(contentParts.join(''));let thinking=fixTurkish(thinkingParts.join(''));
+  return{content,thinking};
+}
+
+function fixTurkish(t){const r={'Ä±':'ı','Ä°':'İ','Ã¶':'ö','Ã–':'Ö','Ã¼':'ü','Ãœ':'Ü','ÅŸ':'ş','Åž':'Ş','ÄŸ':'ğ','Äž':'Ğ','Ã§':'ç','Ã‡':'Ç'};let f=t;for(const[b,g]of Object.entries(r))f=f.split(b).join(g);return f}
+
+// ===== UTILS =====
+function formatDateShort(d){if(!d)return'-';const parts=d.split('-');return`${parts[2]}/${parts[1]}`}
+function formatDuration(m){if(!m)return'-';const h=Math.floor(m/60);const min=m%60;return h>0?`${h}s ${min}dk`:`${min}dk`}
+function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+// ===== INIT =====
+populateSlotTopics();
+</script>
+</body>
+</html>
