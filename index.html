@@ -254,6 +254,35 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .ai-action-card.done::after{content:'✅ Uygulandı';display:block;margin-top:8px;color:var(--success);font-weight:600;font-size:.82rem}
 .ai-action-card.rejected::after{content:'❌ İptal edildi';display:block;margin-top:8px;color:var(--error);font-weight:600;font-size:.82rem}
 
+/* SYLLABUS / KONU TAKİBİ */
+.syllabus-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;padding:16px}
+.syllabus-summary .syl-stat{text-align:center}
+.syllabus-summary .syl-stat .syl-num{font-size:1.6rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.syllabus-summary .syl-stat .syl-label{font-size:.75rem;color:var(--text-secondary);margin-top:2px}
+.syllabus-course{margin-bottom:16px}
+.syllabus-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--glass-bg);backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s}
+.syllabus-header:hover{background:rgba(255,107,157,.08)}
+.syllabus-header .syl-course-name{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px}
+.syllabus-header .syl-progress-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.syllabus-header .syl-progress-bar{width:120px;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.syllabus-header .syl-progress-fill{height:100%;background:var(--gradient);border-radius:4px;transition:width .4s ease}
+.syllabus-header .syl-progress-text{font-size:.8rem;font-weight:600;color:var(--pink);min-width:38px;text-align:right}
+.syllabus-header .syl-arrow{transition:transform .3s;font-size:.8rem;color:var(--text-secondary)}
+.syllabus-header.open .syl-arrow{transform:rotate(180deg)}
+.syllabus-topics{max-height:0;overflow:hidden;transition:max-height .4s ease;border-radius:0 0 var(--radius-sm) var(--radius-sm)}
+.syllabus-topics.open{max-height:2000px}
+.syl-topic-row{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 10px 36px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+.syl-topic-row:hover{background:rgba(255,255,255,.03)}
+.syl-topic-row:last-child{border-bottom:none}
+.syl-topic-name{font-size:.88rem;color:var(--text);flex:1}
+.syl-status-btns{display:flex;gap:6px;flex-shrink:0}
+.syl-status-btn{padding:4px 10px;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:transparent;color:var(--text-secondary);font-size:.72rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.syl-status-btn:hover{border-color:rgba(255,255,255,.3)}
+.syl-status-btn.active-not_started{background:rgba(120,120,120,.2);border-color:rgba(120,120,120,.4);color:#aaa}
+.syl-status-btn.active-started{background:rgba(255,193,7,.15);border-color:rgba(255,193,7,.4);color:#ffc107}
+.syl-status-btn.active-completed{background:rgba(76,175,80,.15);border-color:rgba(76,175,80,.4);color:#4caf50}
+.syl-status-btn.active-needs_review{background:rgba(244,67,54,.15);border-color:rgba(244,67,54,.4);color:#f44336}
+
 /* PROFILE */
 .profile-container{max-width:600px;margin:0 auto}
 .profile-card{padding:28px;margin-bottom:16px}
@@ -359,6 +388,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="nav-item active" data-page="dashboard"><span class="nav-icon">🏠</span>Dashboard</div>
       <div class="nav-item" data-page="entry"><span class="nav-icon">✏️</span>Veri Girişi</div>
       <div class="nav-item" data-page="deneme"><span class="nav-icon">📝</span>Deneme Takibi</div>
+      <div class="nav-item" data-page="syllabus"><span class="nav-icon">📚</span>Konu Takibi</div>
       <div class="nav-item" data-page="analytics"><span class="nav-icon">📊</span>Analizler</div>
       <div class="nav-item" data-page="schedule"><span class="nav-icon">📅</span>Ders Programı</div>
       <div class="nav-item" data-page="history"><span class="nav-icon">📒</span>Geçmiş</div>
@@ -532,6 +562,14 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
     </div>
 
     <!-- SCHEDULE -->
+    <!-- SYLLABUS / KONU TAKİBİ -->
+    <div class="page" id="page-syllabus">
+      <h1 class="page-title">📚 Konu Takibi</h1>
+      <p class="page-subtitle">KPSS Önlisans müfredatını takip et</p>
+      <div class="syllabus-summary glass" id="syllabusSummary"></div>
+      <div class="syllabus-container" id="syllabusContainer"></div>
+    </div>
+
     <div class="page" id="page-schedule">
       <h1 class="page-title">Ders Programı</h1>
       <p class="page-subtitle">Haftalık ders programını oluştur</p>
@@ -668,6 +706,13 @@ const auth=firebase.auth(), db=firebase.firestore();
 
 const SUBJECTS={'Genel Yetenek':{color:'#FF6B9D',topics:['Türkçe','Paragraf','Matematik','Problem']},'Genel Kültür':{color:'#AB47BC',topics:['Tarih','Coğrafya','Vatandaşlık Bilgisi','Güncel Bilgiler']},'Deneme':{color:'#FF9800',topics:['Genel Deneme','Branş Deneme']}};
 const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+const SYLLABUS={
+  'Türkçe':{icon:'📖',topics:['Sözcükte Anlam','Cümlede Anlam','Paragrafta Anlam','Noktalama İşaretleri','Yapı Bilgisi','Ses Bilgisi','Sözcük Bilgisi','Cümle Bilgisi','Yazım Kuralları','Anlatım Bozuklukları','Sözel Mantık ve Akıl Yürütme']},
+  'Matematik':{icon:'🔢',topics:['Temel Kavramlar','Sayılar','Bölme ve Bölünebilme Kuralları','Asal Çarpanlara Ayırma','EBOB-EKOK','Birinci Dereceden Denklemler','Rasyonel Sayılar','Eşitsizlik','Mutlak Değer','Üslü Sayılar','Köklü Sayılar','Çarpanlara Ayırma','Oran-Orantı','Problemler','Kümeler','İşlem ve Modüler Aritmetik','Permütasyon, Kombinasyon ve Olasılık','Tablo ve Grafikler']},
+  'Tarih':{icon:'🏛️',topics:['İslamiyet Öncesi Türk Tarihi','Türk-İslam Tarihi','İlk Müslüman Türk Devletleri','Anadolu Selçuklu Devleti Siyasi Tarihi','Osmanlı Devleti Kültür ve Medeniyeti','Osmanlı Devleti Kuruluş, Yükselme, Duraklama Dönemleri','Osmanlı Devleti Gerileme ve Dağılma Dönemleri','Trablusgarp Savaşı (1911-1912)','I. ve II. Balkan Savaşları','I. Dünya Savaşı','Kurtuluş Savaşına Hazırlık Dönemi','Kurtuluş Savaşı Muharebeler ve Antlaşmalar Dönemi','Atatürk İlke ve İnkılapları','Atatürk Dönemi Türk Dış Politikası','Çağdaş Türk ve Dünya Tarihi']},
+  'Coğrafya':{icon:'🌍',topics:['Türkiye\'nin Coğrafi Konumu ve Yer Şekilleri','Türkiye\'nin İklimi ve Bitki Örtüsü','Türkiye\'de Nüfus, Yerleşme ve Göç','Türkiye\'nin Ekonomik Coğrafyası','Türkiye\'nin Coğrafi Bölgeleri']},
+  'Vatandaşlık':{icon:'⚖️',topics:['Hukukun Temel Kavramları','Genel Esaslar','Temel Haklar','Yasama','Yürütme','Yargı','Anayasal Gelişmeler','İdare Hukuku','Uluslararası Örgütler','Güncel Bilgiler']}
+};
 const AVATARS=['👨‍🎓','👩‍🎓','🦊','🐱','🐼','🦋','🌸','🌺','💜','🎀','🦄','🐰','🌙','⭐','🎯','🏆'];
 const QUOTES=['Başarı, her gün tekrarlanan küçük çabaların toplamıdır.','Bugün yapacağın fedakarlık, yarın seni şampiyon yapacak.','Hedefine odaklan, geri kalan her şey yerli yerine oturacak.','Zorluklar, seni güçlendirmek için var.','Her uzman bir zamanlar amatördü.','Pes etme! Büyük başarılar, sabır ve azimle gelir.','Bugün çalışarak yarını güvence altına alıyorsun.','Kendine inan, sen yapabilirsin!','Disiplin, motivasyonun bittiği yerde başlar.','Küçük adımlar, büyük yolculukların başlangıcıdır.','Başarı bir gece değil, her gece çalışmakla gelir.','Hayallerinin peşinden git, KPSS sadece bir basamak!'];
 const BADGES_DEF=[
@@ -686,7 +731,8 @@ const BADGES_DEF=[
 ];
 
 // ===== STATE =====
-let currentUser=null,entries=[],denemeList=[],bransDenemeList=[],scheduleSlots=[],userSettings={},pomodoroCount=0,aiHistory=[];
+let currentUser=null,entries=[],denemeList=[],bransDenemeList=[],scheduleSlots=[],userSettings={},pomodoroCount=0,aiHistory=[],stats={};
+let topicProgress={};
 let charts={};
 
 // ===== AUTH =====
@@ -748,6 +794,8 @@ async function loadAllData(){
     scheduleSlots=schSnap.docs.map(d=>({id:d.id,...d.data()}));
     // Pomodoro count
     pomodoroCount=userSettings.pomodoroCount||0;
+    // Topic progress
+    topicProgress=userSettings.topicProgress||{};
     // AI history from localStorage
     aiHistory=JSON.parse(localStorage.getItem(`ai_${uid}`)||'[]');
     // Clean old action markers from history
@@ -780,6 +828,7 @@ function navigateTo(pageId){
   if(pageId==='history')renderHistory();
   if(pageId==='badges')renderBadges();
   if(pageId==='deneme'){renderDenemeChart();renderDenemeTable();renderBransChart();renderBransTable()}
+  if(pageId==='syllabus')renderSyllabus();
   if(pageId==='profile')renderProfile();
 }
 
@@ -1117,6 +1166,136 @@ function renderHeatmap(){
 
 function chartOpts(){return{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)',maxTicksLimit:10},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}}
 
+// ===== SYLLABUS / KONU TAKİBİ =====
+const SYLLABUS_STATUSES=[
+  {key:'not_started',label:'Başlamadım',icon:'⬜'},
+  {key:'started',label:'Çalışıyorum',icon:'🟨'},
+  {key:'completed',label:'Bitti',icon:'🟩'},
+  {key:'needs_review',label:'Tekrar',icon:'🟥'}
+];
+let sylOpenState={};
+
+function renderSyllabus(){
+  const container=document.getElementById('syllabusContainer');
+  const summary=document.getElementById('syllabusSummary');
+  if(!container)return;
+  container.innerHTML='';
+
+  let totalTopics=0, completed=0, started=0, needsReview=0;
+
+  // Count stats
+  Object.entries(SYLLABUS).forEach(([course,data])=>{
+    data.topics.forEach(topic=>{
+      totalTopics++;
+      const status=topicProgress[course+'::'+topic]||'not_started';
+      if(status==='completed')completed++;
+      else if(status==='started')started++;
+      else if(status==='needs_review')needsReview++;
+    });
+  });
+
+  const notStarted=totalTopics-completed-started-needsReview;
+  const pct=totalTopics>0?Math.round((completed/totalTopics)*100):0;
+
+  // Summary
+  summary.innerHTML=`
+    <div class="syl-stat"><div class="syl-num">${totalTopics}</div><div class="syl-label">Toplam Konu</div></div>
+    <div class="syl-stat"><div class="syl-num" style="color:#4caf50">${completed}</div><div class="syl-label">🟩 Bitti</div></div>
+    <div class="syl-stat"><div class="syl-num" style="color:#ffc107">${started}</div><div class="syl-label">🟨 Çalışıyorum</div></div>
+    <div class="syl-stat"><div class="syl-num" style="color:#f44336">${needsReview}</div><div class="syl-label">🟥 Tekrar</div></div>
+    <div class="syl-stat"><div class="syl-num">${notStarted}</div><div class="syl-label">⬜ Başlamadım</div></div>
+    <div class="syl-stat"><div class="syl-num">%${pct}</div><div class="syl-label">Tamamlanan</div></div>
+  `;
+
+  // Courses
+  Object.entries(SYLLABUS).forEach(([course,data])=>{
+    const courseDiv=document.createElement('div');
+    courseDiv.className='syllabus-course';
+
+    // Course progress
+    const courseCompleted=data.topics.filter(t=>(topicProgress[course+'::'+t]||'not_started')==='completed').length;
+    const coursePct=data.topics.length>0?Math.round((courseCompleted/data.topics.length)*100):0;
+
+    // Header
+    const header=document.createElement('div');
+    header.className='syllabus-header';
+    header.innerHTML=`
+      <div class="syl-course-name">${data.icon} ${course}</div>
+      <div class="syl-progress-wrap">
+        <div class="syl-progress-bar"><div class="syl-progress-fill" style="width:${coursePct}%"></div></div>
+        <span class="syl-progress-text">${courseCompleted}/${data.topics.length}</span>
+        <span class="syl-arrow">▼</span>
+      </div>
+    `;
+
+    // Topics container
+    const topicsDiv=document.createElement('div');
+    topicsDiv.className='syllabus-topics';
+
+    data.topics.forEach(topic=>{
+      const key=course+'::'+topic;
+      const currentStatus=topicProgress[key]||'not_started';
+
+      const row=document.createElement('div');
+      row.className='syl-topic-row';
+
+      const statusIcon=SYLLABUS_STATUSES.find(s=>s.key===currentStatus)?.icon||'⬜';
+
+      let btnsHtml='<div class="syl-status-btns">';
+      SYLLABUS_STATUSES.forEach(s=>{
+        const activeClass=currentStatus===s.key?`active-${s.key}`:'';
+        btnsHtml+=`<button class="syl-status-btn ${activeClass}" data-key="${key}" data-status="${s.key}">${s.icon} ${s.label}</button>`;
+      });
+      btnsHtml+='</div>';
+
+      row.innerHTML=`<span class="syl-topic-name">${statusIcon} ${topic}</span>${btnsHtml}`;
+      topicsDiv.appendChild(row);
+    });
+
+    if(sylOpenState[course]){
+      header.classList.add('open');
+      topicsDiv.classList.add('open');
+    }
+
+    // Toggle accordion
+    header.addEventListener('click',()=>{
+      const isOpen=header.classList.toggle('open');
+      topicsDiv.classList.toggle('open');
+      sylOpenState[course]=isOpen;
+    });
+
+    // Status button clicks
+    topicsDiv.addEventListener('click',async(e)=>{
+      const btn=e.target.closest('.syl-status-btn');
+      if(!btn)return;
+      const key=btn.dataset.key;
+      const status=btn.dataset.status;
+      topicProgress[key]=status;
+      await saveTopicProgress();
+      renderSyllabus();
+    });
+
+    courseDiv.appendChild(header);
+    courseDiv.appendChild(topicsDiv);
+    container.appendChild(courseDiv);
+  });
+}
+
+async function saveTopicProgress(){
+  if(!currentUser)return;
+  try{
+    await db.collection('users').doc(currentUser.uid).set({topicProgress},{ merge:true });
+  }catch(e){console.error('Topic save error:',e)}
+}
+
+window.updateTopicStatus=async function(course,topic,status){
+  const key=course+'::'+topic;
+  topicProgress[key]=status;
+  await saveTopicProgress();
+  renderSyllabus();
+  showToast(`${topic}: ${SYLLABUS_STATUSES.find(s=>s.key===status)?.label||status}`,'success');
+};
+
 // ===== SCHEDULE =====
 function renderSchedule(){
   const grid=document.getElementById('scheduleGrid');grid.innerHTML='';
@@ -1413,6 +1592,9 @@ ${schedStr}
 🎯 GÜNLÜK HEDEF: ${userSettings.dailyGoal||'Belirlenmedi'} soru
 🎯 HAFTALIK HEDEF: ${userSettings.weeklyGoal||'Belirlenmedi'} soru
 
+📚 KONU TAKİBİ (İLERLEMELER):
+${Object.entries(SYLLABUS).map(([course,data])=>{const items=data.topics.map(t=>{const st=topicProgress[course+'::'+t]||'not_started';const labels={not_started:'Baslamadi',started:'Calisiyor',completed:'Bitti',needs_review:'Tekrar'};return`    ${t}: ${labels[st]||st}`}).join('\n');return`  ${course}:\n${items}`}).join('\n')}
+
 ═══ EYLEM SİSTEMİ ═══
 
 Kullanıcı senden bir İŞLEM yapmanı istediğinde (çalışma kaydı ekle, ders programı değiştir vb.):
@@ -1462,6 +1644,13 @@ Kullanıcı "deneme" veya "genel deneme" veya "branş deneme" yazarsa subject="D
 DERS PROGRAMI SİLME örneği:
 (ÖNEMLİ: id olarak sadece yukarıdaki program listesinde yazan [ID: xyz] kısmındaki gerçek id'yi kullan!)
 [EYLEM]{"type":"delete_schedule","data":{"id":"gercek_id_buraya"}}[/EYLEM]
+
+KONU DURUMU GÜNCELLEME örneği:
+Kullanıcı "Matematik problemleri bitirdim" veya "Tarihte Osmanlı'yı tekrar et" gibi bir şey derse:
+[EYLEM]{"type":"update_topic_status","data":{"course":"Matematik","topic":"Problemler","status":"completed"}}[/EYLEM]
+status değerleri: "not_started", "started", "completed", "needs_review"
+course değerleri: "Turkce", "Matematik", "Tarih", "Cografya", "Vatandaslik" (İlk harfi büyük, Türkçe karakter YOK)
+topic değerlerini yukarıdaki KONU TAKİBİ listesinden seç, ama Türkçe karakter KULLANMA
 
 GENEL KURALLAR:
 - [EYLEM] ve [/EYLEM] etiketlerini MUTLAKA kullan, başka format kullanma
@@ -1518,7 +1707,7 @@ GENEL KURALLAR:
     
     // Method 3: Raw JSON with type field anywhere in content
     if(!actions.length){
-      const jsonPattern=/\{\s*["']type["']\s*:\s*["'](add_entry|add_schedule|delete_schedule)["'][\s\S]*?\{[\s\S]*?\}\s*\}/g;
+      const jsonPattern=/\{\s*["']type["']\s*:\s*["'](add_entry|add_schedule|delete_schedule|update_topic_status)["'][\s\S]*?\{[\s\S]*?\}\s*\}/g;
       let m;
       while((m=jsonPattern.exec(content))!==null){
         try{
@@ -1597,6 +1786,17 @@ GENEL KURALLAR:
             <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Sil</button>
             <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
           </div>`;
+      } else if(action.type==='update_topic_status'){
+        const d=action.data;
+        const sLabels={not_started:'Başlamadım',started:'Çalışıyorum',completed:'Bitti',needs_review:'Tekrar'};
+        card.innerHTML=`<h4>📚 Konu Durumu</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag"><strong>${d.topic}</strong> ➔ ${sLabels[d.status]||d.status}</span>
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Güncelle</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
       }
       aiDiv.appendChild(card);
     });
@@ -1641,6 +1841,9 @@ window.executeAIAction=async function(cardId,actionStr,type){
       scheduleSlots=scheduleSlots.filter(s=>s.id!==action.data.id);
       showToast('✅ Program silindi!','success');
       renderSchedule(); renderDashboard(); // UI güncelle
+    } else if(action.type==='update_topic_status'){
+      const d=action.data;
+      await updateTopicStatus(d.course, d.topic, d.status);
     }
     card.classList.add('done');card.querySelector('.ai-action-btns').remove();
   }catch(e){showToast('Hata: '+e.message,'error')}
