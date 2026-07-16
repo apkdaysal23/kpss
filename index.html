@@ -334,6 +334,105 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .history-filters{flex-direction:column}
 .history-filters .form-group{width:100%}
 }
+
+/* USERNAME MODAL */
+.username-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;display:flex;align-items:center;justify-content:center}
+.username-modal{background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius);padding:32px;max-width:400px;width:90%;text-align:center}
+.username-modal h2{margin-bottom:8px}.username-modal p{color:var(--text2);margin-bottom:16px;font-size:.9rem}
+.username-modal input{width:100%;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--glass-bg);color:#fff;font-size:1rem;margin-bottom:8px}
+.username-modal .un-status{font-size:.8rem;min-height:18px;margin-bottom:12px}
+.username-modal .un-ok{color:var(--success)}.username-modal .un-err{color:var(--error)}
+
+/* SOCIAL TABS */
+.social-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.social-tab{padding:8px 18px;border-radius:20px;background:var(--glass-bg);border:1px solid var(--glass-border);cursor:pointer;font-size:.85rem;white-space:nowrap;transition:var(--transition);color:var(--text2)}
+.social-tab.active,.social-tab:hover{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border-color:transparent}
+.social-tab .tab-badge{background:var(--error);color:#fff;border-radius:50%;padding:1px 6px;font-size:.7rem;margin-left:4px}
+
+/* SEARCH */
+.social-search{display:flex;gap:8px;margin-bottom:16px}
+.social-search input{flex:1;padding:10px 16px;border-radius:20px;border:1px solid var(--glass-border);background:var(--glass-bg);color:#fff;font-size:.9rem}
+.social-search button{padding:10px 20px;border-radius:20px;background:var(--gradient);color:#fff;border:none;cursor:pointer;font-weight:600}
+
+/* DISCOVER GRID & USER CARDS */
+.discover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;padding:8px}
+.user-card{display:flex;flex-direction:column;align-items:center;padding:16px 10px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;cursor:pointer;transition:var(--transition);text-align:center}
+.user-card:hover{transform:translateY(-3px);background:rgba(255,107,157,.1);border-color:var(--pink)}
+.user-card .uc-avatar{font-size:3rem;margin-bottom:10px;width:100%}
+.user-card .uc-info{width:100%;margin-bottom:12px;display:flex;flex-direction:column;gap:2px}
+.user-card .uc-name{font-weight:700;font-size:1rem;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-card .uc-username{color:var(--pink2);font-size:.85rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-card .uc-stat{color:var(--text3);font-size:.75rem;margin-top:2px}
+.follow-btn{width:100%;padding:8px;border-radius:12px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:var(--transition)}
+.follow-btn.follow{background:var(--gradient);color:#fff}
+.follow-btn.following{background:transparent;border:1px solid var(--glass-border);color:var(--text2)}
+.follow-btn.requested{background:transparent;border:1px solid var(--warn);color:var(--warn)}
+
+/* FOLLOW REQUESTS */
+.freq-card{display:flex;align-items:center;padding:12px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-bottom:8px}
+.freq-card .uc-avatar{font-size:1.8rem;margin-right:12px;width:42px;text-align:center}
+.freq-card .uc-info{flex:1}.freq-card .freq-btns{display:flex;gap:6px}
+.freq-card .freq-btns button{padding:6px 14px;border-radius:16px;font-size:.8rem;font-weight:600;cursor:pointer;border:none}
+.freq-card .freq-accept{background:var(--success);color:#fff}
+.freq-card .freq-reject{background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text2)}
+
+/* DM */
+.dm-list{max-height:calc(100vh - 280px);overflow-y:auto}
+.dm-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:var(--transition)}
+.dm-item:hover,.dm-item.active{background:rgba(255,107,157,.06)}
+.dm-item .uc-avatar{font-size:1.6rem;margin-right:10px;width:38px;text-align:center}
+.dm-item .dm-info{flex:1;min-width:0}
+.dm-item .dm-name{font-weight:600;font-size:.9rem}
+.dm-item .dm-preview{color:var(--text3);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dm-item .dm-time{color:var(--text3);font-size:.72rem;white-space:nowrap}
+.dm-item .dm-unread{background:var(--pink);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+.dm-chat-header{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dm-chat-header .dm-back{cursor:pointer;font-size:1.2rem;margin-right:10px}
+.dm-chat-header .uc-avatar{font-size:1.4rem;margin-right:8px}
+.dm-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:calc(100vh - 380px)}
+.dm-msg{max-width:75%;padding:10px 16px;border-radius:20px;font-size:.9rem;line-height:1.4;word-break:break-word;position:relative}
+.dm-msg.sent{align-self:flex-end;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border-bottom-right-radius:4px;box-shadow:0 4px 10px rgba(255,107,157,.3)}
+.dm-msg.received{align-self:flex-start;background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text);border-bottom-left-radius:4px}
+.dm-msg .dm-msg-time{font-size:.65rem;opacity:.7;margin-top:4px;display:block;text-align:right}
+.dm-input-area{display:flex;gap:12px;padding:16px;border-top:1px solid rgba(255,255,255,.06);background:var(--bg-dark)}
+.dm-input-area input{flex:1;padding:12px 20px;border-radius:24px;border:1px solid var(--glass-border);background:var(--glass-bg);color:#fff;font-size:.95rem;transition:border-color .2s}
+.dm-input-area input:focus{border-color:var(--pink);outline:none}
+.dm-input-area button{padding:12px 24px;border-radius:24px;background:var(--gradient);color:#fff;border:none;cursor:pointer;font-weight:700;transition:transform .2s}
+.dm-input-area button:hover{transform:scale(1.05)}
+.dm-blocked-msg{text-align:center;padding:24px;color:var(--text3);font-size:.9rem}
+
+/* USER PROFILE VIEW */
+.up-header{text-align:center;padding:24px}
+.up-header .up-avatar{font-size:3.5rem}
+.up-header .up-name{font-size:1.3rem;font-weight:700;margin-top:8px}
+.up-header .up-username{color:var(--text2);font-size:.9rem}
+.up-header .up-bio{color:var(--text3);font-size:.85rem;margin-top:6px}
+.up-counts{display:flex;justify-content:center;gap:24px;margin:12px 0}
+.up-counts .up-count{text-align:center}
+.up-counts .up-count-num{font-weight:700;font-size:1.1rem}
+.up-counts .up-count-label{color:var(--text2);font-size:.75rem}
+.up-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.up-stats{display:flex;justify-content:center;gap:24px;padding:16px;max-width:500px;margin:0 auto}
+.up-stat-card{flex:1;text-align:center;padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px}
+.up-stat-card .up-sv{font-size:1.8rem;font-weight:700;color:var(--pink);margin-bottom:4px}
+.up-stat-card .up-sl{color:var(--text2);font-size:.75rem;margin-top:2px}
+.up-private-msg{text-align:center;padding:32px;color:var(--text3);font-size:.9rem}
+
+/* PRIVACY SETTINGS */
+.privacy-card{padding:20px;margin-bottom:12px}
+.privacy-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.privacy-row:last-child{border-bottom:none}
+.privacy-row .pr-label{font-size:.9rem}
+.privacy-row .pr-desc{color:var(--text3);font-size:.75rem;margin-top:2px}
+.privacy-row select{padding:6px 12px;border-radius:8px;background:var(--glass-bg);border:1px solid var(--glass-border);color:#fff;font-size:.85rem}
+
+/* NOTIFICATIONS BADGE */
+.notif-badge{position:absolute;top:-2px;right:-2px;background:var(--error);color:#fff;border-radius:50%;width:16px;height:16px;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+.mobile-header .notif-bell{position:relative;cursor:pointer;font-size:1.3rem;margin-left:auto;margin-right:8px}
+
+/* BLOCKED USERS */
+.blocked-item{display:flex;align-items:center;padding:10px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-bottom:6px}
+.blocked-item .uc-info{flex:1}.blocked-item button{padding:4px 12px;border-radius:12px;background:transparent;border:1px solid var(--error);color:var(--error);font-size:.78rem;cursor:pointer}
 </style>
 </head>
 <body>
@@ -352,7 +451,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
     <div id="loginForm">
       <h1 class="auth-title">Hoş Geldin!</h1>
       <p class="auth-subtitle">KPSS Önlisans Çalışma Asistanına giriş yap</p>
-      <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="ornek@mail.com" required></div>
+      <div class="form-group"><label>Kullanıcı Adı veya E-posta</label><input type="text" id="loginEmail" placeholder="ornek@mail.com" required></div>
       <div class="form-group"><label>Şifre</label><input type="password" id="loginPassword" placeholder="••••••" required></div>
       <button class="btn btn-primary" id="loginBtn">Giriş Yap</button>
       <div class="auth-error" id="loginError"></div>
@@ -363,7 +462,16 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <h1 class="auth-title">Kayıt Ol</h1>
       <p class="auth-subtitle">Hemen hesabını oluştur ve çalışmaya başla!</p>
       <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="Adın Soyadın" required></div>
-      <div class="form-group"><label>E-posta</label><input type="email" id="regEmail" placeholder="ornek@mail.com" required></div>
+      <div class="form-group">
+        <label>Kullanıcı Adı</label>
+        <input type="text" id="regUsername" placeholder="kullanici_adi" required style="text-transform:lowercase">
+        <div id="unCheckMsg" style="font-size:0.8rem;margin-top:4px;font-weight:600"></div>
+      </div>
+      <div class="form-group">
+        <label>E-posta</label>
+        <input type="email" id="regEmail" placeholder="ornek@mail.com" required>
+        <div id="emCheckMsg" style="font-size:0.8rem;margin-top:4px;font-weight:600"></div>
+      </div>
       <div class="form-group"><label>Şifre</label><input type="password" id="regPassword" placeholder="En az 6 karakter" required></div>
       <button class="btn btn-primary" id="regBtn">Kayıt Ol</button>
       <div class="auth-error" id="regError"></div>
@@ -378,6 +486,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
   <div class="mobile-header">
     <button class="hamburger" id="menuBtn">☰</button>
     <span style="font-weight:700;font-size:1.1rem">📚 KPSS Asistan</span>
+    <div class="notif-bell" id="notifBell" onclick="navigateTo('social');showSocialTab('requests')">🔔<span class="notif-badge hidden" id="notifCount">0</span></div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -394,6 +503,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="nav-item" data-page="history"><span class="nav-icon">📒</span>Geçmiş</div>
       <div class="nav-item" data-page="pomodoro"><span class="nav-icon">⏱️</span>Pomodoro</div>
       <div class="nav-item" data-page="badges"><span class="nav-icon">🏆</span>Rozetler</div>
+      <div class="nav-item" data-page="social"><span class="nav-icon">🌐</span>Sosyal</div>
       <div class="nav-item" data-page="profile"><span class="nav-icon">👤</span>Profil</div>
     </div>
     <div class="sidebar-footer">
@@ -632,22 +742,73 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="badges-grid" id="badgesGrid"></div>
     </div>
 
+    <!-- SOCIAL -->
+    <div class="page" id="page-social">
+      <h1 class="page-title">🌐 Sosyal</h1>
+      <p class="page-subtitle">Arkadaşlarını bul, takıp et, mesajlaş</p>
+      <div class="social-tabs" id="socialTabs">
+        <div class="social-tab active" data-tab="discover" onclick="showSocialTab('discover')">Keşfet</div>
+        <div class="social-tab" data-tab="requests" onclick="showSocialTab('requests')">İstekler <span class="tab-badge hidden" id="reqBadge">0</span></div>
+        <div class="social-tab" data-tab="messages" onclick="showSocialTab('messages')">💬 Mesajlar</div>
+        <div class="social-tab" data-tab="following" onclick="showSocialTab('following')">👥 Takip Ettiklerim</div>
+        <div class="social-tab" data-tab="followers" onclick="showSocialTab('followers')">❤️ Takipçiler</div>
+      </div>
+      <div id="socialContent"></div>
+    </div>
+
+    <!-- USER PROFILE VIEW -->
+    <div class="page" id="page-userprofile">
+      <div id="userProfileContent"></div>
+    </div>
+
     <!-- PROFILE -->
     <div class="page" id="page-profile">
-      <h1 class="page-title">Profil & Ayarlar</h1>
+      <h1 class="page-title">Profil &amp; Ayarlar</h1>
       <p class="page-subtitle">Hesap ayarlarını düzenle</p>
       <div class="profile-container">
         <div class="profile-card glass">
-          <div class="profile-header"><div class="profile-avatar-big" id="profileAvatar">👤</div><div><h3 id="profileName">Kullanıcı</h3><p style="color:var(--text2);font-size:.85rem" id="profileEmail">email</p></div></div>
+          <div class="profile-header"><div class="profile-avatar-big" id="profileAvatar">👤</div><div><h3 id="profileName">Kullanıcı</h3><p style="color:var(--text2);font-size:.85rem" id="profileEmail">email</p><p style="color:var(--pink);font-size:.85rem" id="profileUsername">@username</p></div></div>
           <h3 style="margin:16px 0 8px">Avatar Seç</h3>
           <div class="avatar-grid" id="avatarGrid"></div>
         </div>
         <div class="profile-card glass">
-          <h3 style="margin-bottom:12px">📅 Sınav & Hedefler</h3>
+          <h3 style="margin-bottom:12px">📝 Kullanıcı Adı &amp; Bio</h3>
+          <div class="settings-row"><label>Bio (Hakkında)</label><input type="text" id="settingBio" placeholder="KPSS 2026 hazırlık..." maxlength="100"></div>
+        </div>
+        <div class="profile-card glass">
+          <h3 style="margin-bottom:12px">📅 Sınav &amp; Hedefler</h3>
           <div class="settings-row"><label>KPSS Sınav Tarihi</label><input type="date" id="settingExamDate"></div>
           <div class="settings-row"><label>Günlük Hedef (soru)</label><input type="number" id="settingDailyGoal" min="0" placeholder="100"></div>
           <div class="settings-row"><label>Haftalık Hedef (soru)</label><input type="number" id="settingWeeklyGoal" min="0" placeholder="500"></div>
           <button class="btn btn-primary btn-sm" style="margin-top:12px" id="saveSettings">Kaydet</button>
+        </div>
+        <div class="profile-card glass privacy-card">
+          <h3 style="margin-bottom:12px">🔒 Gizlilik Ayarları</h3>
+          <div class="privacy-row">
+            <div><div class="pr-label">Hesap Gizliliği</div><div class="pr-desc">Gizli hesapta takip istekleri onay gerektirir</div></div>
+            <select id="privIsPrivate"><option value="0">🔓 Açık</option><option value="1">🔒 Gizli</option></select>
+          </div>
+          <div class="privacy-row">
+            <div><div class="pr-label">Soru Geçmişi Gizliliği</div><div class="pr-desc">Çözdüğün soruları kimler görsün</div></div>
+            <select id="privQVis"><option value="everyone">Herkes</option><option value="followers">Takipçiler</option><option value="nobody">Kimse</option></select>
+          </div>
+          <div class="privacy-row">
+            <div><div class="pr-label">Deneme Geçmişi Gizliliği</div><div class="pr-desc">Denemelerini kimler görsün</div></div>
+            <select id="privDVis"><option value="everyone">Herkes</option><option value="followers">Takipçiler</option><option value="nobody">Kimse</option></select>
+          </div>
+          <div class="privacy-row">
+            <div><div class="pr-label">Grafikler Gizliliği</div><div class="pr-desc">Başarı grafiklerini kimler görsün</div></div>
+            <select id="privCVis"><option value="everyone">Herkes</option><option value="followers">Takipçiler</option><option value="nobody">Kimse</option></select>
+          </div>
+          <div class="privacy-row">
+            <div><div class="pr-label">DM İzni</div><div class="pr-desc">Kim sana mesaj atabilsin</div></div>
+            <select id="privDM"><option value="everyone">Herkes</option><option value="following">Takip Ettiklerim</option><option value="nobody">Kimse</option></select>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-top:12px" id="savePrivacy">Gizliliği Kaydet</button>
+        </div>
+        <div class="profile-card glass">
+          <h3 style="margin-bottom:12px">🚫 Engellenen Kullanıcılar</h3>
+          <div id="blockedList"><p style="color:var(--text3);font-size:.85rem">Engellenen kullanıcı yok</p></div>
         </div>
         <div class="profile-card glass">
           <h3 style="margin-bottom:12px;color:var(--error)">⚠️ Hesap</h3>
@@ -748,20 +909,107 @@ function showToast(msg,type='info'){const c=document.getElementById('toastContai
 const errMsgs={'auth/email-already-in-use':'Bu e-posta zaten kullanılıyor.','auth/invalid-email':'Geçersiz e-posta.','auth/weak-password':'Şifre en az 6 karakter olmalı.','auth/user-not-found':'Kullanıcı bulunamadı.','auth/wrong-password':'Yanlış şifre.','auth/too-many-requests':'Çok fazla deneme. Lütfen bekleyin.','auth/invalid-credential':'Geçersiz e-posta veya şifre.'};
 
 document.getElementById('loginBtn').onclick=async()=>{
-  const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;
-  if(!e||!p)return document.getElementById('loginError').textContent='Tüm alanları doldurun.';
-  try{showLoading();await auth.signInWithEmailAndPassword(e,p)}catch(err){document.getElementById('loginError').textContent=errMsgs[err.code]||'Giriş başarısız.';hideLoading()}
+  const val=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;
+  if(!val||!p)return document.getElementById('loginError').textContent='Tüm alanları doldurun.';
+  try{
+    showLoading();
+    let e=val;
+    if(!val.includes('@')){
+      const unDoc=await db.collection('usernames').doc(val.toLowerCase()).get();
+      if(unDoc.exists) {
+        if(unDoc.data().email) e = unDoc.data().email;
+        else if(unDoc.data().uid) {
+           const uDoc = await db.collection('users').doc(unDoc.data().uid).get();
+           if(uDoc.exists && uDoc.data().email) e = uDoc.data().email;
+           else throw new Error('Kullanıcı adı bulunamadı.');
+        } else throw new Error('Kullanıcı adı bulunamadı.');
+      } else throw new Error('Kullanıcı adı bulunamadı.');
+    }
+    await auth.signInWithEmailAndPassword(e,p);
+  }catch(err){
+    document.getElementById('loginError').textContent=err.message==='Kullanıcı adı bulunamadı.'?err.message:(errMsgs[err.code]||'Giriş başarısız.');
+    hideLoading();
+  }
 };
+let unTimer, emTimer;
+document.getElementById('regUsername').addEventListener('input', (e) => {
+  const un = e.target.value.trim().toLowerCase();
+  const msg = document.getElementById('unCheckMsg');
+  clearTimeout(unTimer);
+  if(!un) { msg.textContent = ''; return; }
+  if(un.length<3||un.length>20||!/^[a-z0-9_]+$/.test(un)) { msg.style.color = 'var(--warn)'; msg.textContent = '❌ Geçersiz format'; return; }
+  msg.style.color = 'var(--text3)'; msg.textContent = '⏳ Kontrol ediliyor...';
+  unTimer = setTimeout(async () => {
+    try {
+      const doc = await db.collection('usernames').doc(un).get();
+      if(doc.exists) { msg.style.color = 'var(--error)'; msg.textContent = '❌ Bu kullanıcı adı alınmış.'; }
+      else { msg.style.color = 'var(--success)'; msg.textContent = '✅ Kullanılabilir.'; }
+    } catch(err) { msg.textContent = ''; }
+  }, 500);
+});
+
+document.getElementById('regEmail').addEventListener('input', (e) => {
+  const em = e.target.value.trim();
+  const msg = document.getElementById('emCheckMsg');
+  clearTimeout(emTimer);
+  if(!em || !em.includes('@')) { msg.textContent = ''; return; }
+  msg.style.color = 'var(--text3)'; msg.textContent = '⏳ Kontrol ediliyor...';
+  emTimer = setTimeout(async () => {
+    try {
+      const methods = await auth.fetchSignInMethodsForEmail(em);
+      if(methods.length > 0) { msg.style.color = 'var(--error)'; msg.textContent = '❌ Bu e-posta kullanımda.'; }
+      else { msg.style.color = 'var(--success)'; msg.textContent = '✅ E-posta boşta.'; }
+    } catch(err) { 
+       // fallback if fetchSignInMethodsForEmail fails (e.g. protection enabled)
+       try {
+         const snap = await db.collection('users').where('email','==',em).limit(1).get();
+         if(!snap.empty) { msg.style.color = 'var(--error)'; msg.textContent = '❌ Bu e-posta kullanımda.'; }
+         else { msg.style.color = 'var(--success)'; msg.textContent = '✅ E-posta boşta.'; }
+       } catch(e2) { msg.textContent = ''; }
+    }
+  }, 800);
+});
+
 document.getElementById('regBtn').onclick=async()=>{
-  const n=document.getElementById('regName').value,e=document.getElementById('regEmail').value,p=document.getElementById('regPassword').value;
-  if(!n||!e||!p)return document.getElementById('regError').textContent='Tüm alanları doldurun.';
-  try{showLoading();const uc=await auth.createUserWithEmailAndPassword(e,p);await uc.user.updateProfile({displayName:n});await db.collection('users').doc(uc.user.uid).set({name:n,email:e,avatar:'👨‍🎓',createdAt:firebase.firestore.FieldValue.serverTimestamp()})}catch(err){document.getElementById('regError').textContent=errMsgs[err.code]||'Kayıt başarısız.';hideLoading()}
+  const n=document.getElementById('regName').value.trim(), e=document.getElementById('regEmail').value.trim(), p=document.getElementById('regPassword').value;
+  const un=document.getElementById('regUsername').value.trim().toLowerCase();
+  if(!n||!e||!p||!un)return document.getElementById('regError').textContent='Tüm alanları doldurun.';
+  if(un.length<3||un.length>20||!/^[a-z0-9_]+$/.test(un))return document.getElementById('regError').textContent='Geçersiz kullanıcı adı (sadece küçük harf, rakam, altçizgi).';
+  try{
+    showLoading();
+    const unDoc = await db.collection('usernames').doc(un).get();
+    if(unDoc.exists) throw new Error('Bu kullanıcı adı daha önce alınmış.');
+    const uc=await auth.createUserWithEmailAndPassword(e,p);
+    await uc.user.updateProfile({displayName:n});
+    const batch=db.batch();
+    batch.set(db.collection('users').doc(uc.user.uid), {name:n, email:e, username:un, avatar:'👨‍🎓', createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    batch.set(db.collection('usernames').doc(un), {uid:uc.user.uid, email:e});
+    await batch.commit();
+  }catch(err){
+    document.getElementById('regError').textContent=err.message==='Bu kullanıcı adı daha önce alınmış.'?err.message:(errMsgs[err.code]||'Kayıt başarısız.');
+    hideLoading();
+  }
 };
-document.getElementById('logoutBtn').onclick=()=>auth.signOut();
+document.getElementById('logoutBtn').onclick=()=>{
+  if(reqUnsub)reqUnsub(); if(dmUnsub)dmUnsub();
+  socialUsers=[]; followRequests=[]; followingList=[]; followersList=[]; blockedList=[];
+  auth.signOut();
+};
 
 auth.onAuthStateChanged(async user=>{
   if(user){currentUser=user;showLoading();await loadAllData();hideLoading();document.getElementById('auth-container').style.display='none';document.getElementById('app-container').style.display='block';updateUserUI()}
-  else{currentUser=null;entries=[];denemeList=[];document.getElementById('auth-container').style.display='flex';document.getElementById('app-container').style.display='none';hideLoading()}
+  else{
+    currentUser=null; entries=[]; denemeList=[]; userSettings={};
+    socialUsers=[]; followRequests=[]; followingList=[]; followersList=[]; blockedList=[]; sentRequestsList=[];
+    document.getElementById('auth-container').style.display='flex';
+    document.getElementById('app-container').style.display='none';
+    document.getElementById('loginEmail').value=''; document.getElementById('loginPassword').value='';
+    document.getElementById('regUsername').value=''; document.getElementById('regEmail').value='';
+    document.getElementById('regPassword').value=''; document.getElementById('regName').value='';
+    const unMsg = document.getElementById('unCheckMsg'); if(unMsg) unMsg.textContent='';
+    const emMsg = document.getElementById('emCheckMsg'); if(emMsg) emMsg.textContent='';
+    hideLoading();
+  }
 });
 
 function updateUserUI(){
@@ -803,6 +1051,7 @@ async function loadAllData(){
     renderAIChatHistory();
     // Render
     renderDashboard();renderDenemeTable();
+    checkUsername(); startSocialListeners();
   }catch(e){console.error('Load error:',e);showToast('Veri yükleme hatası','error')}
 }
 
@@ -830,6 +1079,7 @@ function navigateTo(pageId){
   if(pageId==='deneme'){renderDenemeChart();renderDenemeTable();renderBransChart();renderBransTable()}
   if(pageId==='syllabus')renderSyllabus();
   if(pageId==='profile')renderProfile();
+  if(pageId==='social')showSocialTab('discover');
 }
 
 // ===== DASHBOARD =====
@@ -1879,6 +2129,542 @@ function fixTurkish(t){const r={'Ä±':'ı','Ä°':'İ','Ã¶':'ö','Ã–':'Ö'
 function formatDateShort(d){if(!d)return'-';const parts=d.split('-');return`${parts[2]}/${parts[1]}`}
 function formatDuration(m){if(!m)return'-';const h=Math.floor(m/60);const min=m%60;return h>0?`${h}s ${min}dk`:`${min}dk`}
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+// ===== SOCIAL FEATURES LOGIC =====
+
+let socialUsers = [];
+let followRequests = [];
+let followingList = [];
+let followersList = [];
+let blockedList = [];
+let sentRequestsList = [];
+let dmUnsub = null;
+let reqUnsub = null;
+
+async function updateUsername(username) {
+  const un = username.trim().toLowerCase();
+  if(un.length < 3 || un.length > 20 || !/^[a-z0-9_]+$/.test(un)) throw new Error('Geçersiz kullanıcı adı formatı.');
+  const doc = await db.collection('usernames').doc(un).get();
+  if(doc.exists && doc.data().uid !== currentUser.uid) throw new Error('Bu kullanıcı adı alınmış.');
+  
+  const batch = db.batch();
+  batch.set(db.collection('usernames').doc(un), { uid: currentUser.uid, email: currentUser.email });
+  batch.update(db.collection('users').doc(currentUser.uid), { username: un });
+  if(userSettings.username && userSettings.username !== un) batch.delete(db.collection('usernames').doc(userSettings.username));
+  
+  await batch.commit();
+  userSettings.username = un;
+  document.getElementById('profileUsername').textContent = '@' + un;
+}
+
+async function checkUsername() {
+  if(!userSettings.username) {
+    const div = document.createElement('div');
+    div.className = 'username-modal-overlay';
+    div.id = 'unModal';
+    div.innerHTML = `
+      <div class="username-modal">
+        <h2>Kullanıcı Adı Seç</h2>
+        <p>Diğer adaylarla etkileşime geçmek için benzersiz bir kullanıcı adı belirle.</p>
+        <input type="text" id="unInput" placeholder="kullanici_adi" style="text-transform:lowercase">
+        <div class="un-status" id="unStatus"></div>
+        <button class="btn btn-primary" id="unBtn">Kaydet</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    
+    document.getElementById('unBtn').onclick = async () => {
+      const v = document.getElementById('unInput').value;
+      const st = document.getElementById('unStatus');
+      try {
+        st.textContent = 'Kontrol ediliyor...'; st.className = 'un-status';
+        await updateUsername(v);
+        st.textContent = 'Kayıt başarılı!'; st.className = 'un-status un-ok';
+        setTimeout(() => div.remove(), 1000);
+      } catch(e) {
+        st.textContent = e.message; st.className = 'un-status un-err';
+      }
+    };
+  } else {
+    document.getElementById('profileUsername').textContent = '@' + userSettings.username;
+  }
+  
+  document.getElementById('settingBio').value = userSettings.bio || '';
+  document.getElementById('privIsPrivate').value = userSettings.isPrivate ? "1" : "0";
+  document.getElementById('privQVis').value = (userSettings.privacy && userSettings.privacy.qVis) || 'everyone';
+  document.getElementById('privDVis').value = (userSettings.privacy && userSettings.privacy.dVis) || 'everyone';
+  document.getElementById('privCVis').value = (userSettings.privacy && userSettings.privacy.cVis) || 'everyone';
+  document.getElementById('privDM').value = (userSettings.privacy && userSettings.privacy.dmPerm) || 'everyone';
+}
+
+document.getElementById('savePrivacy').onclick = async () => {
+  const isP = document.getElementById('privIsPrivate').value === "1";
+  const qVis = document.getElementById('privQVis').value;
+  const dVis = document.getElementById('privDVis').value;
+  const cVis = document.getElementById('privCVis').value;
+  const dDM = document.getElementById('privDM').value;
+  const bio = document.getElementById('settingBio').value;
+  
+  try {
+    await db.collection('users').doc(currentUser.uid).update({
+      isPrivate: isP, bio: bio, privacy: { qVis, dVis, cVis, dmPerm: dDM }
+    });
+    userSettings.isPrivate = isP; userSettings.bio = bio; userSettings.privacy = { qVis, dVis, cVis, dmPerm: dDM };
+    showToast('Gizlilik ayarları kaydedildi', 'success');
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+};
+
+function startSocialListeners() {
+  if(reqUnsub) reqUnsub();
+  reqUnsub = db.collection('users').doc(currentUser.uid).collection('followRequests')
+    .onSnapshot(snap => {
+      followRequests = snap.docs.map(d => ({id: d.id, ...d.data()}));
+      const c = followRequests.length;
+      document.getElementById('notifCount').textContent = c;
+      if(c > 0) {
+        document.getElementById('notifCount').classList.remove('hidden');
+        document.getElementById('reqBadge').textContent = c;
+        document.getElementById('reqBadge').classList.remove('hidden');
+      } else {
+        document.getElementById('notifCount').classList.add('hidden');
+        document.getElementById('reqBadge').classList.add('hidden');
+      }
+      if(document.getElementById('page-social').classList.contains('active')) {
+        const activeTab = document.querySelector('.social-tab.active').dataset.tab;
+        if(activeTab === 'requests') renderRequests();
+      }
+    });
+    
+  db.collection('users').doc(currentUser.uid).collection('following').onSnapshot(s => followingList = s.docs.map(d => d.id));
+  db.collection('users').doc(currentUser.uid).collection('followers').onSnapshot(s => followersList = s.docs.map(d => d.id));
+  db.collection('users').doc(currentUser.uid).collection('sentRequests').onSnapshot(s => sentRequestsList = s.docs.map(d => d.id));
+  db.collection('users').doc(currentUser.uid).collection('blocked').onSnapshot(s => {
+    blockedList = s.docs.map(d => ({id: d.id, ...d.data()}));
+    renderBlockedList();
+  });
+}
+
+function showSocialTab(tab) {
+  document.querySelectorAll('.social-tab').forEach(el => el.classList.remove('active'));
+  const tEl = document.querySelector(`.social-tab[data-tab="${tab}"]`);
+  if(tEl) tEl.classList.add('active');
+  const content = document.getElementById('socialContent');
+  content.innerHTML = '';
+  
+  if(tab === 'discover') renderDiscover(content);
+  else if(tab === 'requests') renderRequests(content);
+  else if(tab === 'messages') renderMessages(content);
+  else if(tab === 'following') renderFollowing(content);
+  else if(tab === 'followers') renderFollowers(content);
+}
+
+async function renderDiscover(container) {
+  container.innerHTML = `
+    <div class="social-search"><input type="text" id="searchInput" placeholder="Kullanıcı adı ara..."><button onclick="searchUsers()">Ara</button></div>
+    <h3 style="margin-bottom:12px">Önerilen Kullanıcılar</h3>
+    <div id="discoverList"><div class="spinner" style="margin:20px auto"></div></div>
+  `;
+  try {
+    const snap = await db.collection('users').orderBy('createdAt', 'desc').limit(20).get();
+    let html = '<div class="discover-grid">';
+    snap.docs.forEach(doc => {
+      if(doc.id === currentUser.uid || blockedList.some(b => b.id === doc.id)) return;
+      const d = doc.data(); if(!d.username) return;
+      const isFollowing = followingList.includes(doc.id);
+      const isPending = sentRequestsList.includes(doc.id);
+      let btnHtml = `<button class="follow-btn follow" onclick="event.stopPropagation(); followUser('${doc.id}', ${d.isPrivate})">Takip Et</button>`;
+      if(isFollowing) btnHtml = `<button class="follow-btn following" onclick="event.stopPropagation(); unfollowUser('${doc.id}')">Takipte</button>`;
+      else if(isPending) btnHtml = `<button class="follow-btn pending" onclick="event.stopPropagation(); cancelRequest('${doc.id}')" style="background:transparent;border:1px solid var(--text3);color:var(--text3)">İstek Gönderildi</button>`;
+      html += `<div class="user-card" onclick="viewUserProfile('${doc.id}')"><div class="uc-avatar">${d.avatar||'👤'}</div><div class="uc-info"><div class="uc-name">${d.name}</div><div class="uc-username">@${d.username}</div></div>${btnHtml}</div>`;
+    });
+    html += '</div>';
+    document.getElementById('discoverList').innerHTML = html || 'Kullanıcı bulunamadı.';
+  } catch(e) { document.getElementById('discoverList').innerHTML = 'Hata: ' + e.message; }
+}
+
+async function searchUsers() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if(!q) return;
+  const list = document.getElementById('discoverList'); list.innerHTML = '<div class="spinner" style="margin:20px auto"></div>';
+  try {
+    const unDoc = await db.collection('usernames').doc(q).get();
+    if(!unDoc.exists) { list.innerHTML = 'Kullanıcı bulunamadı.'; return; }
+    const targetUid = unDoc.data().uid;
+    if(targetUid === currentUser.uid || blockedList.some(b => b.id === targetUid)) { list.innerHTML = 'Kullanıcı bulunamadı.'; return; }
+    const uDoc = await db.collection('users').doc(targetUid).get(); const d = uDoc.data();
+    const isFollowing = followingList.includes(targetUid);
+    const isPending = sentRequestsList.includes(targetUid);
+    let btnHtml = `<button class="follow-btn follow" onclick="event.stopPropagation(); followUser('${targetUid}', ${d.isPrivate})">Takip Et</button>`;
+    if(isFollowing) btnHtml = `<button class="follow-btn following" onclick="event.stopPropagation(); unfollowUser('${targetUid}')">Takipte</button>`;
+    else if(isPending) btnHtml = `<button class="follow-btn pending" onclick="event.stopPropagation(); cancelRequest('${targetUid}')" style="background:transparent;border:1px solid var(--text3);color:var(--text3)">İstek Gönderildi</button>`;
+    list.innerHTML = `<div class="discover-grid"><div class="user-card" onclick="viewUserProfile('${targetUid}')"><div class="uc-avatar">${d.avatar||'👤'}</div><div class="uc-info"><div class="uc-name">${d.name}</div><div class="uc-username">@${d.username}</div></div>${btnHtml}</div></div>`;
+  } catch(e) { list.innerHTML = 'Hata: ' + e.message; }
+}
+
+async function followUser(targetUid, isPrivate) {
+  try {
+    if(isPrivate) {
+      const batch = db.batch();
+      batch.set(db.collection('users').doc(targetUid).collection('followRequests').doc(currentUser.uid), {
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(), name: currentUser.displayName, username: userSettings.username, avatar: userSettings.avatar || '👤'
+      });
+      batch.set(db.collection('users').doc(currentUser.uid).collection('sentRequests').doc(targetUid), { timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+      await batch.commit();
+      showToast('Takip isteği gönderildi!', 'success');
+    } else {
+      const batch = db.batch();
+      batch.set(db.collection('users').doc(currentUser.uid).collection('following').doc(targetUid), { timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+      batch.set(db.collection('users').doc(targetUid).collection('followers').doc(currentUser.uid), { timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+      batch.update(db.collection('users').doc(currentUser.uid), { followingCount: firebase.firestore.FieldValue.increment(1) });
+      batch.update(db.collection('users').doc(targetUid), { followersCount: firebase.firestore.FieldValue.increment(1) });
+      await batch.commit();
+      showToast('Takip edildi!', 'success');
+    }
+    const at = document.querySelector('.social-tab.active');
+    if(at && at.dataset.tab === 'discover') showSocialTab('discover');
+    if(document.getElementById('page-userprofile').classList.contains('active')) viewUserProfile(targetUid);
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+async function unfollowUser(targetUid) {
+  try {
+    const batch = db.batch();
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('following').doc(targetUid));
+    batch.delete(db.collection('users').doc(targetUid).collection('followers').doc(currentUser.uid));
+    batch.update(db.collection('users').doc(currentUser.uid), { followingCount: firebase.firestore.FieldValue.increment(-1) });
+    batch.update(db.collection('users').doc(targetUid), { followersCount: firebase.firestore.FieldValue.increment(-1) });
+    await batch.commit();
+    showToast('Takipten çıkıldı.', 'success');
+    const at = document.querySelector('.social-tab.active');
+    if(at && at.dataset.tab === 'discover') showSocialTab('discover');
+    if(document.getElementById('page-userprofile').classList.contains('active')) viewUserProfile(targetUid);
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+function renderRequests(container = document.getElementById('socialContent')) {
+  if(!container) return;
+  if(followRequests.length === 0) { container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)">Bekleyen takip isteği yok.</div>'; return; }
+  let html = '';
+  followRequests.forEach(req => {
+    html += `<div class="freq-card"><div class="uc-avatar">${req.avatar}</div><div class="uc-info"><div class="uc-name">${req.name}</div><div class="uc-username">@${req.username}</div></div><div class="freq-btns"><button class="freq-accept" onclick="acceptRequest('${req.id}')">Kabul</button><button class="freq-reject" onclick="rejectRequest('${req.id}')">Reddet</button></div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+async function acceptRequest(targetUid) {
+  try {
+    const batch = db.batch();
+    batch.set(db.collection('users').doc(currentUser.uid).collection('followers').doc(targetUid), { timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+    batch.set(db.collection('users').doc(targetUid).collection('following').doc(currentUser.uid), { timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('followRequests').doc(targetUid));
+    batch.delete(db.collection('users').doc(targetUid).collection('sentRequests').doc(currentUser.uid));
+    batch.update(db.collection('users').doc(currentUser.uid), { followersCount: firebase.firestore.FieldValue.increment(1) });
+    batch.update(db.collection('users').doc(targetUid), { followingCount: firebase.firestore.FieldValue.increment(1) });
+    await batch.commit(); showToast('İstek kabul edildi.', 'success');
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+async function rejectRequest(targetUid) {
+  try { 
+    const batch = db.batch();
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('followRequests').doc(targetUid));
+    batch.delete(db.collection('users').doc(targetUid).collection('sentRequests').doc(currentUser.uid));
+    await batch.commit();
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+async function cancelRequest(targetUid) {
+  try {
+    const batch = db.batch();
+    batch.delete(db.collection('users').doc(targetUid).collection('followRequests').doc(currentUser.uid));
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('sentRequests').doc(targetUid));
+    await batch.commit();
+    showToast('İstek iptal edildi.', 'info');
+    const at = document.querySelector('.social-tab.active');
+    if(at && at.dataset.tab === 'discover') showSocialTab('discover');
+    if(document.getElementById('page-userprofile').classList.contains('active')) viewUserProfile(targetUid);
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+async function renderFollowing(container) {
+  container.innerHTML = '<div class="spinner" style="margin:20px auto"></div>';
+  if(followingList.length === 0) { container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)">Kimseyi takip etmiyorsun.</div>'; return; }
+  let html = '<div class="discover-grid">';
+  for (const uid of followingList) {
+    const doc = await db.collection('users').doc(uid).get();
+    if(doc.exists) {
+      const d = doc.data();
+      html += `<div class="user-card" onclick="viewUserProfile('${uid}')"><div class="uc-avatar">${d.avatar||'👤'}</div><div class="uc-info"><div class="uc-name">${d.name}</div><div class="uc-username">@${d.username}</div></div><button class="follow-btn following" onclick="event.stopPropagation(); unfollowUser('${uid}')">Takipte</button></div>`;
+    }
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+async function renderFollowers(container) {
+  container.innerHTML = '<div class="spinner" style="margin:20px auto"></div>';
+  if(followersList.length === 0) { container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)">Henüz takipçin yok.</div>'; return; }
+  let html = '<div class="discover-grid">';
+  for (const uid of followersList) {
+    const doc = await db.collection('users').doc(uid).get();
+    if(doc.exists) {
+      const d = doc.data();
+      const isFollowing = followingList.includes(uid);
+      let btnHtml = `<button class="follow-btn follow" onclick="event.stopPropagation(); followUser('${uid}', ${d.isPrivate})">Geri Takip Et</button>`;
+      if(isFollowing) btnHtml = `<button class="follow-btn following" onclick="event.stopPropagation(); unfollowUser('${uid}')">Takipte</button>`;
+      html += `<div class="user-card" onclick="viewUserProfile('${uid}')"><div class="uc-avatar">${d.avatar||' '}</div><div class="uc-info"><div class="uc-name">${d.name}</div><div class="uc-username">@${d.username}</div></div>${btnHtml}</div>`;
+    }
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+async function viewUserProfile(targetUid) {
+  navigateTo('userprofile');
+  const container = document.getElementById('userProfileContent');
+  container.innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
+  
+  if(blockedList.some(b => b.id === targetUid)) {
+    container.innerHTML = `<div class="dm-chat-header"><div class="dm-back" onclick="navigateTo('social')">←</div><h3>Profil</h3></div><div class="up-private-msg">🚫 Bu kullanıcı bulunamadı veya engellendi.</div>`;
+    return;
+  }
+  try {
+    const doc = await db.collection('users').doc(targetUid).get();
+    if(!doc.exists) throw new Error('Kullanıcı bulunamadı');
+    const d = doc.data();
+    const isFollowing = followingList.includes(targetUid);
+    const isPending = sentRequestsList.includes(targetUid);
+    const privacy = d.privacy || { qVis: 'everyone', dVis: 'everyone', cVis: 'everyone', dmPerm: 'everyone' };
+    const qVis = privacy.qVis || privacy.dataVis || 'everyone';
+    const dVis = privacy.dVis || privacy.dataVis || 'everyone';
+    const cVis = privacy.cVis || privacy.dataVis || 'everyone';
+    
+    const canViewQ = (qVis === 'everyone') || (qVis === 'followers' && isFollowing) || (targetUid === currentUser.uid);
+    const canViewD = (dVis === 'everyone') || (dVis === 'followers' && isFollowing) || (targetUid === currentUser.uid);
+    const canViewC = (cVis === 'everyone') || (cVis === 'followers' && isFollowing) || (targetUid === currentUser.uid);
+
+    let btnHtml = '';
+    if(targetUid !== currentUser.uid) {
+      if(isFollowing) btnHtml = `<button class="follow-btn following" onclick="unfollowUser('${targetUid}')">Takipte</button>`;
+      else if(isPending) btnHtml = `<button class="follow-btn pending" onclick="cancelRequest('${targetUid}')" style="background:transparent;border:1px solid var(--text3);color:var(--text3)">İstek Gönderildi</button>`;
+      else btnHtml = `<button class="follow-btn follow" onclick="followUser('${targetUid}', ${d.isPrivate})">Takip Et</button>`;
+      btnHtml += `<button class="btn btn-secondary btn-sm" onclick="startDM('${targetUid}', '${d.name}', '${d.avatar||' '}')">Mesaj Gönder</button>`;
+      btnHtml += `<button class="btn btn-danger btn-sm" onclick="blockUser('${targetUid}', '${d.name}', '${d.username}')">Engelle</button>`;
+    }
+
+    let qHtml = '', dHtml = '', cHtml = '';
+    let hasChartData = false, chartLabels = [], chartData = [];
+
+    // QUESTIONS
+    if(canViewQ) {
+      try {
+        const qSnap = await db.collection('users').doc(targetUid).collection('entries').orderBy('date','desc').limit(15).get();
+        if(qSnap.empty) qHtml = `<div class="up-private-msg">Henüz çözülmüş soru yok.</div>`;
+        else {
+          qHtml = `<div style="display:flex;flex-direction:column;gap:8px;">`;
+          qSnap.docs.forEach(doc => {
+            const data = doc.data();
+            qHtml += `<div style="padding:12px;background:var(--glass-bg);border-radius:12px;border:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:.85rem;color:var(--text2)">${data.date}</div><div style="font-weight:600">${data.topic || data.subject}</div></div>
+              <div style="font-size:1.2rem;font-weight:700;color:var(--pink)">${data.total} Soru</div>
+            </div>`;
+          });
+          qHtml += `</div>`;
+        }
+      } catch(e) { qHtml = `<div class="up-private-msg">⚠️ Soru geçmişi yüklenemedi.</div>`; }
+    } else { qHtml = `<div class="up-private-msg">🔒 Soru geçmişi gizli.</div>`; }
+
+    // DENEMELER
+    if(canViewD) {
+      try {
+        const dSnap = await db.collection('users').doc(targetUid).collection('deneme').orderBy('date','desc').limit(10).get();
+        if(dSnap.empty) dHtml = `<div class="up-private-msg">Henüz deneme kaydı yok.</div>`;
+        else {
+          dHtml = `<div style="display:flex;flex-direction:column;gap:8px;">`;
+          let tempLabels = [], tempNet = [];
+          dSnap.docs.forEach(doc => {
+            const data = doc.data();
+            tempLabels.push(data.name || data.date); tempNet.push(data.totalNet);
+            dHtml += `<div style="padding:12px;background:var(--glass-bg);border-radius:12px;border:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:.85rem;color:var(--text2)">${data.date}</div><div style="font-weight:600">${data.name}</div></div>
+              <div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--success)">${data.totalNet.toFixed(1)} Net</div><div style="font-size:.75rem;color:var(--text2)">Puan: ${data.puan.toFixed(1)}</div></div>
+            </div>`;
+          });
+          dHtml += `</div>`;
+          chartLabels = tempLabels.reverse(); chartData = tempNet.reverse(); hasChartData = true;
+        }
+      } catch(e) { dHtml = `<div class="up-private-msg">⚠️ Deneme geçmişi yüklenemedi.</div>`; }
+    } else { dHtml = `<div class="up-private-msg">🔒 Deneme geçmişi gizli.</div>`; }
+
+    // CHARTS
+    let upEntriesForCharts = [];
+    if(canViewC) {
+      try {
+        const eSnap = await db.collection('users').doc(targetUid).collection('entries').orderBy('date','desc').limit(200).get();
+        upEntriesForCharts = eSnap.docs.map(d => d.data());
+      } catch(e) {}
+      
+      if(upEntriesForCharts.length === 0 && !hasChartData) cHtml = `<div class="up-private-msg">Grafik çizmek için yeterli veri yok.</div>`;
+      else {
+        cHtml = `<div class="analytics-grid" style="margin-bottom:24px;">
+          ${hasChartData ? `<div class="chart-card"><div class="chart-header">📈 Deneme Net Gelişimi</div><canvas id="upChartDeneme"></canvas></div>` : ''}
+          ${upEntriesForCharts.length > 0 ? `
+            <div class="chart-card"><div class="chart-header">📈 Günlük Soru Neti</div><canvas id="upChartNet"></canvas></div>
+            <div class="chart-card"><div class="chart-header">📊 Soru Dağılımı</div><canvas id="upChartDonut"></canvas></div>
+            <div class="chart-card" style="grid-column:1/-1"><div class="chart-header">🎯 Konulara Göre Başarı Oranı</div><canvas id="upChartRadar"></canvas></div>
+          ` : ''}
+        </div>`;
+      }
+    } else { cHtml = `<div class="up-private-msg">🔒 Grafikler gizli.</div>`; }
+    
+    container.innerHTML = `
+      <div class="dm-chat-header"><div class="dm-back" onclick="navigateTo('social')">← Geri</div></div>
+      <div class="up-header" style="text-align:center;padding:24px 16px;">
+        <div class="up-avatar" style="font-size:4.5rem;display:inline-flex;justify-content:center;align-items:center;width:100px;height:100px;border-radius:50%;background:var(--glass-bg);border:2px solid var(--pink);margin-bottom:16px;">${d.avatar||'👤'}</div>
+        <div class="up-name" style="font-size:1.4rem;font-weight:700;margin-bottom:4px">${d.name}</div>
+        <div class="up-username" style="font-size:1rem;color:var(--pink2);margin-bottom:12px">@${d.username}</div>
+        <div class="up-counts" style="display:flex;justify-content:center;gap:32px;margin:20px 0;">
+           <div style="text-align:center"><div style="font-size:1.4rem;font-weight:700">${d.followersCount||0}</div><div style="font-size:.8rem;color:var(--text2)">Takipçi</div></div>
+           <div style="text-align:center"><div style="font-size:1.4rem;font-weight:700">${d.followingCount||0}</div><div style="font-size:.8rem;color:var(--text2)">Takip</div></div>
+        </div>
+        <div class="up-bio" style="font-size:.95rem;color:var(--text);margin-bottom:24px;line-height:1.4">${d.bio || ''}</div>
+        <div class="up-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">
+          ${btnHtml}
+        </div>
+      </div>
+      <div style="padding:0 16px 32px 16px;max-width:800px;margin:0 auto;">
+         <h3 style="margin-bottom:12px;font-size:1.1rem">📈 Analiz Grafikleri</h3>
+         ${cHtml}
+         <h3 style="margin:24px 0 12px 0;font-size:1.1rem">📝 Deneme Geçmişi (Son 10)</h3>
+         ${dHtml}
+         <h3 style="margin:24px 0 12px 0;font-size:1.1rem">✅ Soru Çözümleri (Son 15)</h3>
+         ${qHtml}
+      </div>
+    `;
+
+    // Render Chart if available
+    if(canViewC) renderProfileAnalyticsCharts(upEntriesForCharts, chartLabels, chartData);
+    
+  } catch(e) { container.innerHTML = `<div class="up-private-msg">Hata: ${e.message}</div>`; }
+}
+
+function renderProfileAnalyticsCharts(data, dLabels, dData) {
+   if(document.getElementById('upChartDeneme')) {
+       new Chart(document.getElementById('upChartDeneme').getContext('2d'), {
+         type: 'line',
+         data: { labels: dLabels, datasets: [{ label: 'Net', data: dData, borderColor: '#ff6b9d', backgroundColor: 'rgba(255,107,157,0.1)', fill: true, tension: 0.3 }] },
+         options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+       });
+   }
+   if(!data || data.length === 0) return;
+   
+   if(document.getElementById('upChartNet')) {
+      const byDate={};data.forEach(e=>{if(!byDate[e.date])byDate[e.date]=0;byDate[e.date]+=e.net||0});
+      const sorted=Object.entries(byDate).sort((a,b)=>a[0].localeCompare(b[0]));
+      new Chart(document.getElementById('upChartNet'),{type:'line',data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Günlük Net',data:sorted.map(s=>parseFloat(s[1].toFixed(2))),borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.15)',tension:.3,fill:true,pointBackgroundColor:'#FF6B9D'}]},options:chartOpts()});
+   }
+   if(document.getElementById('upChartDonut')) {
+      const c=data.reduce((s,e)=>s+(e.correct||0),0),w=data.reduce((s,e)=>s+(e.wrong||0),0),b=data.reduce((s,e)=>s+(e.blank||0),0);
+      new Chart(document.getElementById('upChartDonut'),{type:'doughnut',data:{labels:['Doğru','Yanlış','Boş'],datasets:[{data:[c,w,b],backgroundColor:['#4CAF50','#FF5252','rgba(255,255,255,.15)'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}}}});
+   }
+   if(document.getElementById('upChartRadar')) {
+      const topics=Object.values(SUBJECTS).flatMap(s=>s.topics);
+      const vals=topics.map(t=>{const te=data.filter(e=>e.topic===t);const tQ=te.reduce((s,e)=>s+(e.total||0),0);const tC=te.reduce((s,e)=>s+(e.correct||0),0);return tQ>0?Math.round((tC/tQ)*100):0});
+      new Chart(document.getElementById('upChartRadar'),{type:'radar',data:{labels:topics,datasets:[{label:'Doğru %',data:vals,borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.2)',pointBackgroundColor:'#FF6B9D'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{angleLines:{color:'rgba(255,255,255,.1)'},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'rgba(255,255,255,.7)',font:{size:9}},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
+   }
+}
+
+async function blockUser(targetUid, name, username) {
+  if(!confirm(`${name} adlı kullanıcıyı engellemek istediğine emin misin?`)) return;
+  try {
+    const batch = db.batch();
+    batch.set(db.collection('users').doc(currentUser.uid).collection('blocked').doc(targetUid), { name, username, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('following').doc(targetUid));
+    batch.delete(db.collection('users').doc(targetUid).collection('followers').doc(currentUser.uid));
+    batch.delete(db.collection('users').doc(targetUid).collection('following').doc(currentUser.uid));
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('followers').doc(targetUid));
+    await batch.commit(); showToast('Kullanıcı engellendi.', 'success'); navigateTo('social');
+  } catch(e) { showToast('Hata: '+e.message, 'error'); }
+}
+
+async function unblockUser(targetUid) {
+  try { await db.collection('users').doc(currentUser.uid).collection('blocked').doc(targetUid).delete(); showToast('Engel kaldırıldı.', 'success'); } catch(e) { showToast('Hata: '+e.message, 'error'); }
+}
+
+function renderBlockedList() {
+  const c = document.getElementById('blockedList'); if(!c) return;
+  if(blockedList.length === 0) { c.innerHTML = '<p style="color:var(--text3);font-size:.85rem">Engellenen kullanıcı yok</p>'; return; }
+  let html = '';
+  blockedList.forEach(b => { html += `<div class="blocked-item"><div class="uc-info"><div class="uc-name">${b.name}</div><div class="uc-username">@${b.username}</div></div><button onclick="unblockUser('${b.id}')">Kaldır</button></div>`; });
+  c.innerHTML = html;
+}
+
+function getConvId(uid1, uid2) { return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`; }
+async function startDM(targetUid, name, avatar) { navigateTo('social'); showSocialTab('messages'); openChat(targetUid, name, avatar); }
+
+function renderMessages(container) {
+  container.innerHTML = `<div class="dm-list" id="dmList"><div class="spinner" style="margin:20px auto"></div></div>`;
+  // Firebase index error is avoided by NOT using orderBy on a different field when using array-contains
+  db.collection('conversations').where('participants', 'array-contains', currentUser.uid)
+    .onSnapshot(snap => {
+      const list = document.getElementById('dmList'); if(!list) return;
+      if(snap.empty) { list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)">Henüz mesaj yok.</div>'; return; }
+      
+      // In-memory sort by lastMessageTime desc
+      const docs = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => {
+        const ta = a.lastMessageTime ? a.lastMessageTime.toMillis() : 0;
+        const tb = b.lastMessageTime ? b.lastMessageTime.toMillis() : 0;
+        return tb - ta;
+      });
+      
+      let html = '';
+      docs.forEach(d => {
+        const otherUid = d.participants.find(u => u !== currentUser.uid);
+        html += `<div class="dm-item" id="conv_${d.id}" onclick="openChat('${otherUid}', 'Sohbet', '💬')"><div class="uc-avatar">💬</div><div class="dm-info"><div class="dm-name dm-uname">Yükleniyor...</div><div class="dm-preview">${d.lastSenderUid === currentUser.uid ? 'Sen: ' : ''}${d.lastMessage}</div></div></div>`;
+      });
+      list.innerHTML = html;
+      docs.forEach(async d => {
+        const otherUid = d.participants.find(u => u !== currentUser.uid);
+        const uDoc = await db.collection('users').doc(otherUid).get();
+        if(uDoc.exists) {
+          const item = document.getElementById(`conv_${d.id}`);
+          if(item) {
+            item.querySelector('.dm-uname').textContent = uDoc.data().name;
+            item.onclick = () => openChat(otherUid, uDoc.data().name, uDoc.data().avatar||'💬');
+          }
+        }
+      });
+    });
+}
+
+function openChat(targetUid, name, avatar) {
+  const container = document.getElementById('socialContent'); const convId = getConvId(currentUser.uid, targetUid);
+  container.innerHTML = `<div class="dm-chat-header"><div class="dm-back" onclick="showSocialTab('messages')">←</div><div class="uc-avatar" style="font-size:1.2rem;margin-right:8px">${avatar}</div><div style="font-weight:600">${name}</div></div><div class="dm-messages" id="dmMessages"></div><div class="dm-input-area" id="dmInputArea"><input type="text" id="dmInput" placeholder="Mesaj yaz..." onkeydown="if(event.key==='Enter') sendDM('${targetUid}', '${convId}')"><button onclick="sendDM('${targetUid}', '${convId}')">Gönder</button></div>`;
+  
+  if(dmUnsub) dmUnsub();
+  dmUnsub = db.collection('conversations').doc(convId).collection('messages').orderBy('timestamp', 'asc')
+    .onSnapshot(snap => {
+      const msgDiv = document.getElementById('dmMessages'); if(!msgDiv) return;
+      let html = '';
+      snap.docs.forEach(doc => { const d = doc.data(); html += `<div class="dm-msg ${d.senderUid === currentUser.uid ? 'sent' : 'received'}">${escapeHtml(d.text)}</div>`; });
+      msgDiv.innerHTML = html; msgDiv.scrollTop = msgDiv.scrollHeight;
+    });
+    
+  db.collection('users').doc(targetUid).get().then(doc => {
+    const privacy = doc.data().privacy || { dmPerm: 'everyone' };
+    const area = document.getElementById('dmInputArea');
+    if(blockedList.some(b => b.id === targetUid)) area.innerHTML = '<div class="dm-blocked-msg">Bu kullanıcıyı engellediniz.</div>';
+    else if(privacy.dmPerm === 'nobody') area.innerHTML = '<div class="dm-blocked-msg">Bu kullanıcı mesaj kabul etmiyor.</div>';
+  });
+}
+
+async function sendDM(targetUid, convId) {
+  const input = document.getElementById('dmInput'); const text = input.value.trim(); if(!text) return; input.value = '';
+  const batch = db.batch(); const convRef = db.collection('conversations').doc(convId);
+  batch.set(convRef, { participants: [currentUser.uid, targetUid], lastMessage: text, lastSenderUid: currentUser.uid, lastMessageTime: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+  batch.set(convRef.collection('messages').doc(), { senderUid: currentUser.uid, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp(), read: false });
+  await batch.commit();
+}
 
 // ===== INIT =====
 populateSlotTopics();
