@@ -73,7 +73,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .user-name{font-size:.9rem;font-weight:600}
 .logout-btn{font-size:.85rem;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--transition)}
 .logout-btn:hover{color:var(--error)}
-.main-content{margin-left:260px;padding:30px;min-height:100vh}
+.main-content{margin-left:260px;padding:30px;min-height:100vh;overflow-x:hidden}
 .mobile-header{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:rgba(26,10,30,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--surface-border);z-index:90;padding:0 16px;align-items:center;gap:12px}
 .hamburger{background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer;padding:4px}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
@@ -134,16 +134,49 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .chart-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .filter-btn{padding:8px 20px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text2);cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:500;transition:var(--transition)}
 .filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border-color:transparent}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.chart-card{padding:20px}
-.chart-card h3{font-size:.95rem;font-weight:600;margin-bottom:16px}
-.chart-card canvas{max-height:280px}
+.chart-grid{column-count:2;column-gap:16px;margin-bottom:16px}
+.chart-card{padding:20px;position:relative;cursor:default;overflow:hidden;min-width:120px;min-height:120px;height:320px;box-sizing:border-box;break-inside:avoid;margin-bottom:16px;display:flex;flex-direction:column}
+.chart-card h3{font-size:.95rem;font-weight:600;margin-bottom:12px;padding-right:36px;flex-shrink:0}
+.chart-card canvas{flex:1;min-height:0;width:100%!important;max-height:100%}
+/* 8-direction resize handles */
+.rh{position:absolute;z-index:5;opacity:0;transition:opacity .15s}
+.chart-card:hover .rh{opacity:1}
+.rh-n{top:-3px;left:8px;right:8px;height:6px;cursor:n-resize}
+.rh-s{bottom:-3px;left:8px;right:8px;height:6px;cursor:s-resize}
+.rh-w{left:-3px;top:8px;bottom:8px;width:6px;cursor:w-resize}
+.rh-e{right:-3px;top:8px;bottom:8px;width:6px;cursor:e-resize}
+.rh-nw{top:-4px;left:-4px;width:12px;height:12px;cursor:nw-resize}
+.rh-ne{top:-4px;right:-4px;width:12px;height:12px;cursor:ne-resize}
+.rh-sw{bottom:-4px;left:-4px;width:12px;height:12px;cursor:sw-resize}
+.rh-se{bottom:-4px;right:-4px;width:12px;height:12px;cursor:se-resize}
+.rh-n:hover,.rh-s:hover{background:linear-gradient(90deg,transparent,rgba(255,107,157,.4),transparent)}
+.rh-w:hover,.rh-e:hover{background:linear-gradient(180deg,transparent,rgba(255,107,157,.4),transparent)}
+.rh-nw:hover,.rh-ne:hover,.rh-sw:hover,.rh-se:hover{background:radial-gradient(circle,rgba(255,107,157,.5),transparent 70%)}
+.chart-card.resizing{z-index:50;box-shadow:0 0 0 2px var(--pink),0 8px 32px rgba(255,107,157,.2)}
+.widget-actions{position:absolute;top:14px;right:14px;display:flex;gap:4px;z-index:4;opacity:0;transition:opacity .2s}
+.chart-card:hover .widget-actions{opacity:1}
+.widget-btn{width:28px;height:28px;border:none;border-radius:8px;background:rgba(255,255,255,.08);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.widget-btn:hover{background:rgba(255,255,255,.18);color:#fff;transform:scale(1.1)}
+.chart-card.dragging{opacity:.5;transform:scale(.96);z-index:100}
+.chart-card.drag-over{outline:2px dashed var(--pink);outline-offset:4px}
+.chart-card[draggable="true"]{cursor:grab}
+.chart-card[draggable="true"]:active{cursor:grabbing}
+.widget-reset-btn{padding:6px 16px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text2);cursor:pointer;font-family:inherit;font-size:.8rem;transition:var(--transition);margin-left:auto}
+.widget-reset-btn:hover{background:rgba(255,82,82,.15);color:var(--error);border-color:rgba(255,82,82,.3)}
+.widget-fullscreen-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:10000;display:flex;flex-direction:column;padding:20px;animation:wfsFadeIn .25s ease}
+.widget-fullscreen-overlay .wfs-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.widget-fullscreen-overlay .wfs-header h3{font-size:1.2rem;color:#fff;margin:0}
+.widget-fullscreen-overlay .wfs-close{width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.widget-fullscreen-overlay .wfs-close:hover{background:rgba(255,82,82,.3);transform:scale(1.1)}
+.widget-fullscreen-overlay .wfs-body{flex:1;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:24px;overflow:auto}
+.widget-fullscreen-overlay .wfs-body canvas{max-height:none!important;height:100%!important}
+@keyframes wfsFadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 .total-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .total-stat{padding:14px;text-align:center;border-radius:var(--radius-sm);background:rgba(255,255,255,.04)}
 .total-stat .ts-val{font-size:1.4rem;font-weight:700}
 .total-stat .ts-lbl{font-size:.78rem;color:var(--text2)}
 .heatmap-card{padding:20px}
-.heatmap-container{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-start}
+.heatmap-container{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-start;flex:1;align-content:flex-start;overflow:auto}
 .heatmap-week{display:flex;flex-direction:column;gap:3px}
 .heatmap-cell{width:14px;height:14px;border-radius:3px;background:rgba(255,255,255,.06)}
 .heatmap-cell.l1{background:rgba(255,107,157,.2)}.heatmap-cell.l2{background:rgba(255,107,157,.4)}.heatmap-cell.l3{background:rgba(255,107,157,.6)}.heatmap-cell.l4{background:rgba(255,107,157,.85)}
@@ -321,7 +354,8 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .main-content{margin-left:0;padding-top:72px}
 .mobile-header{display:flex}
 .stats-grid{grid-template-columns:1fr 1fr}
-.dashboard-grid,.chart-grid{grid-template-columns:1fr}
+.dashboard-grid{grid-template-columns:1fr}
+.chart-grid{column-count:1}
 .ai-chat-window{width:calc(100% - 20px);right:10px;bottom:86px;height:60vh}
 }
 @media(max-width:600px){
@@ -552,7 +586,10 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <h1 class="page-title">Veri Girişi</h1>
       <p class="page-subtitle">Günlük çalışmanı kaydet ve ilerlemeni takip et!</p>
       <div class="entry-card glass">
-        <h3>✏️ Yeni Çalışma Kaydı</h3>
+        <h3>✨ Yeni Çalışma Kaydı</h3>
+        <div class="form-row" style="margin-bottom:14px">
+          <div class="form-group"><label>Çalışma Türü</label><select id="entryType" onchange="window.toggleEntryType()"><option value="soru">Soru Çözümü</option><option value="konu">Konu Dinleme / Çalışma</option></select></div>
+        </div>
         <div class="form-row">
           <div class="form-group"><label>Tarih</label><input type="date" id="entryDate"></div>
           <div class="form-group"><label>Çalışma Süresi (dakika)</label><input type="number" id="entryDuration" min="0" placeholder="Ör: 90"></div>
@@ -561,6 +598,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
           <div class="form-group"><label>Ders</label><select id="entrySubject"><option value="">Seçiniz</option><option value="Genel Yetenek">Genel Yetenek</option><option value="Genel Kültür">Genel Kültür</option></select></div>
           <div class="form-group"><label>Konu</label><select id="entryTopic"><option value="">Önce ders seçin</option></select></div>
         </div>
+        <div id="entryQuestionFields">
         <div class="form-row" style="margin-top:14px">
           <div class="form-group"><label>Toplam Soru</label><input type="number" id="entryTotal" min="0" placeholder="0"></div>
           <div class="form-group"><label>Doğru</label><input type="number" id="entryCorrect" min="0" placeholder="0"></div>
@@ -572,6 +610,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
         <div class="net-display">
           <div class="net-label">NET</div>
           <div class="net-value" id="entryNet">0.00</div>
+        </div>
         </div>
         <div class="form-group" style="margin-top:14px"><label>Notlar (isteğe bağlı)</label><textarea id="entryNotes" placeholder="Bu çalışmayla ilgili notlarını yaz..."></textarea></div>
         <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px" id="entrySubmit">💾 Kaydet</button>
@@ -656,18 +695,92 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
         <button class="filter-btn" data-period="month">Ay</button>
         <button class="filter-btn" data-period="3months">3 Ay</button>
         <button class="filter-btn" data-period="all">Tümü</button>
+        <button class="filter-btn" data-period="specific" id="filterSpecificBtn">📅 Belirli Gün</button>
+        <button class="filter-btn" data-period="range" id="filterRangeBtn">📆 Tarih Aralığı</button>
+      </div>
+      <div id="dateFilterPanel" style="display:none;margin-bottom:16px">
+        <div class="entry-card glass" style="padding:14px 18px">
+          <div id="specificDatePanel" style="display:none">
+            <label style="font-size:.85rem;color:var(--text2);margin-right:8px">📅 Gün Seç:</label>
+            <input type="date" id="filterSpecificDate" style="padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--surface-border);background:var(--surface);color:var(--text);font-family:inherit;font-size:.85rem">
+            <button class="btn btn-primary" style="padding:6px 16px;margin-left:8px;font-size:.8rem" id="applySpecificDate">Uygula</button>
+          </div>
+          <div id="rangeDatePanel" style="display:none">
+            <label style="font-size:.85rem;color:var(--text2);margin-right:8px">📆 Başlangıç:</label>
+            <input type="date" id="filterStartDate" style="padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--surface-border);background:var(--surface);color:var(--text);font-family:inherit;font-size:.85rem">
+            <label style="font-size:.85rem;color:var(--text2);margin:0 8px">→ Bitiş:</label>
+            <input type="date" id="filterEndDate" style="padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--surface-border);background:var(--surface);color:var(--text);font-family:inherit;font-size:.85rem">
+            <button class="btn btn-primary" style="padding:6px 16px;margin-left:8px;font-size:.8rem" id="applyRangeDate">Uygula</button>
+          </div>
+        </div>
       </div>
       <div class="total-stats" id="totalStats"></div>
-      <div class="chart-grid">
-        <div class="chart-card glass"><h3>📈 Net Trendi</h3><canvas id="chartNet"></canvas></div>
-        <div class="chart-card glass"><h3>🎯 Ders Performansı</h3><canvas id="chartRadar"></canvas></div>
-        <div class="chart-card glass"><h3>📊 Doğru / Yanlış / Boş</h3><canvas id="chartDonut"></canvas></div>
-        <div class="chart-card glass"><h3>⏰ Günlük Çalışma Süresi</h3><canvas id="chartTime"></canvas></div>
+      <div style="display:flex;align-items:center;margin-bottom:12px">
+        <span style="font-size:.85rem;color:var(--text3)">💡 Kartları sürükleyerek yerini değiştir, sağ alttan boyutunu ayarla</span>
+        <button class="widget-reset-btn" onclick="resetWidgetLayout()">🔄 Sıfırla</button>
       </div>
-      <div class="chart-card glass" style="margin-top:16px"><h3>📅 Konu Bazlı Başarı</h3><canvas id="chartTopics"></canvas></div>
-      <div class="heatmap-card glass" style="margin-top:16px">
-        <h3 style="margin-bottom:12px">🗓️ Çalışma Takvimi (Son 90 Gün)</h3>
-        <div class="heatmap-container" id="heatmapContainer"></div>
+      <div class="chart-grid" id="widgetGrid">
+        <div class="chart-card glass" draggable="true" data-widget="chartNet">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📈 Net Trendi</h3><canvas id="chartNet"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartRadar">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>🎯 Ders Performansı</h3><canvas id="chartRadar"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartDonut">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📊 Doğru / Yanlış / Boş</h3><canvas id="chartDonut"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartTime">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>⏰ Günlük Çalışma Süresi</h3><canvas id="chartTime"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartTopics">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📅 Konu Bazlı Başarı</h3><canvas id="chartTopics"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartSubjectQuestions">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📚 Derse Göre Soru Dağılımı</h3><canvas id="chartSubjectQuestions"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartSubjectCW">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>✅❌ Derse Göre Doğru/Yanlış</h3><canvas id="chartSubjectCW"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartTopicQuestions">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📖 Konuya Göre Soru Dağılımı</h3><canvas id="chartTopicQuestions"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartTopicCW">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📝 Konuya Göre Doğru/Yanlış</h3><canvas id="chartTopicCW"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartWeeklyProgress">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📈 Haftalık Gelişim</h3><canvas id="chartWeeklyProgress"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartAccuracyTrend">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>🎯 Doğruluk Oranı Trendi</h3><canvas id="chartAccuracyTrend"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartPerfIndex">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>🎯 Performans Endeksi</h3><p style="font-size:.7rem;color:var(--text3);margin-top:-10px;margin-bottom:8px;flex-shrink:0">(Net / Toplam Soru) × 100</p><canvas id="chartPerfIndex"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartEffScore">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📊 Verimlilik Skoru</h3><p style="font-size:.7rem;color:var(--text3);margin-top:-10px;margin-bottom:8px;flex-shrink:0">Doğru% × log(Soru+1)</p><canvas id="chartEffScore"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartSolveSpeed">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>⚡ Soru Çözme Hızı</h3><p style="font-size:.7rem;color:var(--text3);margin-top:-10px;margin-bottom:8px;flex-shrink:0">Soru / Saat</p><canvas id="chartSolveSpeed"></canvas>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="heatmap">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>🗓️ Çalışma Takvimi (Son 90 Gün)</h3>
+          <div class="heatmap-container" id="heatmapContainer"></div>
+        </div>
       </div>
     </div>
 
@@ -694,12 +807,14 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
         <div class="form-group"><label>Başlangıç</label><input type="date" id="histStart"></div>
         <div class="form-group"><label>Bitiş</label><input type="date" id="histEnd"></div>
         <div class="form-group"><label>Ders</label><select id="histSubject"><option value="">Tümü</option><option>Genel Yetenek</option><option>Genel Kültür</option></select></div>
+        <div class="form-group"><label>Sayfa Başı</label><select id="histPageSize"><option value="10">10</option><option value="25" selected>25</option><option value="50">50</option><option value="100">100</option></select></div>
         <button class="btn btn-secondary btn-sm" id="histFilter">Filtrele</button>
         <button class="btn btn-secondary btn-sm btn-export" id="histExport">📥 CSV İndir</button>
       </div>
       <div class="glass" style="padding:16px;overflow-x:auto">
-        <table class="history-table"><thead><tr><th>Tarih</th><th>Ders</th><th>Konu</th><th>Soru</th><th>D</th><th>Y</th><th>Net</th><th>Süre</th><th>İşlem</th></tr></thead><tbody id="histBody"></tbody></table>
+        <table class="history-table"><thead><tr><th>Tarih</th><th>Saat</th><th>Ders</th><th>Konu</th><th>Soru</th><th>D</th><th>Y</th><th>Net</th><th>Süre</th><th>İşlem</th></tr></thead><tbody id="histBody"></tbody></table>
       </div>
+      <div id="histPagination" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap"></div>
     </div>
 
     <!-- POMODORO -->
@@ -823,17 +938,17 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
   <!-- AI CHAT WINDOW -->
   <div class="ai-chat-window glass hidden" id="aiChatWindow">
     <div class="ai-chat-header">
-      <h3>🤖 Alni AI</h3>
+      <h3>🤖 Al&Ni AI</h3>
       <div class="ai-header-btns">
         <button id="aiFullscreen" title="Tam Ekran">⛶</button>
         <button id="aiClose" title="Kapat">✕</button>
       </div>
     </div>
     <div class="ai-messages" id="aiMessages">
-      <div class="ai-msg assistant">Merhaba! Ben <strong>Alni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir ve sorularını yanıtlayabilirim. Ne sormak istersin?</div>
+      <div class="ai-msg assistant">Merhaba! Ben <strong>Al&Ni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir ve sorularını yanıtlayabilirim. Ne sormak istersin?</div>
     </div>
     <div class="ai-input-area">
-      <textarea id="aiInput" placeholder="Alni AI'a sor..." rows="1"></textarea>
+      <textarea id="aiInput" placeholder="Al&Ni AI'a sor..." rows="1"></textarea>
       <button class="ai-send-btn" id="aiSend">➤</button>
     </div>
   </div>
@@ -864,6 +979,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 const firebaseConfig={apiKey:"AIzaSyADoz2XLDeUlSL22X1FmFq53H9DvKSi81k",authDomain:"kpss-f0a85.firebaseapp.com",projectId:"kpss-f0a85",storageBucket:"kpss-f0a85.firebasestorage.app",messagingSenderId:"77072884762",appId:"1:77072884762:web:1597ab73cadbf93da25da3",measurementId:"G-3526VTT0M8"};
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(), db=firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(e=>{console.warn('Offline persistence could not be enabled:',e.code)});
 
 const SUBJECTS={'Genel Yetenek':{color:'#FF6B9D',topics:['Türkçe','Paragraf','Matematik','Problem']},'Genel Kültür':{color:'#AB47BC',topics:['Tarih','Coğrafya','Vatandaşlık Bilgisi','Güncel Bilgiler']},'Deneme':{color:'#FF9800',topics:['Genel Deneme','Branş Deneme']}};
 const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
@@ -875,7 +991,7 @@ const SYLLABUS={
   'Vatandaşlık':{icon:'⚖️',topics:['Hukukun Temel Kavramları','Genel Esaslar','Temel Haklar','Yasama','Yürütme','Yargı','Anayasal Gelişmeler','İdare Hukuku','Uluslararası Örgütler','Güncel Bilgiler']}
 };
 const AVATARS=['👨‍🎓','👩‍🎓','🦊','🐱','🐼','🦋','🌸','🌺','💜','🎀','🦄','🐰','🌙','⭐','🎯','🏆'];
-const QUOTES=['Başarı, her gün tekrarlanan küçük çabaların toplamıdır.','Bugün yapacağın fedakarlık, yarın seni şampiyon yapacak.','Hedefine odaklan, geri kalan her şey yerli yerine oturacak.','Zorluklar, seni güçlendirmek için var.','Her uzman bir zamanlar amatördü.','Pes etme! Büyük başarılar, sabır ve azimle gelir.','Bugün çalışarak yarını güvence altına alıyorsun.','Kendine inan, sen yapabilirsin!','Disiplin, motivasyonun bittiği yerde başlar.','Küçük adımlar, büyük yolculukların başlangıcıdır.','Başarı bir gece değil, her gece çalışmakla gelir.','Hayallerinin peşinden git, KPSS sadece bir basamak!'];
+const QUOTES=['İnna fetahna leke fethan mubina. (Şüphesiz biz sana apaçık bir zafer verdik)','Başarı, her gün tekrarlanan küçük çabaların toplamıdır.','Bugün yapacağın fedakarlık, yarın seni şampiyon yapacak.','Hedefine odaklan, geri kalan her şey yerli yerine oturacak.','Zorluklar, seni güçlendirmek için var.','Her uzman bir zamanlar amatördü.','Pes etme! Büyük başarılar, sabır ve azimle gelir.','Bugün çalışarak yarını güvence altına alıyorsun.','Kendine inan, sen yapabilirsin!','Disiplin, motivasyonun bittiği yerde başlar.','Küçük adımlar, büyük yolculukların başlangıcıdır.','Başarı bir gece değil, her gece çalışmakla gelir.','Hayallerinin peşinden git, KPSS sadece bir basamak!'];
 const BADGES_DEF=[
   {id:'first_entry',name:'İlk Adım',icon:'🎯',desc:'İlk veri girişini yap',target:1,key:'totalEntries'},
   {id:'q100',name:'Çözücü',icon:'📝',desc:'100 soru çöz',target:100,key:'totalQuestions'},
@@ -1022,7 +1138,7 @@ function updateUserUI(){
 }
 
 // ===== DATA LOADING =====
-async function loadAllData(){
+async function loadAllData(retryCount=0){
   try{
     const uid=currentUser.uid;
     // Settings
@@ -1031,9 +1147,11 @@ async function loadAllData(){
     // Entries
     const entSnap=await db.collection('users').doc(uid).collection('entries').orderBy('date','desc').get();
     entries=entSnap.docs.map(d=>({id:d.id,...d.data()}));
+    entries.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99').localeCompare(a.time||'99:99')});
     // Deneme
     const denSnap=await db.collection('users').doc(uid).collection('deneme').orderBy('date','desc').get();
     denemeList=denSnap.docs.map(d=>({id:d.id,...d.data()}));
+    denemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99').localeCompare(a.time||'99:99')});
     // Branş Deneme
     const bransSnap=await db.collection('users').doc(uid).collection('bransDeneme').orderBy('date','desc').get();
     bransDenemeList=bransSnap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1052,7 +1170,16 @@ async function loadAllData(){
     // Render
     renderDashboard();renderDenemeTable();
     checkUsername(); startSocialListeners();
-  }catch(e){console.error('Load error:',e);showToast('Veri yükleme hatası','error')}
+  }catch(e){
+    console.error('Load error:',e);
+    if(retryCount<3){
+      const delay=Math.pow(2,retryCount)*1000;
+      showToast(`Bağlantı sorunu, ${delay/1000} saniye sonra tekrar denenecek...`,'warn');
+      setTimeout(()=>loadAllData(retryCount+1),delay);
+    } else {
+      showToast('İnternet bağlantınızı kontrol edin. Veriler yüklenemedi.','error');
+    }
+  }
 }
 
 // ===== ROUTER =====
@@ -1083,13 +1210,25 @@ function navigateTo(pageId){
 }
 
 // ===== DASHBOARD =====
+function getAllStudyData(){
+  const all = [...entries];
+  denemeList.forEach(d=>{
+    all.push({date:d.date, subject:'Genel Deneme', topic:'Genel Deneme', total:(d.gyd||0)+(d.gyy||0)+(d.gkd||0)+(d.gky||0)||120, correct:(d.totalCorrect||(d.gyd||0)+(d.gkd||0)), wrong:(d.totalWrong||(d.gyy||0)+(d.gky||0)), blank:0, net:d.totalNet||0, duration:d.duration||0, _src:'deneme'});
+  });
+  bransDenemeList.forEach(d=>{
+    all.push({date:d.date, subject:d.subject||'Branş Deneme', topic:d.topic||'Branş Deneme', total:d.total||0, correct:d.correct||0, wrong:d.wrong||0, blank:0, net:d.net||0, duration:d.duration||0, _src:'brans'});
+  });
+  return all;
+}
+
 function renderDashboard(){
   const today=new Date().toISOString().slice(0,10);
-  const todayEntries=entries.filter(e=>e.date===today);
-  const tQ=todayEntries.reduce((s,e)=>s+(e.total||0),0);
-  const tN=todayEntries.reduce((s,e)=>s+(e.net||0),0);
-  const tD=todayEntries.reduce((s,e)=>s+(e.duration||0),0);
-  const allQ=entries.reduce((s,e)=>s+(e.total||0),0);
+  const allData=getAllStudyData();
+  const todayAll=allData.filter(e=>e.date===today);
+  const tQ=todayAll.reduce((s,e)=>s+(e.total||0),0);
+  const tN=todayAll.reduce((s,e)=>s+(e.net||0),0);
+  const tD=todayAll.reduce((s,e)=>s+(e.duration||0),0);
+  const allQ=allData.reduce((s,e)=>s+(e.total||0),0);
   document.getElementById('dToday').textContent=tQ;
   document.getElementById('dNet').textContent=tN.toFixed(1);
   document.getElementById('dHours').textContent=(tD/60).toFixed(1);
@@ -1108,8 +1247,9 @@ function renderDashboard(){
 }
 
 function calculateStreak(){
-  if(!entries.length)return 0;
-  const dates=[...new Set(entries.map(e=>e.date))].sort().reverse();
+  const allData=getAllStudyData();
+  if(!allData.length)return 0;
+  const dates=[...new Set(allData.map(e=>e.date))].sort().reverse();
   let streak=0,check=new Date();
   check.setHours(0,0,0,0);
   for(let i=0;i<400;i++){
@@ -1156,23 +1296,30 @@ function calcEntryNet(){
   el.className='net-value '+(net>=0?'net-positive':'net-negative');
 }
 
+window.toggleEntryType = function() {
+  const isKonu = document.getElementById('entryType').value === 'konu';
+  document.getElementById('entryQuestionFields').style.display = isKonu ? 'none' : 'block';
+};
+
 document.getElementById('entrySubmit').onclick=async()=>{
+  const type=document.getElementById('entryType') ? document.getElementById('entryType').value : 'soru';
   const subject=document.getElementById('entrySubject').value;
   const topic=document.getElementById('entryTopic').value;
   const date=document.getElementById('entryDate').value;
-  const total=parseInt(document.getElementById('entryTotal').value)||0;
-  const correct=parseInt(document.getElementById('entryCorrect').value)||0;
-  const wrong=parseInt(document.getElementById('entryWrong').value)||0;
-  const blank=Math.max(0,total-correct-wrong);
+  const total=type==='konu'?0:(parseInt(document.getElementById('entryTotal').value)||0);
+  const correct=type==='konu'?0:(parseInt(document.getElementById('entryCorrect').value)||0);
+  const wrong=type==='konu'?0:(parseInt(document.getElementById('entryWrong').value)||0);
+  const blank=type==='konu'?0:Math.max(0,total-correct-wrong);
   const duration=parseInt(document.getElementById('entryDuration').value)||0;
   const notes=document.getElementById('entryNotes').value;
-  const net=correct-(wrong/4);
-  if(!subject||!topic||!date||total<=0)return showToast('Lütfen tüm zorunlu alanları doldurun.','error');
-  if(correct+wrong>total)return showToast('Doğru+Yanlış toplamdan büyük olamaz.','error');
+  const net=type==='konu'?0:correct-(wrong/4);
+  if(!subject||!topic||!date||(type==='soru' && total<=0))return showToast('Lütfen tüm zorunlu alanları doldurun.','error');
+  if(type==='soru' && correct+wrong>total)return showToast('Doğru+Yanlış toplamdan büyük olamaz.','error');
   try{
     showLoading();
-    const doc=await db.collection('users').doc(currentUser.uid).collection('entries').add({subject,topic,date,total,correct,wrong,blank,net,duration,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    entries.unshift({id:doc.id,subject,topic,date,total,correct,wrong,blank,net,duration,notes});
+    const time=new Date().toTimeString().slice(0,5);
+    const doc=await db.collection('users').doc(currentUser.uid).collection('entries').add({subject,topic,date,time,total,correct,wrong,blank,net,duration,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    entries.unshift({id:doc.id,subject,topic,date,time,total,correct,wrong,blank,net,duration,notes});
     hideLoading();showToast('Kayıt başarıyla eklendi! 🎉','success');
     document.getElementById('entryTotal').value='';document.getElementById('entryCorrect').value='';document.getElementById('entryWrong').value='';document.getElementById('entryBlank').value='';document.getElementById('entryNotes').value='';document.getElementById('entryDuration').value='';document.getElementById('entryNet').textContent='0.00';
     checkAndAwardBadges();
@@ -1183,26 +1330,86 @@ document.getElementById('entrySubmit').onclick=async()=>{
 document.getElementById('denemeDate').value=new Date().toISOString().slice(0,10);
 ['denGYD','denGYY','denGKD','denGKY'].forEach(id=>{document.getElementById(id).oninput=calcDenemeNet});
 
-function calcDenemeNet(){
-  const gyd=parseInt(document.getElementById('denGYD').value)||0;
-  const gyy=parseInt(document.getElementById('denGYY').value)||0;
-  const gkd=parseInt(document.getElementById('denGKD').value)||0;
-  const gky=parseInt(document.getElementById('denGKY').value)||0;
-  const gyb=60-gyd-gyy,gkb=60-gkd-gky;
-  const gyn=gyd-(gyy/4),gkn=gkd-(gky/4);
-  const totalNet=gyn+gkn;
-  const puan=calcKPSSPuan(totalNet);
-  document.getElementById('denGYB').textContent=Math.max(0,gyb);
-  document.getElementById('denGKB').textContent=Math.max(0,gkb);
-  document.getElementById('denGYN').textContent=gyn.toFixed(2);
-  document.getElementById('denGKN').textContent=gkn.toFixed(2);
-  document.getElementById('denTotalNet').textContent=totalNet.toFixed(2);
-  document.getElementById('denTotalD').textContent=gyd+gkd;
-  document.getElementById('denTotalY').textContent=gyy+gky;
-  document.getElementById('denPuan').textContent=puan.toFixed(1);
+function calcDenemeNet() {
+  const parseVal = (id) => {
+    let val = document.getElementById(id).value || "0";
+    val = val.replace(/,/g, '.');
+    return parseFloat(val) || 0;
+  };
+
+  const gyd = parseVal('denGYD');
+  const gyy = parseVal('denGYY');
+  const gkd = parseVal('denGKD');
+  const gky = parseVal('denGKY');
+  
+  const gyb = Math.max(0, 60 - gyd - gyy);
+  const gkb = Math.max(0, 60 - gkd - gky);
+  const gyn = gyd - (gyy / 4);
+  const gkn = gkd - (gky / 4);
+  const totalNet = gyn + gkn;
+  
+  document.getElementById('denGYB').textContent = gyb;
+  document.getElementById('denGKB').textContent = gkb;
+  document.getElementById('denGYN').textContent = gyn.toFixed(2);
+  document.getElementById('denGKN').textContent = gkn.toFixed(2);
+  document.getElementById('denTotalNet').textContent = totalNet.toFixed(2);
+  document.getElementById('denTotalD').textContent = gyd + gkd;
+  document.getElementById('denTotalY').textContent = gyy + gky;
+  
+  const puan = calcKPSSPuan(totalNet);
+  document.getElementById('denPuan').textContent = puan.toFixed(1);
 }
 
-function calcKPSSPuan(net){return Math.max(0, net*0.4 + 65);}
+// KPSS Önlisans P93 Puan Hesaplama
+// Geçmiş yıl verileri (kpssrobotu.com, osymli.com, akademiknet.com) baz alınarak
+// oluşturulmuş interpolasyon tablosu. Lineer interpolasyon ile ara değerler hesaplanır.
+function calcKPSSPuan(totalNet){
+  if(totalNet <= 0) return 40;
+  
+  // Gerçek KPSS Önlisans P93 geçmiş yıl verilerine dayalı referans noktaları
+  // [toplam net, tahmini puan]
+  const table = [
+    [0, 38],
+    [5, 42],
+    [10, 46],
+    [15, 50],
+    [20, 54],
+    [25, 57.5],
+    [30, 61],
+    [35, 64],
+    [40, 67],
+    [45, 69.5],
+    [50, 72],
+    [55, 74.5],
+    [60, 77],
+    [65, 79.5],
+    [70, 82],
+    [75, 84],
+    [80, 86],
+    [85, 88],
+    [90, 90],
+    [95, 92],
+    [100, 94],
+    [105, 96],
+    [110, 97.5],
+    [120, 100]
+  ];
+  
+  // Tablodaki en yüksek değeri aşarsa
+  if(totalNet >= 120) return 100;
+  
+  // Lineer interpolasyon
+  for(let i = 0; i < table.length - 1; i++){
+    const [n1, p1] = table[i];
+    const [n2, p2] = table[i+1];
+    if(totalNet >= n1 && totalNet <= n2){
+      const ratio = (totalNet - n1) / (n2 - n1);
+      return p1 + ratio * (p2 - p1);
+    }
+  }
+  
+  return 100;
+}
 
 window.showDetailModal = function(id, type) {
   let item = null;
@@ -1213,69 +1420,141 @@ window.showDetailModal = function(id, type) {
   if(type === 'entry') {
     item = entries.find(e => e.id === id);
     if(!item) return;
-    title = `📝 Çalışma Analizi`;
     
-    // Find previous similar entry to compare
-    const sortedE = [...entries].filter(e => e.subject === item.subject && e.topic === item.topic).sort((a,b)=>a.date.localeCompare(b.date));
-    const currentIndex = sortedE.findIndex(e => e.id === id);
-    if(currentIndex > 0) {
-      const prev = sortedE[currentIndex - 1];
-      const prevRatio = prev.total > 0 ? prev.correct / prev.total : 0;
-      const currRatio = item.total > 0 ? item.correct / item.total : 0;
-      const diff = ((currRatio - prevRatio) * 100).toFixed(1);
-      if(diff > 0) prevComparison = `<div style="background:rgba(76,175,80,0.1);color:var(--success);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📈 Bu konudaki başarı oranın bir önceki çalışmana göre <strong>%${diff} arttı!</strong> Harika gidiyorsun.</div>`;
-      else if(diff < 0) prevComparison = `<div style="background:rgba(255,82,82,0.1);color:var(--error);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📉 Bu konudaki başarı oranın bir önceki çalışmana göre %${Math.abs(diff)} düştü. Dikkat etmelisin.</div>`;
-      else prevComparison = `<div style="background:var(--glass-bg);color:var(--text2);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">➖ Bu konudaki başarı oranın bir önceki çalışmanla aynı seviyede.</div>`;
+    const isKonu = (!item.total || item.total === 0);
+    title = isKonu ? '📖 Konu Çalışma Detayı' : '📝 Çalışma Analizi';
+    
+    const topicEntries = [...entries].filter(e => e.subject === item.subject && e.topic === item.topic).sort((a,b)=>a.date.localeCompare(b.date));
+    const currentIndex = topicEntries.findIndex(e => e.id === id);
+    const topicTotal = topicEntries.reduce((s,e)=>s+(e.total||0),0);
+    const topicCorrect = topicEntries.reduce((s,e)=>s+(e.correct||0),0);
+    const topicDuration = topicEntries.reduce((s,e)=>s+(e.duration||0),0);
+    const topicStudyCount = topicEntries.length;
+    const topicAvgAcc = topicTotal > 0 ? Math.round((topicCorrect/topicTotal)*100) : 0;
+    
+    if(isKonu) {
+      if(currentIndex > 0) {
+        const prev = topicEntries[currentIndex - 1];
+        const dayDiff = Math.ceil((new Date(item.date) - new Date(prev.date)) / (1000*60*60*24));
+        prevComparison = `<div style="background:rgba(41,182,246,.1);color:#29B6F6;padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📅 Bu konuyu en son <strong>${dayDiff} gün önce</strong> (${formatDateShort(prev.date)}) çalışmıştın. ${dayDiff <= 3 ? 'Düzenli tekrar yapıyorsun! 💪' : dayDiff <= 7 ? 'Fena değil, tekrar aralığını sık tut.' : '⚠️ Uzun ara vermişsin, sıklığı artır.'}</div>`;
+      }
+      content = `
+        <div style="font-size:.9rem;color:var(--text2);margin-bottom:16px;">
+          ${formatDateShort(item.date)}${item.time ? ' <span style="color:var(--text3)">'+item.time+'</span>' : ''} | <strong>${item.subject}</strong> - ${item.topic}
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:16px;text-align:center;">
+          <div style="flex:1;background:rgba(41,182,246,.1);border:1px solid rgba(41,182,246,.2);padding:14px;border-radius:12px;color:#29B6F6">
+             <div style="font-size:1.5rem;font-weight:700;">${item.duration || 0}</div>
+             <div style="font-size:.8rem;">Dakika</div>
+          </div>
+          <div style="flex:1;background:var(--glass-bg);padding:14px;border-radius:12px;">
+             <div style="font-size:1.5rem;font-weight:700;">📖</div>
+             <div style="font-size:.8rem;color:var(--text3)">Konu Çalışma</div>
+          </div>
+        </div>
+        <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:14px;border-radius:12px;margin-bottom:12px;">
+          <div style="font-weight:600;margin-bottom:10px;color:var(--text2);">📊 Bu Konudaki Toplam İlerleme</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.85rem;">
+            <div>📚 Toplam Çalışma: <strong>${topicStudyCount} kez</strong></div>
+            <div>⏱️ Toplam Süre: <strong>${topicDuration} dk</strong></div>
+            <div>📝 Çözülen Soru: <strong>${topicTotal}</strong></div>
+            <div>🎯 Ort. Başarı: <strong>%${topicAvgAcc}</strong></div>
+          </div>
+        </div>
+        ${prevComparison}
+        <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:16px;border-radius:12px;margin-top:16px;">
+          <div style="font-weight:600;margin-bottom:8px;color:var(--text2);">📝 Notlar</div>
+          <div style="font-size:.95rem;line-height:1.5">${item.notes ? item.notes.replace(/\n/g, '<br>') : '<em>Not eklenmemiş.</em>'}</div>
+        </div>
+      `;
+    } else {
+      if(currentIndex > 0) {
+        const prev = topicEntries[currentIndex - 1];
+        if(prev.total > 0) {
+          const prevRatio = prev.correct / prev.total;
+          const currRatio = item.correct / item.total;
+          const diff = ((currRatio - prevRatio) * 100).toFixed(1);
+          const netDiff = ((item.net||0) - (prev.net||0)).toFixed(1);
+          if(diff > 0) prevComparison = `<div style="background:rgba(76,175,80,0.1);color:var(--success);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📈 Başarı <strong>%${diff} arttı</strong>, net ${netDiff > 0 ? '+' : ''}${netDiff} değişti. ${diff > 10 ? '🔥 Müthiş!' : '💪 Güzel!'}</div>`;
+          else if(diff < 0) prevComparison = `<div style="background:rgba(255,82,82,0.1);color:var(--error);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📉 Başarı %${Math.abs(diff)} düştü, net ${netDiff > 0 ? '+' : ''}${netDiff}. ${Math.abs(diff) > 15 ? '📖 Tekrar et.' : 'Toparlanırsın.'}</div>`;
+          else prevComparison = `<div style="background:var(--glass-bg);color:var(--text2);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">➖ Aynı seviye. Yanlışları analiz et.</div>`;
+        }
+      }
+      const perfIndex = item.total > 0 ? ((item.net||0)/item.total*100).toFixed(1) : 0;
+      const accRate = item.total > 0 ? Math.round((item.correct/item.total)*100) : 0;
+      content = `
+        <div style="font-size:.9rem;color:var(--text2);margin-bottom:16px;">
+          ${formatDateShort(item.date)}${item.time ? ' <span style="color:var(--text3)">'+item.time+'</span>' : ''} | <strong>${item.subject}</strong> - ${item.topic}<br>
+          ⏱️ Süre: ${item.duration ? item.duration + ' dk' : 'Belirtilmedi'}
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:16px;text-align:center;">
+          <div style="flex:1;background:var(--glass-bg);padding:12px;border-radius:12px;">
+             <div style="font-size:1.5rem;font-weight:700;">${item.total}</div>
+             <div style="font-size:.8rem;color:var(--text3)">Soru</div>
+          </div>
+          <div style="flex:1;background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.2);padding:12px;border-radius:12px;color:var(--success)">
+             <div style="font-size:1.5rem;font-weight:700;">${item.correct}</div>
+             <div style="font-size:.8rem;">Doğru</div>
+          </div>
+          <div style="flex:1;background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.2);padding:12px;border-radius:12px;color:var(--error)">
+             <div style="font-size:1.5rem;font-weight:700;">${item.wrong}</div>
+             <div style="font-size:.8rem;">Yanlış</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:16px;text-align:center;">
+          <div style="flex:1;background:rgba(255,107,157,.08);padding:10px;border-radius:12px;">
+            <div style="font-size:1.2rem;font-weight:700;color:var(--pink)">${(item.net||0).toFixed(1)}</div>
+            <div style="font-size:.75rem;color:var(--text3)">Net</div>
+          </div>
+          <div style="flex:1;background:rgba(255,215,0,.08);padding:10px;border-radius:12px;">
+            <div style="font-size:1.2rem;font-weight:700;color:#FFD700">%${accRate}</div>
+            <div style="font-size:.75rem;color:var(--text3)">Doğruluk</div>
+          </div>
+          <div style="flex:1;background:rgba(41,182,246,.08);padding:10px;border-radius:12px;">
+            <div style="font-size:1.2rem;font-weight:700;color:#29B6F6">${perfIndex}%</div>
+            <div style="font-size:.75rem;color:var(--text3)">Performans</div>
+          </div>
+        </div>
+        <div style="position:relative;height:180px;margin-bottom:16px;background:var(--glass-bg);border-radius:12px;padding:12px;">
+           <canvas id="detailChart"></canvas>
+        </div>
+        ${prevComparison}
+        <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:14px;border-radius:12px;margin-top:12px;">
+          <div style="font-weight:600;margin-bottom:10px;color:var(--text2);">📊 Bu Konudaki Toplam İlerleme</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.85rem;">
+            <div>📚 Çalışma: <strong>${topicStudyCount} kez</strong></div>
+            <div>⏱️ Süre: <strong>${topicDuration} dk</strong></div>
+            <div>📝 Soru: <strong>${topicTotal}</strong></div>
+            <div>🎯 Ort. Başarı: <strong>%${topicAvgAcc}</strong></div>
+          </div>
+        </div>
+        <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:16px;border-radius:12px;margin-top:16px;">
+          <div style="font-weight:600;margin-bottom:8px;color:var(--text2);">📝 Senin Notun</div>
+          <div style="font-size:.95rem;line-height:1.5">${item.notes ? item.notes.replace(/\n/g, '<br>') : '<em>Not eklenmemiş.</em>'}</div>
+        </div>
+      `;
     }
-
-    content = `
-      <div style="font-size:.9rem;color:var(--text2);margin-bottom:16px;">
-        ${formatDateShort(item.date)} | <strong>${item.subject}</strong> - ${item.topic} <br>
-        ⏱️ Süre: ${item.duration ? item.duration + ' dk' : 'Belirtilmedi'}
-      </div>
-      <div style="display:flex;gap:12px;margin-bottom:16px;text-align:center;">
-        <div style="flex:1;background:var(--glass-bg);padding:12px;border-radius:12px;">
-           <div style="font-size:1.5rem;font-weight:700;">${item.total}</div>
-           <div style="font-size:.8rem;color:var(--text3)">Soru</div>
-        </div>
-        <div style="flex:1;background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.2);padding:12px;border-radius:12px;color:var(--success)">
-           <div style="font-size:1.5rem;font-weight:700;">${item.correct}</div>
-           <div style="font-size:.8rem;">Doğru</div>
-        </div>
-        <div style="flex:1;background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.2);padding:12px;border-radius:12px;color:var(--error)">
-           <div style="font-size:1.5rem;font-weight:700;">${item.wrong}</div>
-           <div style="font-size:.8rem;">Yanlış</div>
-        </div>
-      </div>
-      <div style="text-align:center;font-size:1.2rem;margin-bottom:16px;">🎯 Net: <strong style="color:var(--pink)">${(item.net||0).toFixed(1)}</strong></div>
-      <div style="position:relative;height:180px;margin-bottom:16px;background:var(--glass-bg);border-radius:12px;padding:12px;">
-         <canvas id="detailChart"></canvas>
-      </div>
-      ${prevComparison}
-      <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:16px;border-radius:12px;margin-top:16px;">
-        <div style="font-weight:600;margin-bottom:8px;color:var(--text2);">📝 Senin Notun</div>
-        <div style="font-size:.95rem;line-height:1.5">${item.notes ? item.notes.replace(/\n/g, '<br>') : '<em>Bu çalışmaya herhangi bir not eklenmemiş.</em>'}</div>
-      </div>
-    `;
   } else if(type === 'deneme') {
     item = denemeList.find(d => d.id === id);
     if(!item) return;
     title = `📊 Deneme Analizi`;
-    
-    // Find previous deneme to compare
     const sortedD = [...denemeList].sort((a,b)=>a.date.localeCompare(b.date));
     const currentIndex = sortedD.findIndex(d => d.id === id);
     if(currentIndex > 0) {
       const prev = sortedD[currentIndex - 1];
       const diff = ((item.totalNet||0) - (prev.totalNet||0)).toFixed(1);
-      if(diff > 0) prevComparison = `<div style="background:rgba(76,175,80,0.1);color:var(--success);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📈 Önceki denemeye göre toplam netin <strong>+${diff} net arttı!</strong> Harika ilerliyorsun.</div>`;
-      else if(diff < 0) prevComparison = `<div style="background:rgba(255,82,82,0.1);color:var(--error);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📉 Önceki denemeye göre toplam netin ${diff} düştü. Bir sonraki sefere daha iyi olacak.</div>`;
-      else prevComparison = `<div style="background:var(--glass-bg);color:var(--text2);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">➖ Toplam netin bir önceki deneme ile aynı seviyede.</div>`;
+      const gyDiff = ((item.gyNet||0) - (prev.gyNet||0)).toFixed(1);
+      const gkDiff = ((item.gkNet||0) - (prev.gkNet||0)).toFixed(1);
+      if(diff > 0) prevComparison = `<div style="background:rgba(76,175,80,0.1);color:var(--success);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📈 Toplam <strong>+${diff} net</strong> (GY: ${gyDiff>0?'+':''}${gyDiff}, GK: ${gkDiff>0?'+':''}${gkDiff}). ${diff > 5 ? '🚀 Harika sıçrama!' : '💪 İstikrarlı!'}</div>`;
+      else if(diff < 0) prevComparison = `<div style="background:rgba(255,82,82,0.1);color:var(--error);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">📉 Toplam <strong>${diff} net</strong> (GY: ${gyDiff>0?'+':''}${gyDiff}, GK: ${gkDiff>0?'+':''}${gkDiff}). Zayıf konulara odaklan.</div>`;
+      else prevComparison = `<div style="background:var(--glass-bg);color:var(--text2);padding:8px;border-radius:8px;font-size:0.9rem;margin-top:12px">➖ Aynı seviye. Yanlışları analiz et.</div>`;
     }
-
+    const allNets = sortedD.map(d=>d.totalNet||0);
+    const rank = [...allNets].sort((a,b)=>b-a).indexOf(item.totalNet||0) + 1;
     content = `
       <div style="font-size:.9rem;color:var(--text2);margin-bottom:16px;">
         ${formatDateShort(item.date)} | <strong>${item.name || 'Genel Deneme'}</strong>
+        ${sortedD.length > 1 ? `<span style="float:right;color:#FFD700;font-size:.85rem">🏅 ${rank}/${sortedD.length}. sıra</span>` : ''}
       </div>
       <div style="display:flex;gap:12px;margin-bottom:16px;text-align:center;">
         <div style="flex:1;background:var(--glass-bg);padding:12px;border-radius:12px;">
@@ -1291,14 +1570,14 @@ window.showDetailModal = function(id, type) {
            <div style="font-size:.8rem;">Toplam Net</div>
         </div>
       </div>
-      <div style="text-align:center;font-size:1.2rem;margin-bottom:16px;">🏆 Tahmini Puan: <strong style="color:#FFD700">${(item.puan||calcKPSSPuan(item.totalNet||0)).toFixed(2)}</strong></div>
+      <div style="text-align:center;font-size:1.2rem;margin-bottom:16px;">🏆 Tahmini Puan: <strong style="color:#FFD700">${(item.puan||calcKPSSPuan(item.totalNet||0)).toFixed(1)}</strong></div>
       <div style="position:relative;height:180px;margin-bottom:16px;background:var(--glass-bg);border-radius:12px;padding:12px;">
          <canvas id="detailChart"></canvas>
       </div>
       ${prevComparison}
       <div style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:16px;border-radius:12px;margin-top:16px;">
         <div style="font-weight:600;margin-bottom:8px;color:var(--text2);">📝 Deneme Notları</div>
-        <div style="font-size:.95rem;line-height:1.5">${item.notes ? item.notes.replace(/\n/g, '<br>') : '<em>Bu denemeye not eklenmemiş.</em>'}</div>
+        <div style="font-size:.95rem;line-height:1.5">${item.notes ? item.notes.replace(/\n/g, '<br>') : '<em>Not eklenmemiş.</em>'}</div>
       </div>
     `;
   }
@@ -1321,19 +1600,21 @@ window.showDetailModal = function(id, type) {
   document.getElementById('dmBody').innerHTML = content;
   document.getElementById('detailModal').classList.remove('hidden');
   
-  // Render Chart depending on type
-  if(type === 'entry') {
-    new Chart(document.getElementById('detailChart').getContext('2d'), {
-      type: 'doughnut',
-      data: { labels: ['Doğru', 'Yanlış', 'Boş'], datasets: [{ data: [item.correct||0, item.wrong||0, item.blank||0], backgroundColor: ['#4CAF50', '#FF5252', 'rgba(255,255,255,0.2)'], borderWidth: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#fff' } } } }
-    });
-  } else if(type === 'deneme') {
-    new Chart(document.getElementById('detailChart').getContext('2d'), {
-      type: 'bar',
-      data: { labels: ['Genel Yetenek', 'Genel Kültür'], datasets: [{ label: 'Net', data: [item.gyNet||0, item.gkNet||0], backgroundColor: ['#3498db', '#9b59b6'], borderRadius: 6 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
-    });
+  const chartEl = document.getElementById('detailChart');
+  if(chartEl) {
+    if(type === 'entry' && item.total > 0) {
+      new Chart(chartEl.getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Doğru', 'Yanlış', 'Boş'], datasets: [{ data: [item.correct||0, item.wrong||0, item.blank||0], backgroundColor: ['#4CAF50', '#FF5252', 'rgba(255,255,255,0.2)'], borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#fff' } } } }
+      });
+    } else if(type === 'deneme') {
+      new Chart(chartEl.getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Genel Yetenek', 'Genel Kültür'], datasets: [{ label: 'Net', data: [item.gyNet||0, item.gkNet||0], backgroundColor: ['#3498db', '#9b59b6'], borderRadius: 6 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+      });
+    }
   }
 };
 
@@ -1347,12 +1628,15 @@ document.getElementById('denemeSubmit').onclick=async()=>{
   if(!date)return showToast('Tarih seçin','error');
   if(gyd+gyy>60||gkd+gky>60)return showToast('Doğru+Yanlış 60\'ı geçemez','error');
   const gyNet=gyd-(gyy/4),gkNet=gkd-(gky/4),totalNet=gyNet+gkNet;
-  const puan=calcKPSSPuan(totalNet);
+  const puanText = document.getElementById('denPuan').textContent;
+  const puanMatch = puanText.match(/\d+(\.\d+)?/);
+  const puan = puanMatch ? parseFloat(puanMatch[0]) : calcKPSSPuan(totalNet);
   const notes=document.getElementById('denemeNotes').value;
   try{
     showLoading();
-    const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({date,name,gyd,gyy,gyBlank:60-gyd-gyy,gyNet,gkd,gky,gkBlank:60-gkd-gky,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    denemeList.unshift({id:doc.id,date,name,gyNet,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,gyd,gyy,gkd,gky});
+    const time=new Date().toTimeString().slice(0,5);
+    const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({date,time,name,gyd,gyy,gyBlank:60-gyd-gyy,gyNet,gkd,gky,gkBlank:60-gkd-gky,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    denemeList.unshift({id:doc.id,date,time,name,gyNet,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,gyd,gyy,gkd,gky});
     hideLoading();showToast('Deneme kaydedildi! 📝','success');
     renderDenemeChart();renderDenemeTable();
     ['denGYD','denGYY','denGKD','denGKY'].forEach(id=>document.getElementById(id).value='');
@@ -1451,16 +1735,59 @@ window.deleteBransDeneme=async function(id){
 Chart.defaults.color='rgba(255,255,255,.7)';
 
 document.querySelectorAll('.filter-btn').forEach(btn=>{
-  btn.onclick=function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');renderAnalytics(this.dataset.period)}
+  btn.onclick=function(){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    const period=this.dataset.period;
+    const datePanel=document.getElementById('dateFilterPanel');
+    const specificPanel=document.getElementById('specificDatePanel');
+    const rangePanel=document.getElementById('rangeDatePanel');
+    if(period==='specific'){
+      datePanel.style.display='block';
+      specificPanel.style.display='flex';
+      rangePanel.style.display='none';
+    } else if(period==='range'){
+      datePanel.style.display='block';
+      specificPanel.style.display='none';
+      rangePanel.style.display='flex';
+    } else {
+      datePanel.style.display='none';
+      renderAnalytics(period);
+    }
+  }
 });
 
+document.getElementById('applySpecificDate').onclick=function(){
+  const dateVal=document.getElementById('filterSpecificDate').value;
+  if(!dateVal) return showToast('Lütfen bir gün seçin','error');
+  renderAnalytics('specific');
+};
+
+document.getElementById('applyRangeDate').onclick=function(){
+  const start=document.getElementById('filterStartDate').value;
+  const end=document.getElementById('filterEndDate').value;
+  if(!start||!end) return showToast('Lütfen başlangıç ve bitiş tarihlerini seçin','error');
+  if(start>end) return showToast('Başlangıç tarihi bitişten önce olmalı','error');
+  renderAnalytics('range');
+};
+
 function getFilteredEntries(period){
+  const allData=getAllStudyData();
   const now=new Date();let cutoff=new Date(0);
   if(period==='week'){cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-7)}
   else if(period==='month'){cutoff=new Date(now);cutoff.setMonth(cutoff.getMonth()-1)}
   else if(period==='3months'){cutoff=new Date(now);cutoff.setMonth(cutoff.getMonth()-3)}
+  else if(period==='specific'){
+    const dateVal=document.getElementById('filterSpecificDate').value;
+    return allData.filter(e=>e.date===dateVal);
+  }
+  else if(period==='range'){
+    const start=document.getElementById('filterStartDate').value;
+    const end=document.getElementById('filterEndDate').value;
+    return allData.filter(e=>e.date>=start && e.date<=end);
+  }
   const cs=cutoff.toISOString().slice(0,10);
-  return period==='all'?[...entries]:entries.filter(e=>e.date>=cs);
+  return period==='all'?[...allData]:allData.filter(e=>e.date>=cs);
 }
 
 function renderAnalytics(period){
@@ -1476,7 +1803,7 @@ function renderAnalytics(period){
     <div class="total-stat"><div class="ts-val">${tN.toFixed(1)}</div><div class="ts-lbl">Toplam Net</div></div>
     <div class="total-stat"><div class="ts-val">%${avgAcc}</div><div class="ts-lbl">Doğru Oranı</div></div>
     <div class="total-stat"><div class="ts-val">${(tD/60).toFixed(1)}h</div><div class="ts-lbl">Toplam Süre</div></div>`;
-  renderNetChart(data);renderRadarChart(data);renderDonutChart(data);renderTimeChart(data);renderTopicChart(data);renderHeatmap();
+  renderNetChart(data);renderRadarChart(data);renderDonutChart(data);renderTimeChart(data);renderTopicChart(data);renderSubjectQuestionsChart(data);renderSubjectCWChart(data);renderTopicQuestionsChart(data);renderTopicCWChart(data);renderWeeklyProgressChart(data);renderAccuracyTrendChart(data);renderPerfIndexChart(data);renderEffScoreChart(data);renderSolveSpeedChart(data);renderHeatmap();initWidgetGrid();
 }
 
 function renderNetChart(data){
@@ -1490,13 +1817,13 @@ function renderRadarChart(data){
   if(charts.radar)charts.radar.destroy();
   const topics=Object.values(SUBJECTS).flatMap(s=>s.topics);
   const vals=topics.map(t=>{const te=data.filter(e=>e.topic===t);const tQ=te.reduce((s,e)=>s+(e.total||0),0);const tC=te.reduce((s,e)=>s+(e.correct||0),0);return tQ>0?Math.round((tC/tQ)*100):0});
-  charts.radar=new Chart(document.getElementById('chartRadar'),{type:'radar',data:{labels:topics,datasets:[{label:'Doğru %',data:vals,borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.2)',pointBackgroundColor:'#FF6B9D'}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{r:{angleLines:{color:'rgba(255,255,255,.1)'},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'rgba(255,255,255,.7)',font:{size:11}},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
+  charts.radar=new Chart(document.getElementById('chartRadar'),{type:'radar',data:{labels:topics,datasets:[{label:'Doğru %',data:vals,borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.2)',pointBackgroundColor:'#FF6B9D'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#fff'}}},scales:{r:{angleLines:{color:'rgba(255,255,255,.1)'},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'rgba(255,255,255,.7)',font:{size:11}},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
 }
 
 function renderDonutChart(data){
   if(charts.donut)charts.donut.destroy();
   const c=data.reduce((s,e)=>s+(e.correct||0),0),w=data.reduce((s,e)=>s+(e.wrong||0),0),b=data.reduce((s,e)=>s+(e.blank||0),0);
-  charts.donut=new Chart(document.getElementById('chartDonut'),{type:'doughnut',data:{labels:['Doğru','Yanlış','Boş'],datasets:[{data:[c,w,b],backgroundColor:['#4CAF50','#FF5252','rgba(255,255,255,.15)'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}}}});
+  charts.donut=new Chart(document.getElementById('chartDonut'),{type:'doughnut',data:{labels:['Doğru','Yanlış','Boş'],datasets:[{data:[c,w,b],backgroundColor:['#4CAF50','#FF5252','rgba(255,255,255,.15)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#fff'}}}}});
 }
 
 function renderTimeChart(data){
@@ -1511,6 +1838,205 @@ function renderTopicChart(data){
   const topics=Object.values(SUBJECTS).flatMap(s=>s.topics);
   const accs=topics.map(t=>{const te=data.filter(e=>e.topic===t);const tQ=te.reduce((s,e)=>s+(e.total||0),0);const tC=te.reduce((s,e)=>s+(e.correct||0),0);return tQ>0?Math.round((tC/tQ)*100):0});
   charts.topics=new Chart(document.getElementById('chartTopics'),{type:'bar',data:{labels:topics,datasets:[{label:'Doğru %',data:accs,backgroundColor:topics.map((_,i)=>i<2?'rgba(255,107,157,.5)':'rgba(171,71,188,.5)'),borderColor:topics.map((_,i)=>i<2?'#FF6B9D':'#AB47BC'),borderWidth:1,borderRadius:6}]},options:{...chartOpts(),indexAxis:'y'}});
+}
+
+// 📚 Derse Göre Soru Dağılımı (Pie Chart)
+function renderSubjectQuestionsChart(data){
+  if(charts.subjectQ)charts.subjectQ.destroy();
+  const subjects={};
+  data.forEach(e=>{
+    const s=e.subject||'Diğer';
+    subjects[s]=(subjects[s]||0)+(e.total||0);
+  });
+  const labels=Object.keys(subjects);
+  const vals=Object.values(subjects);
+  const colors=['#FF6B9D','#AB47BC','#FF9800','#4CAF50','#29B6F6','#EF5350','#66BB6A','#FFA726'];
+  charts.subjectQ=new Chart(document.getElementById('chartSubjectQuestions'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors.slice(0,labels.length),borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#fff',padding:12,font:{size:11}}}}}
+  });
+}
+
+// ✅❌ Derse Göre Doğru/Yanlış (Stacked Bar)
+function renderSubjectCWChart(data){
+  if(charts.subjectCW)charts.subjectCW.destroy();
+  const subjects={};
+  data.forEach(e=>{
+    const s=e.subject||'Diğer';
+    if(!subjects[s])subjects[s]={c:0,w:0,b:0};
+    subjects[s].c+=(e.correct||0);
+    subjects[s].w+=(e.wrong||0);
+    subjects[s].b+=(e.blank||0);
+  });
+  const labels=Object.keys(subjects);
+  charts.subjectCW=new Chart(document.getElementById('chartSubjectCW'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Doğru',data:labels.map(l=>subjects[l].c),backgroundColor:'#4CAF50',borderRadius:4},
+      {label:'Yanlış',data:labels.map(l=>subjects[l].w),backgroundColor:'#FF5252',borderRadius:4},
+      {label:'Boş',data:labels.map(l=>subjects[l].b),backgroundColor:'rgba(255,255,255,.15)',borderRadius:4}
+    ]},
+    options:{...chartOpts(),plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}
+  });
+}
+
+// 📖 Konuya Göre Soru Dağılımı
+function renderTopicQuestionsChart(data){
+  if(charts.topicQ)charts.topicQ.destroy();
+  const topics={};
+  data.forEach(e=>{
+    const t=e.topic||'Diğer';
+    if(t==='Genel Deneme'||t==='Branş Deneme')return;
+    topics[t]=(topics[t]||0)+(e.total||0);
+  });
+  const sorted=Object.entries(topics).sort((a,b)=>b[1]-a[1]);
+  const labels=sorted.map(s=>s[0]);
+  const vals=sorted.map(s=>s[1]);
+  const colors=['#FF6B9D','#AB47BC','#FF9800','#4CAF50','#29B6F6','#EF5350','#66BB6A','#FFA726','#7E57C2','#26A69A','#EC407A','#42A5F5'];
+  charts.topicQ=new Chart(document.getElementById('chartTopicQuestions'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors.slice(0,labels.length),borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#fff',padding:8,font:{size:10}}}}}
+  });
+}
+
+// 📝 Konuya Göre Doğru/Yanlış (Stacked Horizontal Bar)
+function renderTopicCWChart(data){
+  if(charts.topicCW)charts.topicCW.destroy();
+  const topics={};
+  data.forEach(e=>{
+    const t=e.topic||'Diğer';
+    if(t==='Genel Deneme'||t==='Branş Deneme')return;
+    if(!topics[t])topics[t]={c:0,w:0,b:0};
+    topics[t].c+=(e.correct||0);
+    topics[t].w+=(e.wrong||0);
+    topics[t].b+=(e.blank||0);
+  });
+  const sorted=Object.entries(topics).sort((a,b)=>(b[1].c+b[1].w+b[1].b)-(a[1].c+a[1].w+a[1].b));
+  const labels=sorted.map(s=>s[0]);
+  charts.topicCW=new Chart(document.getElementById('chartTopicCW'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Doğru',data:sorted.map(s=>s[1].c),backgroundColor:'#4CAF50',borderRadius:3},
+      {label:'Yanlış',data:sorted.map(s=>s[1].w),backgroundColor:'#FF5252',borderRadius:3},
+      {label:'Boş',data:sorted.map(s=>s[1].b),backgroundColor:'rgba(255,255,255,.15)',borderRadius:3}
+    ]},
+    options:{...chartOpts(),indexAxis:'y',plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.6)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}}
+  });
+}
+
+// 📈 Haftalık Gelişim (Haftalık ortalama net trendi)
+function renderWeeklyProgressChart(data){
+  if(charts.weeklyProg)charts.weeklyProg.destroy();
+  const weeks={};
+  data.forEach(e=>{
+    if(!e.date)return;
+    const d=new Date(e.date);
+    const weekStart=new Date(d);weekStart.setDate(d.getDate()-d.getDay()+1);
+    const wk=weekStart.toISOString().slice(0,10);
+    if(!weeks[wk])weeks[wk]={net:0,count:0,questions:0};
+    weeks[wk].net+=(e.net||0);
+    weeks[wk].count++;
+    weeks[wk].questions+=(e.total||0);
+  });
+  const sorted=Object.entries(weeks).sort((a,b)=>a[0].localeCompare(b[0]));
+  charts.weeklyProg=new Chart(document.getElementById('chartWeeklyProgress'),{
+    type:'line',
+    data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[
+      {label:'Haftalık Toplam Net',data:sorted.map(s=>parseFloat(s[1].net.toFixed(1))),borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.1)',tension:.3,fill:true,pointBackgroundColor:'#FF6B9D'},
+      {label:'Haftalık Soru',data:sorted.map(s=>s[1].questions),borderColor:'#AB47BC',backgroundColor:'rgba(171,71,188,.1)',tension:.3,fill:true,pointBackgroundColor:'#AB47BC',yAxisID:'y1'}
+    ]},
+    options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{position:'left',ticks:{color:'#FF6B9D'},grid:{color:'rgba(255,255,255,.05)'}},y1:{position:'right',ticks:{color:'#AB47BC'},grid:{display:false}}}}
+  });
+}
+
+// 🎯 Performans Endeksi: (Net / Toplam Soru) × 100 — günlük
+function renderPerfIndexChart(data){
+  if(charts.perfIndex)charts.perfIndex.destroy();
+  const byDate={};
+  data.forEach(e=>{
+    if(!e.total)return;
+    if(!byDate[e.date])byDate[e.date]={net:0,total:0};
+    byDate[e.date].net+=(e.net||0);
+    byDate[e.date].total+=(e.total||0);
+  });
+  const sorted=Object.entries(byDate).filter(s=>s[1].total>0).sort((a,b)=>a[0].localeCompare(b[0]));
+  const vals=sorted.map(s=>parseFloat(((s[1].net/s[1].total)*100).toFixed(1)));
+  charts.perfIndex=new Chart(document.getElementById('chartPerfIndex'),{
+    type:'line',
+    data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Performans %',data:vals,borderColor:'#FF6B9D',backgroundColor:'rgba(255,107,157,.1)',tension:.3,fill:true,pointBackgroundColor:'#FF6B9D',pointRadius:3}]},
+    options:{...chartOpts(),scales:{...chartOpts().scales,y:{...chartOpts().scales.y,suggestedMin:0,suggestedMax:100}}}
+  });
+}
+
+// 📊 Verimlilik Skoru: Doğru% × log(SoruSayısı+1) — günlük
+function renderEffScoreChart(data){
+  if(charts.effScore)charts.effScore.destroy();
+  const byDate={};
+  data.forEach(e=>{
+    if(!e.total)return;
+    if(!byDate[e.date])byDate[e.date]={correct:0,total:0};
+    byDate[e.date].correct+=(e.correct||0);
+    byDate[e.date].total+=(e.total||0);
+  });
+  const sorted=Object.entries(byDate).filter(s=>s[1].total>0).sort((a,b)=>a[0].localeCompare(b[0]));
+  const vals=sorted.map(s=>{
+    const acc=s[1].correct/s[1].total;
+    return parseFloat((acc*Math.log10(s[1].total+1)*100).toFixed(1));
+  });
+  charts.effScore=new Chart(document.getElementById('chartEffScore'),{
+    type:'bar',
+    data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Verimlilik Skoru',data:vals,backgroundColor:'rgba(171,71,188,.4)',borderColor:'#AB47BC',borderWidth:1,borderRadius:6}]},
+    options:chartOpts()
+  });
+}
+
+// ⚡ Soru Çözme Hızı: Soru / Saat — günlük
+function renderSolveSpeedChart(data){
+  if(charts.solveSpeed)charts.solveSpeed.destroy();
+  const byDate={};
+  data.forEach(e=>{
+    if(!e.total||!e.duration)return;
+    if(!byDate[e.date])byDate[e.date]={total:0,dur:0};
+    byDate[e.date].total+=(e.total||0);
+    byDate[e.date].dur+=(e.duration||0);
+  });
+  const sorted=Object.entries(byDate).filter(s=>s[1].dur>0).sort((a,b)=>a[0].localeCompare(b[0]));
+  const vals=sorted.map(s=>{const hours=s[1].dur/60;return hours>0?parseFloat((s[1].total/hours).toFixed(1)):0});
+  charts.solveSpeed=new Chart(document.getElementById('chartSolveSpeed'),{
+    type:'line',
+    data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Soru/Saat',data:vals,borderColor:'#29B6F6',backgroundColor:'rgba(41,182,246,.1)',tension:.3,fill:true,pointBackgroundColor:'#29B6F6',pointRadius:3,borderWidth:2}]},
+    options:chartOpts()
+  });
+}
+
+// 🎯 Doğruluk Oranı Trendi (günlük % doğruluk)
+function renderAccuracyTrendChart(data){
+  if(charts.accTrend)charts.accTrend.destroy();
+  const byDate={};
+  data.forEach(e=>{
+    if(!byDate[e.date])byDate[e.date]={c:0,t:0};
+    byDate[e.date].c+=(e.correct||0);
+    byDate[e.date].t+=(e.total||0);
+  });
+  const sorted=Object.entries(byDate).filter(s=>s[1].t>0).sort((a,b)=>a[0].localeCompare(b[0]));
+  const accData=sorted.map(s=>Math.round((s[1].c/s[1].t)*100));
+  
+  // Hareketli ortalama (3 günlük)
+  const movingAvg=accData.map((v,i)=>{
+    if(i<2)return v;
+    return Math.round((accData[i-2]+accData[i-1]+v)/3);
+  });
+  
+  charts.accTrend=new Chart(document.getElementById('chartAccuracyTrend'),{
+    type:'line',
+    data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[
+      {label:'Günlük Doğruluk %',data:accData,borderColor:'rgba(76,175,80,.5)',backgroundColor:'rgba(76,175,80,.05)',tension:.2,fill:false,pointRadius:3,pointBackgroundColor:'#4CAF50',borderWidth:1},
+      {label:'3 Günlük Ortalama',data:movingAvg,borderColor:'#4CAF50',backgroundColor:'rgba(76,175,80,.15)',tension:.4,fill:true,pointRadius:0,borderWidth:2.5}
+    ]},
+    options:{...chartOpts(),scales:{...chartOpts().scales,y:{...chartOpts().scales.y,suggestedMin:0,suggestedMax:100}}}
+  });
 }
 
 function renderHeatmap(){
@@ -1532,7 +2058,235 @@ function renderHeatmap(){
   }
 }
 
-function chartOpts(){return{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)',maxTicksLimit:10},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}}
+function chartOpts(){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'rgba(255,255,255,.6)',maxTicksLimit:10},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}}}}}
+
+// ===== WIDGET DASHBOARD SYSTEM =====
+let dragSrcEl = null;
+
+function getWidgetKey(suffix) {
+  return 'widget_' + suffix + '_' + (currentUser?.uid || '');
+}
+
+function initWidgetGrid() {
+  const grid = document.getElementById('widgetGrid');
+  if(!grid) return;
+  
+  // Restore saved order
+  const savedOrder = JSON.parse(localStorage.getItem(getWidgetKey('order')) || '[]');
+  if(savedOrder.length > 0) {
+    const cards = [...grid.querySelectorAll('.chart-card[data-widget]')];
+    const cardMap = {};
+    cards.forEach(c => cardMap[c.dataset.widget] = c);
+    savedOrder.forEach(wid => { if(cardMap[wid]) grid.appendChild(cardMap[wid]); });
+    cards.forEach(c => { if(!savedOrder.includes(c.dataset.widget)) grid.appendChild(c); });
+  }
+  
+  // Restore saved dimensions
+  const savedDims = JSON.parse(localStorage.getItem(getWidgetKey('dims')) || '{}');
+  Object.entries(savedDims).forEach(([wid, dim]) => {
+    const el = grid.querySelector(`[data-widget="${wid}"]`);
+    if(el) {
+      if(dim.w) el.style.width = dim.w;
+      if(dim.h) el.style.height = dim.h;
+    }
+  });
+  
+  // Inject resize handles + drag events
+  grid.querySelectorAll('.chart-card[data-widget]').forEach(card => {
+    // Add 8 resize handles if not already added
+    if(!card.querySelector('.rh')) {
+      ['n','s','w','e','nw','ne','sw','se'].forEach(dir => {
+        const h = document.createElement('div');
+        h.className = 'rh rh-' + dir;
+        h.dataset.dir = dir;
+        h.addEventListener('mousedown', startResize);
+        card.appendChild(h);
+      });
+    }
+    // Drag events
+    card.addEventListener('dragstart', handleDragStart);
+    card.addEventListener('dragover', handleDragOver);
+    card.addEventListener('dragenter', handleDragEnter);
+    card.addEventListener('dragleave', handleDragLeave);
+    card.addEventListener('drop', handleDrop);
+    card.addEventListener('dragend', handleDragEnd);
+  });
+}
+
+// ===== 8-DIRECTION RESIZE =====
+let resizeState = null;
+
+function startResize(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const card = this.closest('.chart-card');
+  const rect = card.getBoundingClientRect();
+  card.classList.add('resizing');
+  card.setAttribute('draggable', 'false'); // disable drag while resizing
+  
+  resizeState = {
+    card: card,
+    dir: this.dataset.dir,
+    startX: e.clientX,
+    startY: e.clientY,
+    startW: rect.width,
+    startH: rect.height,
+    startL: rect.left,
+    startT: rect.top
+  };
+  
+  document.addEventListener('mousemove', doResize);
+  document.addEventListener('mouseup', stopResize);
+  const cursorMap = {n:'n-resize',s:'s-resize',w:'w-resize',e:'e-resize',nw:'nw-resize',ne:'ne-resize',sw:'sw-resize',se:'se-resize'};
+  document.body.style.cursor = cursorMap[this.dataset.dir] || 'default';
+  document.body.style.userSelect = 'none';
+}
+
+function doResize(e) {
+  if(!resizeState) return;
+  const s = resizeState;
+  const dx = e.clientX - s.startX;
+  const dy = e.clientY - s.startY;
+  const dir = s.dir;
+  let newW = s.startW;
+  let newH = s.startH;
+  
+  // Width changes
+  if(dir.includes('e')) newW = Math.max(120, s.startW + dx);
+  if(dir.includes('w')) newW = Math.max(120, s.startW - dx);
+  
+  // Height changes
+  if(dir.includes('s')) newH = Math.max(120, s.startH + dy);
+  if(dir.includes('n')) newH = Math.max(120, s.startH - dy);
+  
+  s.card.style.width = newW + 'px';
+  s.card.style.height = newH + 'px';
+  
+  // Resize chart inside
+  const canvas = s.card.querySelector('canvas');
+  if(canvas) {
+    const ci = Chart.getChart(canvas);
+    if(ci) ci.resize();
+  }
+}
+
+function stopResize(e) {
+  if(!resizeState) return;
+  resizeState.card.classList.remove('resizing');
+  resizeState.card.setAttribute('draggable', 'true');
+  resizeState = null;
+  document.removeEventListener('mousemove', doResize);
+  document.removeEventListener('mouseup', stopResize);
+  document.body.style.cursor = '';
+  document.body.style.userSelect = '';
+  saveWidgetDims();
+}
+
+function handleDragStart(e) {
+  dragSrcEl = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.widget);
+}
+function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function handleDragEnter(e) { e.preventDefault(); if(this !== dragSrcEl) this.classList.add('drag-over'); }
+function handleDragLeave(e) { this.classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.stopPropagation(); e.preventDefault();
+  this.classList.remove('drag-over');
+  if(dragSrcEl !== this) {
+    const grid = this.parentNode;
+    const allCards = [...grid.querySelectorAll('.chart-card[data-widget]')];
+    const fromIdx = allCards.indexOf(dragSrcEl);
+    const toIdx = allCards.indexOf(this);
+    if(fromIdx < toIdx) grid.insertBefore(dragSrcEl, this.nextSibling);
+    else grid.insertBefore(dragSrcEl, this);
+    saveWidgetOrder();
+  }
+}
+function handleDragEnd(e) {
+  document.querySelectorAll('.chart-card').forEach(c => c.classList.remove('dragging', 'drag-over'));
+}
+
+function saveWidgetOrder() {
+  const grid = document.getElementById('widgetGrid');
+  const order = [...grid.querySelectorAll('.chart-card[data-widget]')].map(c => c.dataset.widget);
+  localStorage.setItem(getWidgetKey('order'), JSON.stringify(order));
+}
+
+function saveWidgetDims() {
+  const grid = document.getElementById('widgetGrid');
+  const dims = {};
+  grid.querySelectorAll('.chart-card[data-widget]').forEach(c => {
+    if(c.style.width || c.style.height) {
+      dims[c.dataset.widget] = { w: c.style.width, h: c.style.height };
+    }
+  });
+  localStorage.setItem(getWidgetKey('dims'), JSON.stringify(dims));
+}
+
+window.resetWidgetLayout = function() {
+  if(!confirm('Tüm kart boyutları ve sıralaması varsayılana dönecek. Emin misin?')) return;
+  localStorage.removeItem(getWidgetKey('order'));
+  localStorage.removeItem(getWidgetKey('dims'));
+  // Clear inline styles
+  document.querySelectorAll('#widgetGrid .chart-card').forEach(c => {
+    c.style.width = '';
+    c.style.height = '';
+  });
+  // Re-render analytics to restore default order
+  renderAnalytics();
+  showToast('Düzen sıfırlandı! 🔄', 'success');
+};
+
+window.widgetFullscreen = function(btn) {
+  const card = btn.closest('.chart-card');
+  const title = card.querySelector('h3')?.textContent || 'Metrik';
+  const canvas = card.querySelector('canvas');
+  const heatmap = card.querySelector('.heatmap-container');
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'widget-fullscreen-overlay';
+  overlay.innerHTML = `
+    <div class="wfs-header">
+      <h3>${title}</h3>
+      <button class="wfs-close" onclick="this.closest('.widget-fullscreen-overlay').remove()">✕</button>
+    </div>
+    <div class="wfs-body" id="wfsBody"></div>
+  `;
+  document.body.appendChild(overlay);
+  
+  const escHandler = (e) => { if(e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', escHandler); } };
+  document.addEventListener('keydown', escHandler);
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.remove(); });
+  
+  const body = overlay.querySelector('#wfsBody');
+  
+  if(heatmap) {
+    body.innerHTML = heatmap.innerHTML;
+    body.style.display = 'flex';
+    body.style.flexWrap = 'wrap';
+    body.style.gap = '4px';
+    body.style.justifyContent = 'center';
+    body.style.alignContent = 'center';
+  } else if(canvas) {
+    const chartInstance = Chart.getChart(canvas);
+    if(chartInstance) {
+      const newCanvas = document.createElement('canvas');
+      newCanvas.style.width = '100%';
+      newCanvas.style.height = '100%';
+      body.appendChild(newCanvas);
+      const config = {
+        type: chartInstance.config.type,
+        data: JSON.parse(JSON.stringify(chartInstance.config.data)),
+        options: JSON.parse(JSON.stringify(chartInstance.config.options))
+      };
+      config.options.maintainAspectRatio = false;
+      config.options.responsive = true;
+      new Chart(newCanvas.getContext('2d'), config);
+    }
+  }
+};
 
 // ===== SYLLABUS / KONU TAKİBİ =====
 const SYLLABUS_STATUSES=[
@@ -1709,6 +2463,9 @@ window.deleteSlot=async function(id){
 };
 
 // ===== HISTORY =====
+let histCurrentPage=1;
+let histFilteredData=[];
+
 function renderHistory(){
   const startVal=document.getElementById('histStart').value;
   const endVal=document.getElementById('histEnd').value;
@@ -1717,10 +2474,53 @@ function renderHistory(){
   if(startVal)filtered=filtered.filter(e=>e.date>=startVal);
   if(endVal)filtered=filtered.filter(e=>e.date<=endVal);
   if(subVal)filtered=filtered.filter(e=>e.subject===subVal);
-  const body=document.getElementById('histBody');
-  body.innerHTML=filtered.map(e=>`<tr style="cursor:pointer;" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td>${e.subject}</td><td>${e.topic}</td><td>${e.total}</td><td style="color:var(--success)">${e.correct}</td><td style="color:var(--error)">${e.wrong}</td><td><strong>${(e.net||0).toFixed(1)}</strong></td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
+  histFilteredData=filtered;
+  histCurrentPage=1;
+  renderHistoryPage();
 }
+
+function renderHistoryPage(){
+  const pageSize=parseInt(document.getElementById('histPageSize').value)||25;
+  const totalPages=Math.max(1,Math.ceil(histFilteredData.length/pageSize));
+  if(histCurrentPage>totalPages)histCurrentPage=totalPages;
+  const start=(histCurrentPage-1)*pageSize;
+  const pageData=histFilteredData.slice(start,start+pageSize);
+  
+  const body=document.getElementById('histBody');
+  body.innerHTML=pageData.map(e=>{
+    const isKonu=(!e.total||e.total===0);
+    const timeStr=e.time||'--:--';
+    if(isKonu) return `<tr style="cursor:pointer;opacity:.85" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td style="color:var(--text3);font-size:.8rem">${timeStr}</td><td>${e.subject}</td><td>${e.topic}</td><td colspan="4" style="text-align:center;color:#29B6F6">📖 Konu Dinleme — ${e.duration||0} dk</td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
+    return `<tr style="cursor:pointer;" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td style="color:var(--text3);font-size:.8rem">${timeStr}</td><td>${e.subject}</td><td>${e.topic}</td><td>${e.total}</td><td style="color:var(--success)">${e.correct}</td><td style="color:var(--error)">${e.wrong}</td><td><strong>${(e.net||0).toFixed(1)}</strong></td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
+  }).join('');
+  
+  // Pagination controls
+  const pag=document.getElementById('histPagination');
+  let html=`<span style="font-size:.8rem;color:var(--text2)">${histFilteredData.length} kayıt, Sayfa ${histCurrentPage}/${totalPages}</span>`;
+  html+=`<button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:.8rem" onclick="histGoPage(1)" ${histCurrentPage===1?'disabled':''}>«</button>`;
+  html+=`<button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:.8rem" onclick="histGoPage(${histCurrentPage-1})" ${histCurrentPage===1?'disabled':''}>‹</button>`;
+  
+  // Page numbers
+  let startP=Math.max(1,histCurrentPage-2);
+  let endP=Math.min(totalPages,startP+4);
+  if(endP-startP<4)startP=Math.max(1,endP-4);
+  for(let p=startP;p<=endP;p++){
+    html+=`<button class="btn btn-sm" style="padding:4px 10px;font-size:.8rem;${p===histCurrentPage?'background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border-color:transparent':''}" onclick="histGoPage(${p})">${p}</button>`;
+  }
+  
+  html+=`<button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:.8rem" onclick="histGoPage(${histCurrentPage+1})" ${histCurrentPage===totalPages?'disabled':''}>›</button>`;
+  html+=`<button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:.8rem" onclick="histGoPage(${totalPages})" ${histCurrentPage===totalPages?'disabled':''}>»</button>`;
+  pag.innerHTML=html;
+}
+
+window.histGoPage=function(p){
+  const pageSize=parseInt(document.getElementById('histPageSize').value)||25;
+  const totalPages=Math.max(1,Math.ceil(histFilteredData.length/pageSize));
+  histCurrentPage=Math.max(1,Math.min(totalPages,p));
+  renderHistoryPage();
+};
 document.getElementById('histFilter').onclick=renderHistory;
+document.getElementById('histPageSize').onchange=function(){histCurrentPage=1;renderHistoryPage();};
 document.getElementById('histExport').onclick=()=>{
   const csv='Tarih,Ders,Konu,Soru,Doğru,Yanlış,Boş,Net,Süre(dk),Not\n'+entries.map(e=>`${e.date},${e.subject},${e.topic},${e.total},${e.correct},${e.wrong},${e.blank},${e.net?.toFixed(2)},${e.duration},"${(e.notes||'').replace(/"/g,'""')}"`).join('\n');
   const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kpss_kayitlar.csv';a.click();showToast('CSV indirildi','success');
@@ -1772,13 +2572,14 @@ async function savePomodoroCount(){
 
 // ===== BADGES =====
 function getUserStats(){
-  const totalEntries=entries.length;
-  const totalQuestions=entries.reduce((s,e)=>s+(e.total||0),0);
+  const allData=getAllStudyData();
+  const totalEntries=allData.length;
+  const totalQuestions=allData.reduce((s,e)=>s+(e.total||0),0);
   const streak=calculateStreak();
   const totalPomodoros=pomodoroCount;
-  const topicAccs={};entries.forEach(e=>{if(!topicAccs[e.topic])topicAccs[e.topic]={c:0,t:0};topicAccs[e.topic].c+=(e.correct||0);topicAccs[e.topic].t+=(e.total||0)});
+  const topicAccs={};allData.forEach(e=>{if(!topicAccs[e.topic])topicAccs[e.topic]={c:0,t:0};topicAccs[e.topic].c+=(e.correct||0);topicAccs[e.topic].t+=(e.total||0)});
   const bestAccuracy=Math.max(0,...Object.values(topicAccs).filter(t=>t.t>=5).map(t=>Math.round((t.c/t.t)*100)));
-  const dailyQ={};entries.forEach(e=>{dailyQ[e.date]=(dailyQ[e.date]||0)+(e.total||0)});
+  const dailyQ={};allData.forEach(e=>{dailyQ[e.date]=(dailyQ[e.date]||0)+(e.total||0)});
   const maxDailyQuestions=Math.max(0,...Object.values(dailyQ));
   return{totalEntries,totalQuestions,streak,totalPomodoros,bestAccuracy,maxDailyQuestions};
 }
@@ -1807,7 +2608,7 @@ async function checkAndAwardBadges(){
 // ===== PROFILE =====
 function renderProfile(){
   const grid=document.getElementById('avatarGrid');grid.innerHTML='';
-  AVATARS.forEach(a=>{const div=document.createElement('div');div.className='avatar-option'+(userSettings.avatar===a?' selected':'');div.textContent=a;div.onclick=()=>{document.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));div.classList.add('selected');userSettings.avatar=a};grid.appendChild(div)});
+  AVATARS.forEach(a=>{const div=document.createElement('div');div.className='avatar-option'+(userSettings.avatar===a?' selected':'');div.textContent=a;div.onclick=async()=>{document.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));div.classList.add('selected');userSettings.avatar=a;updateUserUI();try{await db.collection('users').doc(currentUser.uid).update({avatar:a});showToast('Avatar güncellendi!','success')}catch(e){showToast('Avatar kaydedilemedi','error')}};grid.appendChild(div)});
 }
 document.getElementById('saveSettings').onclick=async()=>{
   const examDate=document.getElementById('settingExamDate').value;
@@ -1864,7 +2665,7 @@ document.getElementById('aiInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey
 
 function renderAIChatHistory(){
   const el=document.getElementById('aiMessages');
-  el.innerHTML='<div class="ai-msg assistant">Merhaba! Ben <strong>Alni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir, çalışma kaydı ekleyebilir ve ders programını düzenleyebilirim. Ne yapmamı istersin?</div>';
+  el.innerHTML='<div class="ai-msg assistant">Merhaba! Ben <strong>Al&Ni AI</strong>, senin kişisel KPSS çalışma koçunum. 🎓 Çalışma verilerini analiz edebilir, öneriler sunabilir, çalışma kaydı ekleyebilir ve ders programını düzenleyebilirim. Ne yapmamı istersin?</div>';
   aiHistory.forEach(m=>{const div=document.createElement('div');div.className=`ai-msg ${m.role}`;div.innerHTML=m.role==='assistant'?(typeof marked!=='undefined'?marked.parse(m.content):m.content):escapeHtml(m.content);el.appendChild(div)});
   el.scrollTop=el.scrollHeight;
 }
@@ -1912,7 +2713,7 @@ async function sendAIMessage(){
   // Weak topics
   const weakTopics=Object.entries(topicStats).filter(([,s])=>s.t>=10&&(s.c/s.t)<0.5).map(([k,v])=>`${k} (%${Math.round((v.c/v.t)*100)})`).join(', ');
 
-  const systemPrompt=`Sen Alni AI'sın - kullanıcının kişisel KPSS Önlisans çalışma koçu ve asistanısın.
+  const systemPrompt=`Sen Al&Ni AI'sın - kullanıcının kişisel KPSS Önlisans çalışma koçu ve asistanısın.
 Kullanıcının adı: ${currentUser.displayName||'Kullanıcı'}
 
 ÖNEMLİ KİMLİK KURALLARI (BUNLARA KESİNLİKLE UY):
@@ -1958,6 +2759,8 @@ ${bransDenemeList.slice(0,10).map(d=>`  - ${d.date} "${d.name}": ${d.topic}, ${d
 📒 SON 10 ÇALIŞMA KAYDI:
 ${recentEntries||'  Henüz kayıt yok'}
 
+
+
 📅 HAFTALIK DERS PROGRAMI:
 ${schedStr}
 
@@ -1977,12 +2780,16 @@ Kullanıcı senden bir İŞLEM yapmanı istediğinde (çalışma kaydı ekle, de
 ⚠️ ADIM 1 — EKSİK BİLGİ KONTROLÜ:
 Bir işlem için gerekli TÜM bilgiler verilmediyse, ACTION bloğu EKLEME. Bunun yerine eksik bilgileri TEK TEK sor.
 
-Çalışma kaydı için ZORUNLU bilgiler:
+SORU ÇÖZÜMÜ kaydı için ZORUNLU bilgiler:
 - Konu (Türkçe/Paragraf/Matematik/Problem/Tarih/Coğrafya/Vatandaşlık Bilgisi/Güncel Bilgiler)
 - Toplam soru sayısı
 - Doğru sayısı
 - Yanlış sayısı
-- Çalışma süresi (dakika) — belirtilmediyse sor
+- Çalışma süresi (dakika)
+
+KONU DİNLEME/ÇALIŞMA kaydı için ZORUNLU bilgiler:
+- Sadece Konu ve Çalışma süresi (dakika) yeterlidir.
+- Eğer kullanıcı soru çözdüğünden bahsetmiyorsa, sadece "dinledim/çalıştım" diyorsa, soru sayılarını KESİNLİKLE SORMA.
 
 Ders programı için ZORUNLU bilgiler:
 - Gün (Pazartesi-Pazar)
@@ -1998,8 +2805,15 @@ Tüm bilgiler mevcutsa, yanıtının EN SONUNA (metin bittikten sonra) şu forma
 ÇALIŞMA KAYDI EKLEME örneği:
 [EYLEM]{"type":"add_entry","data":{"subject":"Genel Yetenek","topic":"Turkce","total":50,"correct":40,"wrong":5,"duration":90,"date":"${today}","notes":""}}[/EYLEM]
 
+GENEL DENEME EKLEME örneği:
+(gyd=Genel Yetenek Doğru, gyy=Genel Yetenek Yanlış, gkd=Genel Kültür Doğru, gky=Genel Kültür Yanlış)
+[EYLEM]{"type":"add_deneme","data":{"name":"TG-1","gyd":45,"gyy":10,"gkd":50,"gky":5,"date":"${today}","notes":""}}[/EYLEM]
+
+BRANŞ DENEMESİ EKLEME örneği:
+[EYLEM]{"type":"add_brans_deneme","data":{"name":"Turkce Denemesi 1","subject":"Genel Yetenek","topic":"Turkce","total":30,"correct":25,"wrong":3,"date":"${today}","notes":""}}[/EYLEM]
+
 Kurallar:
-- subject ve topic değerleri SADECE aşağıdaki listeden seçilmeli:
+- ÇALIŞMA KAYDI ve BRANŞ DENEMESİ için subject ve topic değerleri SADECE aşağıdaki listeden seçilmeli:
   * subject: "Genel Yetenek" → topic: "Turkce", "Paragraf", "Matematik", "Problem"
   * subject: "Genel Kultur" → topic: "Tarih", "Cografya", "Vatandaslik Bilgisi", "Guncel Bilgiler"
 - topic değerlerinde Türkçe karakter KULLANMA, yukarıdaki ASCII değerleri kullan
@@ -2024,7 +2838,7 @@ DERS PROGRAMI İÇİN subject ve topic değerleri:
   * subject: "Genel Yetenek" → topic: "Turkce", "Paragraf", "Matematik", "Problem"
   * subject: "Genel Kultur" → topic: "Tarih", "Cografya", "Vatandaslik Bilgisi", "Guncel Bilgiler"
   * subject: "Deneme" → topic: "Genel Deneme", "Brans Deneme"
-Kullanıcı "deneme" veya "genel deneme" veya "branş deneme" yazarsa subject="Deneme" kullan!
+Kullanıcı programına "deneme" veya "genel deneme" ekle derse subject="Deneme" kullan! Sadece program (add_schedule) için geçerlidir. Çalışma kaydı için add_deneme veya add_brans_deneme kullan!
 
 DERS PROGRAMI SİLME örneği:
 (ÖNEMLİ: id olarak sadece yukarıdaki program listesinde yazan [ID: xyz] kısmındaki gerçek id'yi kullan!)
@@ -2092,7 +2906,7 @@ GENEL KURALLAR:
     
     // Method 3: Raw JSON with type field anywhere in content
     if(!actions.length){
-      const jsonPattern=/\{\s*["']type["']\s*:\s*["'](add_entry|edit_entry|delete_entry|add_schedule|edit_schedule|delete_schedule|update_topic_status)["'][\s\S]*?\{[\s\S]*?\}\s*\}/g;
+      const jsonPattern=/\{\s*["']type["']\s*:\s*["'](add_entry|add_deneme|add_brans_deneme|edit_entry|delete_entry|add_schedule|edit_schedule|delete_schedule|update_topic_status)["'][\s\S]*?\{[\s\S]*?\}\s*\}/g;
       let m;
       while((m=jsonPattern.exec(content))!==null){
         try{
@@ -2142,6 +2956,35 @@ GENEL KURALLAR:
             <span class="ai-action-tag" style="color:var(--error)">❌ <strong>${d.wrong}</strong> yanlış</span>
             <span class="ai-action-tag">🎯 <strong>${net.toFixed(1)}</strong> net</span>
             ${d.duration?`<span class="ai-action-tag">⏰ <strong>${d.duration}</strong> dk</span>`:''}
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Onayla & Kaydet</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
+      } else if(action.type==='add_deneme'){
+        const d=action.data;
+        const gyNet=(d.gyd||0)-((d.gyy||0)/4);
+        const gkNet=(d.gkd||0)-((d.gky||0)/4);
+        const totalNet=gyNet+gkNet;
+        card.innerHTML=`<h4>📄 Genel Deneme Ekle</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag">📅 <strong>${d.date||''}</strong></span>
+            <span class="ai-action-tag">📝 <strong>${d.name||'Genel Deneme'}</strong></span>
+            <span class="ai-action-tag">🎯 <strong>${totalNet.toFixed(1)}</strong> net</span>
+          </div>
+          <div class="ai-action-btns">
+            <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Onayla & Kaydet</button>
+            <button class="ai-reject-btn" onclick="executeAIAction('${actionId}',null,'reject')">❌ İptal</button>
+          </div>`;
+      } else if(action.type==='add_brans_deneme'){
+        const d=action.data;
+        const net=(d.correct||0)-((d.wrong||0)/4);
+        card.innerHTML=`<h4>📄 Branş Denemesi Ekle</h4>
+          <div class="ai-action-detail">
+            <span class="ai-action-tag">📅 <strong>${d.date||''}</strong></span>
+            <span class="ai-action-tag">📘 <strong>${d.subject||''} - ${d.topic||''}</strong></span>
+            <span class="ai-action-tag">📝 <strong>${d.total||0}</strong> soru</span>
+            <span class="ai-action-tag">🎯 <strong>${net.toFixed(1)}</strong> net</span>
           </div>
           <div class="ai-action-btns">
             <button class="ai-confirm-btn" onclick="executeAIAction('${actionId}','${encodeURIComponent(JSON.stringify(action))}','confirm')">✅ Onayla & Kaydet</button>
@@ -2225,12 +3068,42 @@ window.executeAIAction=async function(cardId,actionStr,type){
       const blank=Math.max(0,(d.total||0)-(d.correct||0)-(d.wrong||0));
       const net=(d.correct||0)-((d.wrong||0)/4);
       const doc=await db.collection('users').doc(currentUser.uid).collection('entries').add({
-        subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Alni AI ile eklendi',createdAt:firebase.firestore.FieldValue.serverTimestamp()
+        subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Al&Ni AI ile eklendi',createdAt:firebase.firestore.FieldValue.serverTimestamp()
       });
-      entries.unshift({id:doc.id,subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Alni AI ile eklendi'});
+      entries.unshift({id:doc.id,subject:d.subject,topic:d.topic,date:d.date,total:d.total||0,correct:d.correct||0,wrong:d.wrong||0,blank,net,duration:d.duration||0,notes:d.notes||'Al&Ni AI ile eklendi'});
       showToast('✅ Çalışma kaydı eklendi!','success');
       checkAndAwardBadges();
       renderDashboard(); // UI güncelle
+    } else if(action.type==='add_deneme'){
+      const d=action.data;
+      const gyd=d.gyd||0, gyy=d.gyy||0, gkd=d.gkd||0, gky=d.gky||0;
+      const gyBlank=60-gyd-gyy, gkBlank=60-gkd-gky;
+      const gyNet=gyd-(gyy/4), gkNet=gkd-(gky/4), totalNet=gyNet+gkNet;
+      const puan = typeof calcKPSSPuan === 'function' ? calcKPSSPuan(totalNet) : Math.max(0, Math.min(100, (totalNet * 0.5) + 40));
+      const date = d.date || new Date().toISOString().split('T')[0];
+      const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({
+        date, name: d.name || 'AI Genel Deneme', gyd, gyy, gyBlank, gyNet, gkd, gky, gkBlank, gkNet, totalNet, puan, totalCorrect: gyd + gkd, totalWrong: gyy + gky, notes: d.notes || 'AI ile eklendi', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      denemeList.unshift({ id: doc.id, date, name: d.name || 'AI Genel Deneme', gyNet, gkNet, totalNet, puan, totalCorrect: gyd + gkd, totalWrong: gyy + gky, notes: d.notes || 'AI ile eklendi', gyd, gyy, gkd, gky });
+      showToast('✅ Genel Deneme eklendi!', 'success');
+      if(typeof renderDenemeChart==='function')renderDenemeChart();
+      if(typeof renderDenemeTable==='function')renderDenemeTable();
+      renderDashboard();
+    } else if(action.type==='add_brans_deneme'){
+      const d=action.data;
+      const t=d.total||0, c=d.correct||0, w=d.wrong||0;
+      const blank=Math.max(0,t-c-w);
+      const net=c-(w/4);
+      const accuracy=t>0?Math.round((c/t)*100):0;
+      const date = d.date || new Date().toISOString().split('T')[0];
+      const doc=await db.collection('users').doc(currentUser.uid).collection('bransDeneme').add({
+        date, name: d.name || 'AI Branş Deneme', subject: d.subject, topic: d.topic, total: t, correct: c, wrong: w, blank, net, accuracy, notes: d.notes || 'AI ile eklendi', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      bransDenemeList.unshift({ id: doc.id, date, name: d.name || 'AI Branş Deneme', subject: d.subject, topic: d.topic, total: t, correct: c, wrong: w, blank, net, accuracy, notes: d.notes || 'AI ile eklendi' });
+      showToast('✅ Branş denemesi eklendi!', 'success');
+      if(typeof renderBransChart==='function')renderBransChart();
+      if(typeof renderBransTable==='function')renderBransTable();
+      renderDashboard();
     } else if(action.type==='add_schedule'){
       const d=action.data;
       const doc=await db.collection('users').doc(currentUser.uid).collection('schedule').add({day:d.day,startTime:d.startTime,endTime:d.endTime,subject:d.subject,topic:d.topic});
