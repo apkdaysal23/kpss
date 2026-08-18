@@ -506,10 +506,10 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .edit-btn-save { background: linear-gradient(135deg, var(--pink), var(--accent)); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; }
 /* NEW UI IMPROVEMENTS */
 .global-ticker-wrap { width: 100%; overflow: hidden; background: rgba(255,255,255,0.03); padding: 8px 0; margin-bottom: 20px; border-radius: 8px; border-left: 3px solid var(--pink); position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); }
-.global-ticker { display: inline-flex; gap: 40px; padding-left: 100%; animation: ticker 40s linear infinite; color: var(--text2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; }
+.global-ticker { display: inline-flex; animation: ticker 40s linear infinite; color: var(--text2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; width:max-content; }
 .global-ticker span { display: inline-block; white-space: nowrap; }
 .global-ticker strong { color: var(--pink); }
-@keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+@keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
 .global-ticker-wrap:hover .global-ticker { animation-play-state: paused; }
 .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
 .hl-title { font-size: 0.85rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
@@ -871,13 +871,14 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
           <h3>⏰ Günlük Çalışma Süresi</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTime"></canvas></div>
         </div>
-        <div class="chart-card glass" draggable="true" data-widget="chartTopics">
-          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
-          <h3>📅 Konu Bazlı Başarı</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTopics"></canvas></div>
-        </div>
+        
         <div class="chart-card glass" draggable="true" data-widget="chartSubjectQuestions">
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
           <h3>📚 Derse Göre Soru Dağılımı</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartSubjectQuestions"></canvas></div>
+        </div>
+        <div class="chart-card glass" draggable="true" data-widget="chartGYGK">
+          <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
+          <h3>📋 GY / GK Soru Dağılımı</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartGYGK"></canvas></div>
         </div>
         <div class="chart-card glass" draggable="true" data-widget="chartSubjectCW">
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
@@ -885,11 +886,19 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
         </div>
         <div class="chart-card glass" draggable="true" data-widget="chartTopicQuestions">
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
-          <h3>📖 Konuya Göre Soru Dağılımı</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTopicQuestions"></canvas></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="margin:0;">📖 Konuya Göre Soru Dağılımı</h3>
+            <select id="topicQSubjectFilter" onchange="renderTopicQuestionsChart(window._lastAnalyticsData)" style="padding:4px 8px; border-radius:6px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:white; font-size:0.8rem; max-width:120px;"></select>
+          </div>
+          <div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTopicQuestions"></canvas></div>
         </div>
         <div class="chart-card glass" draggable="true" data-widget="chartTopicCW">
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
-          <h3>📝 Konuya Göre Doğru/Yanlış</h3><div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTopicCW"></canvas></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="margin:0;">📝 Konuya Göre Doğru/Yanlış</h3>
+            <select id="topicCWSubjectFilter" onchange="renderTopicCWChart(window._lastAnalyticsData)" style="padding:4px 8px; border-radius:6px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:white; font-size:0.8rem; max-width:120px;"></select>
+          </div>
+          <div style="position:relative; flex:1; min-height:0; width:100%; height:100%"><canvas id="chartTopicCW"></canvas></div>
         </div>
         <div class="chart-card glass" draggable="true" data-widget="chartWeeklyProgress">
           <div class="widget-actions"><button class="widget-btn" onclick="widgetFullscreen(this)" title="Tam Ekran">⛶</button></div>
@@ -1122,14 +1131,24 @@ const BADGES_DEF=[
   {id:'q100',name:'Çözücü',icon:'🥉',desc:'100 soru çöz',target:100,key:'totalQuestions'},
   {id:'q500',name:'Soru Avcısı',icon:'🥈',desc:'500 soru çöz',target:500,key:'totalQuestions'},
   {id:'q1000',name:'Soru Canavarı',icon:'🥇',desc:'1000 soru çöz',target:1000,key:'totalQuestions'},
+  {id:'q2000',name:'Süper Çözücü',icon:'🌟',desc:'2000 soru çöz',target:2000,key:'totalQuestions'},
   {id:'q5000',name:'Efsane',icon:'👑',desc:'5000 soru çöz',target:5000,key:'totalQuestions'},
   {id:'q10000',name:'10.000 Soru Kulübü',icon:'💎',desc:'10000 soru çöz',target:10000,key:'totalQuestions'},
   {id:'streak7',name:'Haftalık Seri',icon:'🔥',desc:'7 gün üst üste çalış',target:7,key:'streak'},
+  {id:'streak14',name:'İki Hafta Seri',icon:'🔗',desc:'14 gün üst üste çalış',target:14,key:'streak'},
+  {id:'streak30',name:'Ay Boyunca',icon:'🏆',desc:'30 gün üst üste çalış',target:30,key:'streak'},
   {id:'streak60',name:'Demir İrade',icon:'⚡',desc:'60 gün üst üste çalış',target:60,key:'streak'},
   {id:'pomo10',name:'Odaklı',icon:'🍅',desc:'10 pomodoro tamamla',target:10,key:'totalPomodoros'},
+  {id:'pomo25',name:'Odaklanma Ustası',icon:'🧠',desc:'25 pomodoro tamamla',target:25,key:'totalPomodoros'},
   {id:'pomo50',name:'Pomodoro Pro',icon:'⏱️',desc:'50 pomodoro tamamla',target:50,key:'totalPomodoros'},
+  {id:'pomo100',name:'Pomodoro Efsanesi',icon:'💫',desc:'100 pomodoro tamamla',target:100,key:'totalPomodoros'},
   {id:'accuracy80',name:'Keskin Nişancı',icon:'🎯',desc:'Bir derste %80+ doğru',target:80,key:'bestAccuracy'},
+  {id:'accuracy90',name:'Mükemmeliyetçi',icon:'🎖️',desc:'Bir derste %90+ doğru',target:90,key:'bestAccuracy'},
   {id:'marathon',name:'Maratoncu',icon:'🏃',desc:'Tek günde 200+ soru',target:200,key:'maxDailyQuestions'},
+  {id:'marathon500',name:'Ultra Maratoncu',icon:'💪',desc:'Tek günde 500+ soru',target:500,key:'maxDailyQuestions'},
+  {id:'allsubjects',name:'Çok Yönlü',icon:'🎨',desc:'5 farklı derste soru çöz',target:5,key:'studiedSubjects'},
+  {id:'deneme10',name:'Deneme Sever',icon:'📊',desc:'10 deneme gir',target:10,key:'totalDeneme'},
+  {id:'deneme25',name:'Deneme Ustası',icon:'🏅',desc:'25 deneme gir',target:25,key:'totalDeneme'}
 ];
 
 // ===== STATE =====
@@ -2250,12 +2269,45 @@ function applyMasonry() {
 }
 window.addEventListener('resize', applyMasonry);
 
+function resolveSubject(e) {
+  let s = (e.subject || 'Diğer').trim();
+  let t = (e.topic || '').trim();
+  
+  const valid = Object.keys(SUBJECTS);
+  const sLower = s.toLocaleLowerCase('tr-TR');
+  const tLower = t.toLocaleLowerCase('tr-TR');
+  
+  for (let v of valid) {
+    if (v.toLocaleLowerCase('tr-TR') === sLower) { s = v; break; }
+  }
+  
+  if (s === 'Genel Yetenek' || s === 'Genel Kültür') {
+    for (let v of valid) {
+      if (v.toLocaleLowerCase('tr-TR') === tLower) return v;
+    }
+    if (tLower.includes('paragraf') || tLower.includes('sözcük') || tLower.includes('cümle') || tLower.includes('dil bilgisi')) return 'Türkçe';
+    if (tLower.includes('problem') || tLower.includes('sayı') || tLower.includes('kavram') || tLower.includes('geometri')) return 'Matematik';
+    if (tLower.includes('vatandaş') || tLower.includes('güncel') || tLower.includes('hukuk') || tLower.includes('anayasa')) return 'Vatandaşlık';
+    if (tLower.includes('tarih') || tLower.includes('osmanlı') || tLower.includes('inkılap')) return 'Tarih';
+    if (tLower.includes('coğrafya') || tLower.includes('iklim') || tLower.includes('nüfus') || tLower.includes('harita')) return 'Coğrafya';
+  }
+  
+  if (sLower.includes('vatandaş') || sLower.includes('vatandas')) return 'Vatandaşlık';
+  if (sLower.includes('matematik') || sLower.includes('mat')) return 'Matematik';
+  if (sLower.includes('türkçe') || sLower.includes('turkce')) return 'Türkçe';
+  if (sLower.includes('tarih')) return 'Tarih';
+  if (sLower.includes('coğrafya') || sLower.includes('cografya')) return 'Coğrafya';
+  
+  return s;
+}
+
 function renderRadarChart(data){
   if(charts.radar)charts.radar.destroy();
+  const validSubjects=new Set(Object.keys(SUBJECTS));
   const subjSet={};
   data.forEach(e=>{
-    const s=e.subject||'Diğer';
-    if(s==='Genel Deneme'||s==='Branş Deneme')return;
+    const s = resolveSubject(e);
+    if(!validSubjects.has(s))return;
     if(!subjSet[s])subjSet[s]={c:0,t:0};
     subjSet[s].c+=(e.correct||0);
     subjSet[s].t+=(e.total||0);
@@ -2278,7 +2330,13 @@ function renderAnalytics(period){
     <div class="total-stat"><div class="ts-val">${tN.toFixed(1)}</div><div class="ts-lbl">Toplam Net</div></div>
     <div class="total-stat"><div class="ts-val">%${avgAcc}</div><div class="ts-lbl">Doğru Oranı</div></div>
     <div class="total-stat"><div class="ts-val">${(tD/60).toFixed(1)}h</div><div class="ts-lbl">Toplam Süre</div></div>`;
-  renderNetChart(data);renderRadarChart(data);renderDonutChart(data);renderTimeChart(data);renderTopicChart(data);renderSubjectQuestionsChart(data);renderSubjectCWChart(data);renderTopicQuestionsChart(data);renderTopicCWChart(data);renderWeeklyProgressChart(data);renderAccuracyTrendChart(data);renderPerfIndexChart(data);renderEffScoreChart(data);renderSolveSpeedChart(data);renderHeatmap();initWidgetGrid();initSubtopicAnalytics();
+  window._lastAnalyticsData=data;
+  // Populate topic filter dropdowns
+  const _tqSel=document.getElementById('topicQSubjectFilter');
+  const _tcSel=document.getElementById('topicCWSubjectFilter');
+  if(_tqSel && !_tqSel.options.length) { _tqSel.innerHTML=Object.keys(SUBJECTS).map((s,i)=>`<option value="${s}" ${i===0?'selected':''}>${s}</option>`).join(''); }
+  if(_tcSel && !_tcSel.options.length) { _tcSel.innerHTML=Object.keys(SUBJECTS).map((s,i)=>`<option value="${s}" ${i===0?'selected':''}>${s}</option>`).join(''); }
+  renderNetChart(data);renderRadarChart(data);renderDonutChart(data);renderTimeChart(data);renderSubjectQuestionsChart(data);renderGYGKChart(data);renderSubjectCWChart(data);renderTopicQuestionsChart(data);renderTopicCWChart(data);renderWeeklyProgressChart(data);renderAccuracyTrendChart(data);renderPerfIndexChart(data);renderEffScoreChart(data);renderSolveSpeedChart(data);renderHeatmap();initWidgetGrid();initSubtopicAnalytics();
 }
 
 function renderNetChart(data){
@@ -2317,12 +2375,14 @@ function renderTopicChart(data){
   charts.topics=new Chart(document.getElementById('chartTopics'),{type:'bar',data:{labels,datasets:[{label:'Doğru %',data:accs,backgroundColor:'rgba(255,107,157,.5)',borderColor:'#FF6B9D',borderWidth:1,borderRadius:6}]},options:{...chartOpts(),indexAxis:'y'}});
 }
 
-// 📚 Derse Göre Soru Dağılımı (Pie Chart)
+// 📚 Derse Göre Soru Dağılımı (Pie Chart) — sadece gerçek dersler
 function renderSubjectQuestionsChart(data){
   if(charts.subjectQ)charts.subjectQ.destroy();
+  const validSubjects=new Set(Object.keys(SUBJECTS));
   const subjects={};
   data.forEach(e=>{
-    const s=e.subject||'Diğer';
+    const s = resolveSubject(e);
+    if(!validSubjects.has(s))return;
     subjects[s]=(subjects[s]||0)+(e.total||0);
   });
   const labels=Object.keys(subjects);
@@ -2335,12 +2395,36 @@ function renderSubjectQuestionsChart(data){
   });
 }
 
+// 📋 GY/GK Soru Dağılımı (Ayrı Pasta)
+function renderGYGKChart(data){
+  if(charts.gygk)charts.gygk.destroy();
+  const cats={};
+  data.forEach(e=>{
+    const s=e.subject||'';
+    if(s==='Genel Yetenek'||s==='Genel Kültür'||s==='Genel Deneme') {
+      cats[s]=(cats[s]||0)+(e.total||0);
+    }
+  });
+  const labels=Object.keys(cats);
+  const vals=Object.values(cats);
+  if(!labels.length) { const el=document.getElementById('chartGYGK'); if(el) el.parentNode.style.display='none'; return; }
+  const el=document.getElementById('chartGYGK'); if(el) el.parentNode.style.display='';
+  const colors=['#29B6F6','#66BB6A','#FFA726'];
+  charts.gygk=new Chart(document.getElementById('chartGYGK'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors.slice(0,labels.length),borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#fff',padding:12,font:{size:11}}}}}
+  });
+}
+
 // ✅❌ Derse Göre Doğru/Yanlış (Stacked Bar)
 function renderSubjectCWChart(data){
   if(charts.subjectCW)charts.subjectCW.destroy();
+  const validSubjects=new Set(Object.keys(SUBJECTS));
   const subjects={};
   data.forEach(e=>{
-    const s=e.subject||'Diğer';
+    const s = resolveSubject(e);
+    if(!validSubjects.has(s))return;
     if(!subjects[s])subjects[s]={c:0,w:0,b:0};
     subjects[s].c+=(e.correct||0);
     subjects[s].w+=(e.wrong||0);
@@ -2358,20 +2442,48 @@ function renderSubjectCWChart(data){
   });
 }
 
-// 📖 Konuya Göre Soru Dağılımı
+// 📖 Konuya Göre Soru Dağılımı (Ders bazlı filtreli)
 function renderTopicQuestionsChart(data){
   if(charts.topicQ)charts.topicQ.destroy();
+  const sel=document.getElementById('topicQSubjectFilter');
+  const selectedSubj=sel?sel.value:'';
+  if(!selectedSubj||!SUBJECTS[selectedSubj]) return;
+  const validTopics=new Set(SUBJECTS[selectedSubj].topics);
   const topics={};
-  const mainSubjects=new Set(Object.keys(SUBJECTS));
+  
+  function getMappedTopic(t, subj) {
+    let tLower = t.toLocaleLowerCase('tr-TR');
+    if (subj === 'Türkçe') {
+      if (tLower.includes('paragraf')) return 'Paragrafta Anlam ve Yorum';
+      if (tLower.includes('sözcük') || tLower.includes('sozcuk')) return 'Sözcükte ve Söz Öbeklerinde Anlam';
+      if (tLower.includes('cümle') || tLower.includes('cumle')) return 'Cümlede Anlam';
+    }
+    if (subj === 'Matematik') {
+      if (tLower.includes('problem')) return 'Denklem Çözme (Problem Türleri)';
+      if (tLower.includes('sayı') || tLower.includes('sayi')) return 'Sayılar ve Çözümleme';
+      if (tLower.includes('kavram')) return 'Temel Kavramlar';
+    }
+    if (subj === 'Vatandaşlık') {
+      if (tLower.includes('vatandaş') || tLower.includes('vatandas') || tLower.includes('anayasa')) return 'Anayasa ve Devlet Yapıları';
+      if (tLower.includes('hukuk')) return 'Temel Hukuk Kavramları';
+    }
+    for (let v of validTopics) {
+      if (v.toLocaleLowerCase('tr-TR') === tLower) return v;
+    }
+    return t;
+  }
+  
   data.forEach(e=>{
-    const t=e.topic||'Diğer';
-    if(t==='Genel Deneme'||t==='Branş Deneme'||mainSubjects.has(t))return;
+    const s = resolveSubject(e);
+    if(s !== selectedSubj) return;
+    const t = getMappedTopic((e.topic||'').trim(), selectedSubj);
+    if(!validTopics.has(t))return;
     topics[t]=(topics[t]||0)+(e.total||0);
   });
-  const sorted=Object.entries(topics).sort((a,b)=>b[1]-a[1]);
+  const sorted=Object.entries(topics).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
   const labels=sorted.map(s=>s[0]);
   const vals=sorted.map(s=>s[1]);
-  const colors=['#FF6B9D','#AB47BC','#FF9800','#4CAF50','#29B6F6','#EF5350','#66BB6A','#FFA726','#7E57C2','#26A69A','#EC407A','#42A5F5'];
+  const colors=['#FF6B9D','#AB47BC','#FF9800','#4CAF50','#29B6F6','#EF5350','#66BB6A','#FFA726','#7E57C2','#26A69A','#EC407A','#42A5F5','#8D6E63','#78909C','#D4E157','#FF7043'];
   charts.topicQ=new Chart(document.getElementById('chartTopicQuestions'),{
     type:'doughnut',
     data:{labels,datasets:[{data:vals,backgroundColor:colors.slice(0,labels.length),borderWidth:0}]},
@@ -2379,19 +2491,48 @@ function renderTopicQuestionsChart(data){
   });
 }
 
-// 📝 Konuya Göre Doğru/Yanlış (Stacked Horizontal Bar)
+// 📝 Konuya Göre Doğru/Yanlış (Ders bazlı filtreli)
 function renderTopicCWChart(data){
   if(charts.topicCW)charts.topicCW.destroy();
+  const sel=document.getElementById('topicCWSubjectFilter');
+  const selectedSubj=sel?sel.value:'';
+  if(!selectedSubj||!SUBJECTS[selectedSubj]) return;
+  const validTopics=new Set(SUBJECTS[selectedSubj].topics);
   const topics={};
+  
+  function getMappedTopic(t, subj) {
+    let tLower = t.toLocaleLowerCase('tr-TR');
+    if (subj === 'Türkçe') {
+      if (tLower.includes('paragraf')) return 'Paragrafta Anlam ve Yorum';
+      if (tLower.includes('sözcük') || tLower.includes('sozcuk')) return 'Sözcükte ve Söz Öbeklerinde Anlam';
+      if (tLower.includes('cümle') || tLower.includes('cumle')) return 'Cümlede Anlam';
+    }
+    if (subj === 'Matematik') {
+      if (tLower.includes('problem')) return 'Denklem Çözme (Problem Türleri)';
+      if (tLower.includes('sayı') || tLower.includes('sayi')) return 'Sayılar ve Çözümleme';
+      if (tLower.includes('kavram')) return 'Temel Kavramlar';
+    }
+    if (subj === 'Vatandaşlık') {
+      if (tLower.includes('vatandaş') || tLower.includes('vatandas') || tLower.includes('anayasa')) return 'Anayasa ve Devlet Yapıları';
+      if (tLower.includes('hukuk')) return 'Temel Hukuk Kavramları';
+    }
+    for (let v of validTopics) {
+      if (v.toLocaleLowerCase('tr-TR') === tLower) return v;
+    }
+    return t;
+  }
+  
   data.forEach(e=>{
-    const t=e.topic||'Diğer';
-    if(t==='Genel Deneme'||t==='Branş Deneme')return;
+    const s = resolveSubject(e);
+    if(s !== selectedSubj) return;
+    const t = getMappedTopic((e.topic||'').trim(), selectedSubj);
+    if(!validTopics.has(t))return;
     if(!topics[t])topics[t]={c:0,w:0,b:0};
     topics[t].c+=(e.correct||0);
     topics[t].w+=(e.wrong||0);
     topics[t].b+=(e.blank||0);
   });
-  const sorted=Object.entries(topics).sort((a,b)=>(b[1].c+b[1].w+b[1].b)-(a[1].c+a[1].w+a[1].b));
+  const sorted=Object.entries(topics).filter(([,v])=>(v.c+v.w+v.b)>0).sort((a,b)=>(b[1].c+b[1].w+b[1].b)-(a[1].c+a[1].w+a[1].b));
   const labels=sorted.map(s=>s[0]);
   charts.topicCW=new Chart(document.getElementById('chartTopicCW'),{
     type:'bar',
@@ -2400,9 +2541,13 @@ function renderTopicCWChart(data){
       {label:'Yanlış',data:sorted.map(s=>s[1].w),backgroundColor:'#FF5252',borderRadius:3},
       {label:'Boş',data:sorted.map(s=>s[1].b),backgroundColor:'rgba(255,255,255,.15)',borderRadius:3}
     ]},
-    options:{...chartOpts(),indexAxis:'y',plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.6)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}}
-  });
+    options:{...chartOpts(),indexAxis:'y',plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{stacked:true,ticks:{color:'rgba(255,255,255,.6)'},grid:{color:'rgba(255,255,255,.05)'}},y:{stacked:true,ticks:{color:'rgba(255,255,255,.6)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}
+  }});
 }
+
+
+
+
 
 // 📈 Haftalık Gelişim (Haftalık ortalama net trendi)
 function renderWeeklyProgressChart(data){
@@ -3154,7 +3299,10 @@ function getUserStats(){
   const dailyQ={};allData.forEach(e=>{dailyQ[e.date]=(dailyQ[e.date]||0)+(e.total||0)});
   const maxDailyQuestions=Math.max(0,...Object.values(dailyQ));
   
-  return{totalEntries,totalQuestions,streak,totalPomodoros,bestAccuracy,maxDailyQuestions,nightQuestions,morningQuestions};
+  const totalDeneme = denemeList.length + bransDenemeList.length;
+  const studiedSubjects = new Set(allData.map(e=>e.subject).filter(Boolean)).size;
+  
+  return{totalEntries,totalQuestions,streak,totalPomodoros,bestAccuracy,maxDailyQuestions,nightQuestions,morningQuestions,totalDeneme,studiedSubjects};
 }
 
 function renderBadges(){
@@ -4093,7 +4241,16 @@ window.updateHighlightsAndTicker = function() {
     const topSubjStr = topSubjArr ? `<span>⭐ Favori Ders: <strong>${topSubjArr[0]}</strong> (${topSubjArr[1]} soru)</span>` : '';
     const lastEntry = [...entries].sort((a,b)=>b.date.localeCompare(a.date))[0];
     const lastEntryStr = lastEntry ? `<span>📝 Son Çalışma: <strong>${lastEntry.total||0} Soru - ${lastEntry.topic||lastEntry.subject}</strong></span>` : '';
-    ticker.innerHTML = `<span>🚀 Toplam <strong>${totalSoru}</strong> Soru Çözüldü</span><span>📅 Bu Ay: <strong>${currentMonthSoru}</strong> Soru</span><span>🔥 Rekor Gün: <strong>${maxQ} Soru</strong> (${maxQ > 0 ? formatDateShort(recordDay) : '--'})</span><span>🎯 En İyi Deneme: <strong>${bestDeneme ? maxPuan.toFixed(2) + ' Puan' : '--'}</strong></span>${daysLeftStr}${avgNetStr}${topSubjStr}${lastEntryStr}<span>💡 Akıllı Algoritma Aktif</span>`;
+    
+    // Calculate new metrics
+    const overallAcc = totalSoru > 0 ? ((allData.reduce((s,e)=>s+(e.correct||0),0)/totalSoru)*100).toFixed(1) : 0;
+    const studyDays = new Set(allData.map(e=>e.date).filter(Boolean)).size;
+    const dCount = denemeler.length;
+    
+    const content = `<span>🚀 Toplam <strong>${totalSoru}</strong> Soru Çözüldü</span><span>📊 <strong>${dCount}</strong> Deneme Çözüldü</span><span>📅 Toplam Çalışma: <strong>${studyDays}</strong> Gün</span><span>🔥 Aktif Seri: <strong>${streak} Gün</strong></span><span>🎯 Genel Doğru Oranı: <strong>%${overallAcc}</strong></span><span>🔥 Rekor Gün: <strong>${maxQ} Soru</strong> (${maxQ > 0 ? formatDateShort(recordDay) : '--'})</span><span>🏆 En İyi Deneme: <strong>${bestDeneme ? maxPuan.toFixed(2) + ' Puan' : '--'}</strong></span>${daysLeftStr}${avgNetStr}${topSubjStr}${lastEntryStr}`;
+    
+    // Add two identical spans for seamless looping
+    ticker.innerHTML = `<div style="display:inline-flex; gap:40px; padding-right:40px;">${content}</div><div style="display:inline-flex; gap:40px;">${content}</div>`;
   }
 };
 
@@ -4136,22 +4293,16 @@ window.renderSubtopicAnalytics = function() {
     return;
   }
 
-  const best = validStats[0];
-  const worst = validStats[validStats.length-1];
-
-  let html = '';
-  if(best.q >= 1) {
-     html += `<div style="flex:1; background:rgba(76,175,80,0.1); border-left:3px solid var(--success); padding:8px; border-radius:6px; overflow:hidden;">
-       <div style="color:var(--text2); margin-bottom:2px; font-size:0.75rem;">🏆 En Başarılı</div>
-       <div style="font-weight:600; color:var(--success); white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${best.name} <span style="font-size:0.75rem;">(%${best.acc})</span></div>
-     </div>`;
-  }
-  if(worst.q >= 1 && worst.name !== best.name) {
-     html += `<div style="flex:1; background:rgba(255,82,82,0.1); border-left:3px solid var(--error); padding:8px; border-radius:6px; overflow:hidden;">
-       <div style="color:var(--text2); margin-bottom:2px; font-size:0.75rem;">⚠️ Geliştirilmeli</div>
-       <div style="font-weight:600; color:var(--error); white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${worst.name} <span style="font-size:0.75rem;">(%${worst.acc})</span></div>
-     </div>`;
-  }
+  let html = '<div style="max-height:250px; overflow-y:auto; margin-bottom:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">';
+  html += '<table style="width:100%; border-collapse:collapse; font-size:0.8rem;">';
+  html += '<thead><tr style="background:rgba(255,255,255,0.05); position:sticky; top:0;"><th style="padding:6px 8px; text-align:left; color:var(--text2); font-weight:600;">#</th><th style="padding:6px 8px; text-align:left; color:var(--text2); font-weight:600;">Alt Konu</th><th style="padding:6px 8px; text-align:center; color:var(--text2); font-weight:600;">Soru</th><th style="padding:6px 8px; text-align:center; color:var(--text2); font-weight:600;">Doğru</th><th style="padding:6px 8px; text-align:center; color:var(--text2); font-weight:600;">Net</th><th style="padding:6px 8px; text-align:center; color:var(--text2); font-weight:600;">Başarı</th></tr></thead><tbody>';
+  validStats.forEach((s, i) => {
+    const color = s.acc >= 70 ? 'var(--success)' : (s.acc >= 40 ? '#FFA726' : 'var(--error)');
+    const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : (i+1)));
+    const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+    html += `<tr style="background:${bg}; border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:5px 8px; font-weight:600; color:var(--text2);">${medal}</td><td style="padding:5px 8px; color:var(--text); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${s.name}">${s.name}</td><td style="padding:5px 8px; text-align:center; color:var(--text2);">${s.q}</td><td style="padding:5px 8px; text-align:center; color:var(--text2);">${s.c}</td><td style="padding:5px 8px; text-align:center; color:var(--text2);">${s.n.toFixed(1)}</td><td style="padding:5px 8px; text-align:center; font-weight:700; color:${color};">%${s.acc}</td></tr>`;
+  });
+  html += '</tbody></table></div>';
   hlContainer.innerHTML = html;
 
   if(window.charts.subtopic) window.charts.subtopic.destroy();
