@@ -800,7 +800,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div id="tabContentGenel">
         <div class="deneme-card glass">
           <h3>📝 Yeni Deneme Sonucu</h3>
-          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="denemeDate"></div><div class="form-group"><label>Deneme Adı (isteğe bağlı)</label><input type="text" id="denemeName" placeholder="Ör: ÖSYM Deneme 3"></div></div>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="denemeDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="denemeName" placeholder="Ör: ÖSYM Deneme 3"></div><div class="form-group"><label>Süre (dk)</label><input type="number" id="denemeDuration" placeholder="130" min="0"></div></div>
           <div class="deneme-section" style="margin-top:16px">
             <h4>📘 Genel Yetenek (60 Soru)</h4>
             <div class="form-row"><div class="form-group"><label>Doğru</label><input type="number" id="denGYD" min="0" max="60" placeholder="0"></div><div class="form-group"><label>Yanlış</label><input type="number" id="denGYY" min="0" max="60" placeholder="0"></div></div>
@@ -847,7 +847,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div id="tabContentBrans" style="display:none">
         <div class="deneme-card glass">
           <h3>📝 Yeni Branş Deneme</h3>
-          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="bransDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="bransName" placeholder="Ör: Türkçe Deneme 5"></div></div>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="bransDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="bransName" placeholder="Ör: Türkçe Deneme 5"></div><div class="form-group"><label>Süre (dk)</label><input type="number" id="bransDuration" placeholder="45" min="0"></div></div>
           <div class="form-row" style="margin-top:14px">
             <div class="form-group"><label>Konu</label><select id="bransTopic"><option value="Türkçe">Türkçe</option><option value="Paragraf">Paragraf</option><option value="Matematik">Matematik</option><option value="Problem">Problem</option><option value="Tarih">Tarih</option><option value="Coğrafya">Coğrafya</option><option value="Vatandaşlık Bilgisi">Vatandaşlık Bilgisi</option><option value="Güncel Bilgiler">Güncel Bilgiler</option></select></div>
             <div class="form-group"><label>Toplam Soru</label><input type="number" id="bransTotalQ" min="1" placeholder="30"></div>
@@ -887,7 +887,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div id="tabContentGY" style="display:none">
         <div class="deneme-card glass">
           <h3>📘 Yeni Genel Yetenek Denemesi</h3>
-          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gyDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gyName" placeholder="Ör: Pegem GY 1"></div></div>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gyDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gyName" placeholder="Ör: Pegem GY 1"></div><div class="form-group"><label>Süre (dk)</label><input type="number" id="gyDuration" placeholder="75" min="0"></div></div>
           <div class="form-row" style="margin-top:14px">
             <div class="form-group"><label>Doğru (Max 60)</label><input type="number" id="gyCorrect" min="0" max="60" placeholder="0"></div>
             <div class="form-group"><label>Yanlış (Max 60)</label><input type="number" id="gyWrong" min="0" max="60" placeholder="0"></div>
@@ -922,7 +922,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div id="tabContentGK" style="display:none">
         <div class="deneme-card glass">
           <h3>📗 Yeni Genel Kültür Denemesi</h3>
-          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gkDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gkName" placeholder="Ör: Yargı GK 2"></div></div>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gkDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gkName" placeholder="Ör: Yargı GK 2"></div><div class="form-group"><label>Süre (dk)</label><input type="number" id="gkDuration" placeholder="55" min="0"></div></div>
           <div class="form-row" style="margin-top:14px">
             <div class="form-group"><label>Doğru (Max 60)</label><input type="number" id="gkCorrect" min="0" max="60" placeholder="0"></div>
             <div class="form-group"><label>Yanlış (Max 60)</label><input type="number" id="gkWrong" min="0" max="60" placeholder="0"></div>
@@ -2137,11 +2137,13 @@ window.showDetailModal = function(id, type) {
 document.getElementById('denemeSubmit').onclick=async()=>{
   const date=document.getElementById('denemeDate').value;
   const name=document.getElementById('denemeName').value||'Deneme';
+  const duration=parseInt(document.getElementById('denemeDuration').value)||0;
   const gyd=parseInt(document.getElementById('denGYD').value)||0;
   const gyy=parseInt(document.getElementById('denGYY').value)||0;
   const gkd=parseInt(document.getElementById('denGKD').value)||0;
   const gky=parseInt(document.getElementById('denGKY').value)||0;
-  if(!date)return showToast('Tarih seçin','error');
+  const notes=document.getElementById('denemeNotes').value;
+  if(!date)return showToast('Lütfen tarih seçin','error');
   if(gyd<0||gyy<0||gkd<0||gky<0)return showToast('Değerler negatif olamaz.','error');
   if(gyd>60)return showToast(`GY Doğru (${gyd}) 60\'ı geçemez.`,'error');
   if(gyy>60)return showToast(`GY Yanlış (${gyy}) 60\'ı geçemez.`,'error');
@@ -2154,17 +2156,19 @@ document.getElementById('denemeSubmit').onclick=async()=>{
   const puanText = document.getElementById('denPuan').textContent;
   const puanMatch = puanText.match(/\d+(\.\d+)?/);
   const puan = puanMatch ? parseFloat(puanMatch[0]) : calcKPSSPuan(totalNet);
-  const notes=document.getElementById('denemeNotes').value;
   try{
     showLoading();
     const time=new Date().toTimeString().slice(0,8);
-    const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({date,time,name,gyd,gyy,gyBlank:60-gyd-gyy,gyNet,gkd,gky,gkBlank:60-gkd-gky,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    denemeList.unshift({id:doc.id,date,time,name,gyNet,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,gyd,gyy,gkd,gky});
+    const gyBlank=60-(gyd+gyy);const gkBlank=60-(gkd+gky);
+    const doc=await db.collection('users').doc(currentUser.uid).collection('deneme').add({date,time,name,gyd,gyy,gyBlank,gyNet,gkd,gky,gkBlank,gkNet,totalNet,puan,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,duration,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    denemeList.unshift({id:doc.id,date,time,name,gyd,gyy,gkd,gky,gyNet,gkNet,totalNet,puan,gyBlank,gkBlank,totalCorrect:gyd+gkd,totalWrong:gyy+gky,notes,duration});
     denemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99:99').localeCompare(a.time||'99:99:99')});
     hideLoading();showToast('Deneme kaydedildi! 📝','success');
     renderDenemeChart();renderDenemeTable();
-    ['denGYD','denGYY','denGKD','denGKY'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('denemeName').value='';document.getElementById('denemeNotes').value='';calcDenemeNet();
+    ['denemeDate','denemeName','denemeDuration','denGYD','denGYY','denGKD','denGKY','denemeNotes'].forEach(id=>document.getElementById(id).value='');
+    ['denGYB','denGKB'].forEach(id=>document.getElementById(id).innerText='60');
+    ['denGYN','denGKN','denTotalNet'].forEach(id=>document.getElementById(id).innerText='0.00');
+    ['denTotalD','denTotalY','denPuan'].forEach(id=>document.getElementById(id).innerText='0');
   }catch(e){hideLoading();showToast('Hata: '+e.message,'error')}
 };
 
@@ -2223,7 +2227,7 @@ function renderDenemeTablePage() {
   const body = document.getElementById('denemeTableBody');
   body.innerHTML = pageData.map(d => {
     const p = d.puan || calcKPSSPuan(d.totalNet||0);
-    return `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','deneme')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}</small></td><td>${d.name||'-'}</td><td>${(d.gyNet||0).toFixed(1)}</td><td>${(d.gkNet||0).toFixed(1)}</td><td><strong class="text-gradient">${(d.totalNet||0).toFixed(1)}</strong></td><td><strong style="color:#FFD700">${p.toFixed(1)}</strong></td><td><button onclick="event.stopPropagation();deleteDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
+    return `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','deneme')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td><td>${d.name||'-'}</td><td>${(d.gyNet||0).toFixed(1)}</td><td>${(d.gkNet||0).toFixed(1)}</td><td><strong class="text-gradient">${(d.totalNet||0).toFixed(1)}</strong></td><td><strong style="color:#FFD700">${p.toFixed(1)}</strong></td><td><button onclick="event.stopPropagation();deleteDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
   }).join('');
   // Pagination
   const pag = document.getElementById('denHistPagination');
@@ -2270,6 +2274,7 @@ document.getElementById('bransSubmit').onclick=async()=>{
   const date=document.getElementById('bransDate').value;
   const name=document.getElementById('bransName').value||'Branş Deneme';
   const topic=document.getElementById('bransTopic').value;
+  const duration=parseInt(document.getElementById('bransDuration').value)||0;
   const total=parseInt(document.getElementById('bransTotalQ').value)||0;
   const correct=parseInt(document.getElementById('bransCorrect').value)||0;
   const wrong=parseInt(document.getElementById('bransWrong').value)||0;
@@ -2288,12 +2293,12 @@ document.getElementById('bransSubmit').onclick=async()=>{
   try{
     showLoading();
     const time=new Date().toTimeString().slice(0,8);
-    const doc=await db.collection('users').doc(currentUser.uid).collection('bransDeneme').add({date,time,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    bransDenemeList.unshift({id:doc.id,date,time,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes});
+    const doc=await db.collection('users').doc(currentUser.uid).collection('bransDeneme').add({date,time,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes,duration,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    bransDenemeList.unshift({id:doc.id,date,time,name,topic,subject,total,correct,wrong,blank,net,accuracy,notes,duration});
     bransDenemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99:99').localeCompare(a.time||'99:99:99')});
     hideLoading();showToast('Branş deneme kaydedildi! 📋','success');
     renderBransChart();renderBransTable();
-    ['bransCorrect','bransWrong','bransTotalQ'].forEach(id=>document.getElementById(id).value='');
+    ['bransCorrect','bransWrong','bransTotalQ','bransDuration'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('bransName').value='';document.getElementById('bransNotes').value='';calcBransNet();
   }catch(e){hideLoading();showToast('Hata: '+e.message,'error')}
 };
@@ -2335,7 +2340,7 @@ function renderBransTablePage() {
   const start = (bransHistPage - 1) * pageSize;
   const pageData = bransHistFiltered.slice(start, start + pageSize);
   const body = document.getElementById('bransTableBody');
-  body.innerHTML = pageData.map(d => `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','brans')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}</small></td><td>${d.name||'-'}</td><td>${d.topic}</td><td>${d.total}</td><td><strong class="text-gradient">${(d.net||0).toFixed(1)}</strong></td><td>%${d.accuracy||0}</td><td><button onclick="event.stopPropagation();deleteBransDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
+  body.innerHTML = pageData.map(d => `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','brans')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td><td>${d.name||'-'}</td><td>${d.topic}</td><td>${d.total}</td><td><strong class="text-gradient">${(d.net||0).toFixed(1)}</strong></td><td>%${d.accuracy||0}</td><td><button onclick="event.stopPropagation();deleteBransDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
   // Pagination
   const pag = document.getElementById('bransHistPagination');
   if(!pag) return;
@@ -2392,6 +2397,7 @@ function updateGyGkNet() {
 document.getElementById('gySubmit')?.addEventListener('click', async () => {
   const date = document.getElementById('gyDate').value;
   const name = document.getElementById('gyName').value.trim();
+  const duration = parseInt(document.getElementById('gyDuration').value||0);
   const correct = parseInt(document.getElementById('gyCorrect').value||0);
   const wrong = parseInt(document.getElementById('gyWrong').value||0);
   const notes = document.getElementById('gyNotes').value.trim();
@@ -2405,9 +2411,9 @@ document.getElementById('gySubmit')?.addEventListener('click', async () => {
   try {
     const time = new Date().toTimeString().slice(0,8);
     const docRef = await db.collection('users').doc(currentUser.uid).collection('gyDeneme').add({
-      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, duration, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    gyDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes});
+    gyDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, duration});
     gyDenemeList.sort((a,b)=>b.date.localeCompare(a.date)||(b.time||'').localeCompare(a.time||''));
     hideLoading(); showToast('GY Denemesi kaydedildi', 'success');
     document.getElementById('gyCorrect').value=''; document.getElementById('gyWrong').value=''; document.getElementById('gyName').value=''; document.getElementById('gyNotes').value=''; updateGyGkNet();
@@ -2447,7 +2453,7 @@ window.renderGYTablePage = function() {
   const pageData = gyHistFiltered.slice(start, start+pageSize);
   document.getElementById('gyTableBody').innerHTML = pageData.map(d=>
     `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gy')">
-      <td>${formatDateShort(d.date)}</td>
+      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td>
       <td>${d.name||'-'}</td>
       <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
       <td>%${d.accuracy}</td>
@@ -2472,6 +2478,7 @@ let gkHistPage = 1;
 document.getElementById('gkSubmit')?.addEventListener('click', async () => {
   const date = document.getElementById('gkDate').value;
   const name = document.getElementById('gkName').value.trim();
+  const duration = parseInt(document.getElementById('gkDuration').value||0);
   const correct = parseInt(document.getElementById('gkCorrect').value||0);
   const wrong = parseInt(document.getElementById('gkWrong').value||0);
   const notes = document.getElementById('gkNotes').value.trim();
@@ -2485,9 +2492,9 @@ document.getElementById('gkSubmit')?.addEventListener('click', async () => {
   try {
     const time = new Date().toTimeString().slice(0,8);
     const docRef = await db.collection('users').doc(currentUser.uid).collection('gkDeneme').add({
-      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, duration, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    gkDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes});
+    gkDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, duration});
     gkDenemeList.sort((a,b)=>b.date.localeCompare(a.date)||(b.time||'').localeCompare(a.time||''));
     hideLoading(); showToast('GK Denemesi kaydedildi', 'success');
     document.getElementById('gkCorrect').value=''; document.getElementById('gkWrong').value=''; document.getElementById('gkName').value=''; document.getElementById('gkNotes').value=''; updateGyGkNet();
@@ -2527,7 +2534,7 @@ window.renderGKTablePage = function() {
   const pageData = gkHistFiltered.slice(start, start+pageSize);
   document.getElementById('gkTableBody').innerHTML = pageData.map(d=>
     `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gk')">
-      <td>${formatDateShort(d.date)}</td>
+      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td>
       <td>${d.name||'-'}</td>
       <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
       <td>%${d.accuracy}</td>
@@ -4314,6 +4321,9 @@ window.editRecord = function(id, type) {
         <div class="edit-form-group"><label>GK Doğru</label><input type="number" id="editGKD" value="${item.gkd||0}"></div>
         <div class="edit-form-group"><label>GK Yanlış</label><input type="number" id="editGKY" value="${item.gky||0}"></div>
       </div>
+      <div class="edit-form-row">
+        <div class="edit-form-group"><label>Süre (dk)</label><input type="number" id="editDuration" value="${item.duration||0}"></div>
+      </div>
       <div class="edit-form-group"><label>Notlar</label><input type="text" id="editNotes" value="${item.notes||''}"></div>
     `;
   } else if (type === 'brans' || type === 'gy' || type === 'gk') {
@@ -4333,6 +4343,9 @@ window.editRecord = function(id, type) {
       <div class="edit-form-row">
         <div class="edit-form-group"><label>Doğru</label><input type="number" id="editCorrect" value="${item.correct||0}"></div>
         <div class="edit-form-group"><label>Yanlış</label><input type="number" id="editWrong" value="${item.wrong||0}"></div>
+      </div>
+      <div class="edit-form-row">
+        <div class="edit-form-group"><label>Süre (dk)</label><input type="number" id="editDuration" value="${item.duration||0}"></div>
       </div>
       <div class="edit-form-group"><label>Notlar</label><input type="text" id="editNotes" value="${item.notes||''}"></div>
     `;
@@ -4368,6 +4381,7 @@ window.saveEditRecord = async function(id, type) {
       const gyy = parseFloat(document.getElementById('editGYY').value)||0;
       const gkd = parseFloat(document.getElementById('editGKD').value)||0;
       const gky = parseFloat(document.getElementById('editGKY').value)||0;
+      const duration = parseInt(document.getElementById('editDuration').value)||0;
       const notes = document.getElementById('editNotes').value;
       
       const gyNet = gyd - (gyy/4);
@@ -4377,9 +4391,9 @@ window.saveEditRecord = async function(id, type) {
       const gyBlank = 60-gyd-gyy;
       const gkBlank = 60-gkd-gky;
       
-      await db.collection('users').doc(currentUser.uid).collection('deneme').doc(id).update({ date, name, gyd, gyy, gkd, gky, notes, gyNet, gkNet, totalNet, puan, gyBlank, gkBlank, totalCorrect:gyd+gkd, totalWrong:gyy+gky });
+      await db.collection('users').doc(currentUser.uid).collection('deneme').doc(id).update({ date, name, gyd, gyy, gkd, gky, notes, duration, gyNet, gkNet, totalNet, puan, gyBlank, gkBlank, totalCorrect:gyd+gkd, totalWrong:gyy+gky });
       const idx = denemeList.findIndex(e=>e.id===id);
-      if(idx>-1) { denemeList[idx] = {...denemeList[idx], date, name, gyd, gyy, gkd, gky, notes, gyNet, gkNet, totalNet, puan, gyBlank, gkBlank, totalCorrect:gyd+gkd, totalWrong:gyy+gky}; }
+      if(idx>-1) { denemeList[idx] = {...denemeList[idx], date, name, gyd, gyy, gkd, gky, notes, duration, gyNet, gkNet, totalNet, puan, gyBlank, gkBlank, totalCorrect:gyd+gkd, totalWrong:gyy+gky}; }
       if(typeof renderDenemeTable==='function') renderDenemeTable();
       
     } else if (type === 'brans' || type === 'gy' || type === 'gk') {
@@ -4388,25 +4402,26 @@ window.saveEditRecord = async function(id, type) {
       const t = parseInt(document.getElementById('editTotal').value)||0;
       const c = parseInt(document.getElementById('editCorrect').value)||0;
       const w = parseInt(document.getElementById('editWrong').value)||0;
+      const duration = parseInt(document.getElementById('editDuration').value)||0;
       const notes = document.getElementById('editNotes').value;
       const blank = Math.max(0, t - c - w);
       const net = c - (w / 4);
       const accuracy = t>0 ? Math.round((c/t)*100) : 0;
       
       const coll = type === 'brans' ? 'bransDeneme' : (type === 'gy' ? 'gyDeneme' : 'gkDeneme');
-      await db.collection('users').doc(currentUser.uid).collection(coll).doc(id).update({ date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy });
+      await db.collection('users').doc(currentUser.uid).collection(coll).doc(id).update({ date, name, total:t, correct:c, wrong:w, notes, duration, blank, net, accuracy });
       
       if (type === 'brans') {
         const idx = bransDenemeList.findIndex(e=>e.id===id);
-        if(idx>-1) { bransDenemeList[idx] = {...bransDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(idx>-1) { bransDenemeList[idx] = {...bransDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, duration, blank, net, accuracy}; }
         if(typeof renderBransTable==='function') renderBransTable();
       } else if (type === 'gy') {
         const idx = gyDenemeList.findIndex(e=>e.id===id);
-        if(idx>-1) { gyDenemeList[idx] = {...gyDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(idx>-1) { gyDenemeList[idx] = {...gyDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, duration, blank, net, accuracy}; }
         if(typeof renderGYTable==='function') renderGYTable();
       } else if (type === 'gk') {
         const idx = gkDenemeList.findIndex(e=>e.id===id);
-        if(idx>-1) { gkDenemeList[idx] = {...gkDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(idx>-1) { gkDenemeList[idx] = {...gkDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, duration, blank, net, accuracy}; }
         if(typeof renderGKTable==='function') renderGKTable();
       }
     }
@@ -4847,8 +4862,14 @@ function checkFCNotifications() {
   const staleTopics = new Set();
   fcAllCards.forEach(c => {
     const prog = fcUserProgress[c.id];
-    if (!prog || !prog.lastSeen) { staleCount++; return; }
-    const lastMs = prog.lastSeen.toDate ? prog.lastSeen.toDate().getTime() : new Date(prog.lastSeen).getTime();
+    let lastMs = now; // Default to now so it doesn't trigger if neither lastSeen nor createdAt exist
+    if (!prog || !prog.lastSeen) {
+      if (c.createdAt) {
+        lastMs = c.createdAt.toDate ? c.createdAt.toDate().getTime() : new Date(c.createdAt).getTime();
+      }
+    } else {
+      lastMs = prog.lastSeen.toDate ? prog.lastSeen.toDate().getTime() : new Date(prog.lastSeen).getTime();
+    }
     if (now - lastMs >= threeDays) { staleCount++; staleTopics.add(c.topic || c.subject); }
   });
   if (staleCount > 0) {
