@@ -520,6 +520,77 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group input, .form-group select, .form-group textarea { width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: var(--text); transition: var(--transition); }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--pink); box-shadow: 0 0 0 2px rgba(255,107,157,0.2); outline: none; }
+/* FLASHCARD SYSTEM */
+.fc-subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.fc-subject-card{padding:20px;border-radius:16px;cursor:pointer;transition:var(--transition);border:1px solid rgba(255,255,255,.08);text-align:center;position:relative;overflow:hidden}
+.fc-subject-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.fc-subject-card .fc-icon{font-size:2.2rem;margin-bottom:8px}
+.fc-subject-card .fc-name{font-weight:700;font-size:1rem;margin-bottom:4px}
+.fc-subject-card .fc-count{font-size:.8rem;color:var(--text3)}
+.fc-topic-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.fc-topic-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--glass-border);cursor:pointer;transition:var(--transition)}
+.fc-topic-item:hover{background:rgba(255,107,157,.08);border-color:rgba(255,107,157,.2)}
+.fc-topic-item .fc-topic-name{font-weight:600;font-size:.95rem}
+.fc-topic-item .fc-topic-count{font-size:.8rem;color:var(--text3);background:rgba(255,255,255,.06);padding:4px 10px;border-radius:20px}
+.fc-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:.9rem;color:var(--text3);flex-wrap:wrap}
+.fc-breadcrumb span{cursor:pointer;transition:var(--transition)}
+.fc-breadcrumb span:hover{color:var(--pink)}
+.fc-breadcrumb .fc-bc-active{color:var(--text);font-weight:600;cursor:default}
+.fc-breadcrumb .fc-bc-sep{color:var(--text3);cursor:default}
+.fc-study-area{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:600px;margin:0 auto}
+.fc-stats-bar{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;width:100%}
+.fc-stat{text-align:center;padding:10px 16px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--glass-border);min-width:80px}
+.fc-stat-val{font-size:1.3rem;font-weight:700}
+.fc-stat-lbl{font-size:.7rem;color:var(--text3);margin-top:2px}
+.fc-card-container{perspective:1200px;width:100%;max-width:500px;height:300px;cursor:pointer;margin:0 auto}
+.fc-card-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.fc-card-inner.flipped{transform:rotateY(180deg)}
+.fc-card-front,.fc-card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;border:1px solid var(--glass-border);box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.fc-card-front{background:linear-gradient(135deg,rgba(40,20,60,.95),rgba(60,30,80,.9));z-index:2}
+.fc-card-back{background:linear-gradient(135deg,rgba(20,60,40,.95),rgba(30,80,60,.9));transform:rotateY(180deg)}
+.fc-card-label{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:12px;font-weight:600}
+.fc-card-text{font-size:1.3rem;font-weight:600;line-height:1.5;color:var(--text)}
+.fc-card-meta{position:absolute;bottom:12px;right:16px;font-size:.7rem;color:var(--text3)}
+.fc-card-counter{position:absolute;top:12px;left:16px;font-size:.75rem;color:var(--text3);font-weight:600}
+.fc-actions{display:flex;gap:16px;justify-content:center;align-items:center;width:100%}
+.fc-btn-wrong,.fc-btn-correct{width:70px;height:70px;border-radius:50%;border:none;font-size:1.8rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;font-weight:700}
+.fc-btn-wrong{background:rgba(255,82,82,.15);color:var(--error);border:2px solid rgba(255,82,82,.3)}
+.fc-btn-wrong:hover{background:rgba(255,82,82,.3);transform:scale(1.1)}
+.fc-btn-correct{background:rgba(76,175,80,.15);color:var(--success);border:2px solid rgba(76,175,80,.3)}
+.fc-btn-correct:hover{background:rgba(76,175,80,.3);transform:scale(1.1)}
+.fc-btn-flip{padding:8px 24px;border-radius:30px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--text2);cursor:pointer;font-size:.85rem;transition:var(--transition)}
+.fc-btn-flip:hover{background:rgba(255,255,255,.12)}
+.fc-tabs{display:flex;gap:8px;margin-bottom:20px}
+.fc-tab{padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--text2);cursor:pointer;font-size:.85rem;font-weight:500;transition:var(--transition)}
+.fc-tab.active{background:linear-gradient(135deg,rgba(255,107,157,.15),rgba(233,30,99,.1));color:var(--pink);border-color:rgba(255,107,157,.2)}
+.fc-error-box{background:rgba(255,82,82,.05);border:1px solid rgba(255,82,82,.15);border-radius:16px;padding:20px;margin-top:16px}
+.fc-error-box h3{color:var(--error);margin-bottom:12px;font-size:1rem}
+.fc-error-list{display:flex;flex-direction:column;gap:8px}
+.fc-error-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(255,82,82,.08);border-radius:10px;font-size:.85rem}
+.fc-error-item .fc-err-q{flex:1;font-weight:500}
+.fc-error-item .fc-err-actions{display:flex;gap:8px}
+.fc-error-item .fc-err-actions button{padding:4px 12px;border-radius:8px;border:none;cursor:pointer;font-size:.75rem;font-weight:600}
+.fc-notification{background:linear-gradient(135deg,rgba(255,167,38,.1),rgba(255,152,0,.05));border:1px solid rgba(255,167,38,.2);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:.9rem}
+.fc-notification .fc-notif-icon{font-size:1.3rem}
+.fc-notification .fc-notif-text{flex:1;color:var(--text2)}
+.fc-notification .fc-notif-text strong{color:var(--text)}
+.fc-notification .fc-notif-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:1.1rem;padding:4px}
+.fc-admin-panel{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:24px;margin-top:24px}
+.fc-admin-panel h3{margin-bottom:16px;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.fc-admin-json{width:100%;min-height:150px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;color:var(--text);font-family:'Courier New',monospace;font-size:.85rem;resize:vertical;box-sizing:border-box}
+.fc-admin-cards{max-height:400px;overflow-y:auto;margin-top:16px}
+.fc-admin-card-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:6px;font-size:.85rem}
+.fc-admin-card-item .fc-ac-front{flex:1;font-weight:500}
+.fc-admin-card-item .fc-ac-back{flex:1;color:var(--text2)}
+.fc-admin-card-item button{padding:4px 10px;border-radius:6px;border:none;cursor:pointer;font-size:.75rem}
+.fc-progress-ring{width:100%;height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden}
+.fc-progress-fill{height:100%;border-radius:3px;transition:width .5s ease;background:linear-gradient(90deg,var(--pink),var(--accent))}
+.fc-empty{text-align:center;padding:40px 20px;color:var(--text3)}
+.fc-empty .fc-empty-icon{font-size:3rem;margin-bottom:12px}
+.fc-session-complete{text-align:center;padding:40px 20px}
+.fc-session-complete .fc-done-icon{font-size:4rem;margin-bottom:16px}
+.fc-session-complete h2{margin-bottom:8px}
+.fc-session-complete p{color:var(--text2);margin-bottom:20px}
 </style>
 </head>
 <body>
@@ -597,6 +668,8 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="nav-item" data-page="schedule"><span class="nav-icon">📅</span>Ders Programı</div>
       <div class="nav-item" data-page="history"><span class="nav-icon">📒</span>Geçmiş</div>
       <div class="nav-item" data-page="pomodoro"><span class="nav-icon">⏱️</span>Pomodoro</div>
+      <div class="nav-item" data-page="flashcard"><span class="nav-icon">🃏</span>Flashcard</div>
+      <div class="nav-item" id="nav-fcadmin" data-page="fcadmin" style="display:none"><span class="nav-icon">⚙️</span>FC Admin</div>
       <div class="nav-item" data-page="badges"><span class="nav-icon">🏆</span>Rozetler</div>
       <div class="nav-item" data-page="social"><span class="nav-icon">🌐</span>Sosyal</div>
       <div class="nav-item" data-page="profile"><span class="nav-icon">👤</span>Profil</div>
@@ -716,9 +789,11 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
     <div class="page" id="page-deneme">
       <h1 class="page-title">Deneme Takibi</h1>
       <p class="page-subtitle">Deneme sınavı sonuçlarını gir ve ilerlemeyi gör</p>
-      <div style="display:flex;gap:8px;margin-bottom:20px">
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
         <button class="filter-btn active" id="tabGenel" onclick="switchDenemeTab('genel')">📝 Genel Deneme</button>
         <button class="filter-btn" id="tabBrans" onclick="switchDenemeTab('brans')">📋 Branş Deneme</button>
+        <button class="filter-btn" id="tabGY" onclick="switchDenemeTab('gy')">📘 GY Deneme</button>
+        <button class="filter-btn" id="tabGK" onclick="switchDenemeTab('gk')">📗 GK Deneme</button>
       </div>
 
       <!-- GENEL DENEME TAB -->
@@ -805,6 +880,76 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
             <table class="history-table" id="bransTable"><thead><tr><th>Tarih</th><th>Ad</th><th>Konu</th><th>Soru</th><th>Net</th><th>Başarı</th><th>İşlem</th></tr></thead><tbody id="bransTableBody"></tbody></table>
           </div>
           <div id="bransHistPagination" style="display:flex;gap:4px;justify-content:center;align-items:center;margin-top:12px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+
+      <!-- GY DENEME TAB -->
+      <div id="tabContentGY" style="display:none">
+        <div class="deneme-card glass">
+          <h3>📘 Yeni Genel Yetenek Denemesi</h3>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gyDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gyName" placeholder="Ör: Pegem GY 1"></div></div>
+          <div class="form-row" style="margin-top:14px">
+            <div class="form-group"><label>Doğru (Max 60)</label><input type="number" id="gyCorrect" min="0" max="60" placeholder="0"></div>
+            <div class="form-group"><label>Yanlış (Max 60)</label><input type="number" id="gyWrong" min="0" max="60" placeholder="0"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem">
+            <span style="color:var(--text2)">Boş: <strong id="gyBlank">60</strong></span>
+            <span>Net: <strong id="gyNet" class="text-gradient">0.00</strong></span>
+          </div>
+          <div class="form-group" style="margin-top:14px"><label>Notlar</label><textarea id="gyNotes" placeholder="GY deneme notları..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="gySubmit">💾 GY Deneme Kaydet</button>
+        </div>
+        <div class="deneme-history glass">
+          <h3>📈 İlerleme Grafiği</h3>
+          <div class="deneme-chart-container"><canvas id="gyChart"></canvas></div>
+        </div>
+        <div class="deneme-history glass" style="margin-top:16px">
+          <h3>📋 GY Deneme Geçmişi</h3>
+          <div class="history-filters" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Başlangıç</label><input type="date" id="gyHistStart" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"></div>
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Bitiş</label><input type="date" id="gyHistEnd" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"></div>
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Satır</label><select id="gyHistPageSize" onchange="gyHistPage=1;renderGYTablePage()" style="padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"><option value="10" selected>10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></div>
+            <button class="btn btn-secondary" style="padding:6px 14px;font-size:.8rem;height:34px" onclick="filterGYHist()">🔍 Filtrele</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="history-table" id="gyTable"><thead><tr><th>Tarih</th><th>Ad</th><th>Net</th><th>Başarı</th><th>İşlem</th></tr></thead><tbody id="gyTableBody"></tbody></table>
+          </div>
+          <div id="gyHistPagination" style="display:flex;gap:4px;justify-content:center;align-items:center;margin-top:12px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+
+      <!-- GK DENEME TAB -->
+      <div id="tabContentGK" style="display:none">
+        <div class="deneme-card glass">
+          <h3>📗 Yeni Genel Kültür Denemesi</h3>
+          <div class="form-row"><div class="form-group"><label>Tarih</label><input type="date" id="gkDate"></div><div class="form-group"><label>Deneme Adı</label><input type="text" id="gkName" placeholder="Ör: Yargı GK 2"></div></div>
+          <div class="form-row" style="margin-top:14px">
+            <div class="form-group"><label>Doğru (Max 60)</label><input type="number" id="gkCorrect" min="0" max="60" placeholder="0"></div>
+            <div class="form-group"><label>Yanlış (Max 60)</label><input type="number" id="gkWrong" min="0" max="60" placeholder="0"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem">
+            <span style="color:var(--text2)">Boş: <strong id="gkBlank">60</strong></span>
+            <span>Net: <strong id="gkNet" class="text-gradient">0.00</strong></span>
+          </div>
+          <div class="form-group" style="margin-top:14px"><label>Notlar</label><textarea id="gkNotes" placeholder="GK deneme notları..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="gkSubmit">💾 GK Deneme Kaydet</button>
+        </div>
+        <div class="deneme-history glass">
+          <h3>📈 İlerleme Grafiği</h3>
+          <div class="deneme-chart-container"><canvas id="gkChart"></canvas></div>
+        </div>
+        <div class="deneme-history glass" style="margin-top:16px">
+          <h3>📋 GK Deneme Geçmişi</h3>
+          <div class="history-filters" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Başlangıç</label><input type="date" id="gkHistStart" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"></div>
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Bitiş</label><input type="date" id="gkHistEnd" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"></div>
+            <div class="form-group" style="margin:0"><label style="font-size:.75rem;color:var(--text3)">Satır</label><select id="gkHistPageSize" onchange="gkHistPage=1;renderGKTablePage()" style="padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--surface-border);color:var(--text);font-family:inherit;font-size:.8rem"><option value="10" selected>10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></div>
+            <button class="btn btn-secondary" style="padding:6px 14px;font-size:.8rem;height:34px" onclick="filterGKHist()">🔍 Filtrele</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="history-table" id="gkTable"><thead><tr><th>Tarih</th><th>Ad</th><th>Net</th><th>Başarı</th><th>İşlem</th></tr></thead><tbody id="gkTableBody"></tbody></table>
+          </div>
+          <div id="gkHistPagination" style="display:flex;gap:4px;justify-content:center;align-items:center;margin-top:12px;flex-wrap:wrap"></div>
         </div>
       </div>
     </div>
@@ -1076,33 +1221,60 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       </div>
     </div>
 
-</div>
+    <!-- FLASHCARD -->
+    <div class="page" id="page-flashcard">
+      <h1 class="page-title">🃏 Flashcard</h1>
+      <p class="page-subtitle">Kartlarla öğren, tekrar et, pekiştir</p>
+      <div id="fcNotificationArea"></div>
+      <div id="fcDailyGoal" style="margin-bottom:16px"></div>
+      <div class="fc-tabs">
+        <button class="fc-tab active" onclick="fcSwitchTab('study')">📖 Çalış</button>
+        <button class="fc-tab" onclick="fcSwitchTab('errors')">❌ Hata Kutusu</button>
+        <button class="fc-tab" onclick="fcSwitchTab('stats')">📊 İstatistik</button>
+      </div>
+      <div id="fcTabStudy">
+        <div id="fcBreadcrumb" class="fc-breadcrumb"></div>
+        <div id="fcContent"></div>
+      </div>
+      <div id="fcTabErrors" style="display:none">
+        <div id="fcErrorContent"></div>
+      </div>
+      <div id="fcTabStats" style="display:none">
+        <div id="fcStatsContent"></div>
+      </div>
+    </div>
 
-<!-- SCHEDULE MODAL -->
-<div class="modal-overlay hidden" id="scheduleModal">
-  <div class="modal-content glass" style="position:relative">
-    <h3>📅 Ders Ekle</h3>
-    <input type="hidden" id="slotDay">
-    <div class="form-row">
-      <div class="form-group"><label>Başlangıç</label><input type="time" id="slotStart"></div>
-      <div class="form-group"><label>Bitiş</label><input type="time" id="slotEnd"></div>
-    </div>
-    <div style="display:flex; gap:8px; margin-top:8px; justify-content:center;">
-      <button class="quick-time-btn" onclick="addQuickTime(30)">+30dk</button>
-      <button class="quick-time-btn" onclick="addQuickTime(45)">+45dk</button>
-      <button class="quick-time-btn" onclick="addQuickTime(60)">+1 Saat</button>
-      <button class="quick-time-btn" onclick="addQuickTime(90)">+1.5 Saat</button>
-    </div>
-    <div class="form-row" style="margin-top:12px">
-      <div class="form-group" style="margin: 5px;"><label>Ders</label><select id="slotSubject"><option value="Türkçe">Türkçe</option><option value="Matematik">Matematik</option><option value="Tarih">Tarih</option><option value="Coğrafya">Coğrafya</option><option value="Vatandaşlık">Vatandaşlık</option><option value="Deneme">Deneme</option></select></div>
-      <div class="form-group" style="margin: 5px;"><label>Konu</label><select id="slotTopic"></select></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm" onclick="closeScheduleModal()">İptal</button>
-      <button class="btn btn-primary btn-sm" id="slotSave">Kaydet</button>
+    <!-- FC ADMIN -->
+    <div class="page" id="page-fcadmin">
+      <div id="fcAdminPanel"></div>
     </div>
   </div>
-</div>
+
+  <!-- SCHEDULE MODAL -->
+  <div class="modal-overlay hidden" id="scheduleModal">
+    <div class="modal-content glass" style="position:relative">
+      <h3>📅 Ders Ekle</h3>
+      <input type="hidden" id="slotDay">
+      <div class="form-row">
+        <div class="form-group"><label>Başlangıç</label><input type="time" id="slotStart"></div>
+        <div class="form-group"><label>Bitiş</label><input type="time" id="slotEnd"></div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:8px; justify-content:center;">
+        <button class="quick-time-btn" onclick="addQuickTime(30)">+30dk</button>
+        <button class="quick-time-btn" onclick="addQuickTime(45)">+45dk</button>
+        <button class="quick-time-btn" onclick="addQuickTime(60)">+1 Saat</button>
+        <button class="quick-time-btn" onclick="addQuickTime(90)">+1.5 Saat</button>
+      </div>
+      <div class="form-row" style="margin-top:12px">
+        <div class="form-group" style="margin: 5px;"><label>Ders</label><select id="slotSubject"><option value="Türkçe">Türkçe</option><option value="Matematik">Matematik</option><option value="Tarih">Tarih</option><option value="Coğrafya">Coğrafya</option><option value="Vatandaşlık">Vatandaşlık</option><option value="Deneme">Deneme</option></select></div>
+        <div class="form-group" style="margin: 5px;"><label>Konu</label><select id="slotTopic"></select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="closeScheduleModal()">İptal</button>
+        <button class="btn btn-primary btn-sm" id="slotSave">Kaydet</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 // ===== CONFIG =====
@@ -1118,7 +1290,7 @@ const CATEGORIES = {
 const SUBJECTS = {
   'Türkçe': { color: '#FF6B9D', icon: '📝', topics: ['Sözcükte ve Söz Öbeklerinde Anlam', 'Cümlede Anlam', 'Paragrafta Anlam ve Yorum', 'Anlatım Teknikleri ve Düşünceyi Geliştirme Yolları', 'Ses Bilgisi', 'Yazım Kuralları', 'Noktalama İşaretleri', 'Sözcük Yapısı ve Ekler', 'Sözcük Türleri (İsim, Sıfat, Zamir, Zarf, Edat, Bağlaç, Ünlem)', 'Cümlenin Ögeleri', 'Cümle Çeşitleri', 'Anlatım Bozuklukları'] },
   'Matematik': { color: '#AB47BC', icon: '📐', topics: ['Temel Kavramlar', 'Sayılar ve Çözümleme', 'Bölme ve Bölünebilme Kuralları', 'EBOB - EKOK', 'Rasyonel ve Ondalıklı Sayılar', 'Birinci Dereceden Denklemler', 'Basit Eşitsizlikler ve Mutlak Değer', 'Üslü ve Köklü Sayılar', 'Çarpanlara Ayırma ve Özdeşlikler', 'Oran - Orantı', 'Denklem Çözme (Problem Türleri)', 'Kümeler', 'Fonksiyonlar ve İşlem', 'Veri Analizi, Grafik ve Sayısal Mantık', 'Temel Geometri Kavramları, Üçgenler, Dörtgenler, Çember ve Daire'] },
-  'Tarih': { color: '#FF9800', icon: '🏛️', topics: ['İslamiyet Öncesi Türk Devletleri Kültürü ve Uygarlığı', 'İlk Türk-İslam Devletleri', 'Osmanlı Devleti Siyasi Tarihi', 'Osmanlı Devleti’nde Kültür ve Medeniyet', 'XIX. Yüzyılda Osmanlı Devleti', 'XX. Yüzyılda Osmanlı Devleti (I. Dünya Savaşı, Cepheler)', 'Millî Mücadele Dönemi (Hazırlık ve Savaşlar Dönemi)', 'Atatürk İnkılap ve İlkeleri', 'Atatürk Dönemi Türk Dış Politikası', 'Çağdaş Türk ve Dünya Tarihi'] },
+  'Tarih': { color: '#FF9800', icon: '🏛️', topics: ['İslamiyet Öncesi Türk Devletleri Kültürü ve Uygarlığı', 'İlk Türk-İslam Devletleri', 'Osmanlı Devleti Siyasi Tarihi', 'Osmanlı Devleti’nde Kültür ve Medeniyet', 'XIX. Yüzyılda Osmanlı Devleti', 'XX. Yüzyılda Osmanlı Devleti (I. Dünya Savaşı, Cepheler)', 'II. Dünya Savaşı', 'Millî Mücadele Dönemi (Hazırlık ve Savaşlar Dönemi)', 'Atatürk İnkılap ve İlkeleri', 'Atatürk Dönemi Türk Dış Politikası', 'Çağdaş Türk ve Dünya Tarihi'] },
   'Coğrafya': { color: '#4CAF50', icon: '🌍', topics: ['Jeolojik Zamanlar', 'İç Kuvvetler (Orojenez-Epirojenez)', 'İç Kuvvetler (Volkanizma-Deprem)', 'Dış Kuvvetler (Akarsu-Rüzgar)', 'Dış Kuvvetler (Buzul-Karstik)', 'Dış Kuvvetler (Dalga ve Akıntılar)', 'Türkiye\'nin Dağları', 'Türkiye\'nin Platoları', 'Türkiye\'nin Ovaları', 'İklim Elemanları (Sıcaklık)', 'İklim Elemanları (Basınç-Rüzgarlar)', 'İklim Elemanları (Nem-Yağış)', 'Türkiye\'nin İklimleri', 'Türkiye\'de Sular (Akarsular)', 'Türkiye\'de Sular (Göller)', 'Türkiye\'de Sular (Denizler-Körfezler)', 'Türkiye\'de Topraklar', 'Türkiye\'de Bitkiler', 'Doğal Afetler 1', 'Doğal Afetler 2', 'Türkiye\'de Nüfus', 'Türkiye\'de Nüfusun Dağılışı', 'Türkiye\'ye Göçler', 'Türkiye\'de Yerleşmeler', 'Türkiye\'de Tarım', 'Türkiye\'de Hayvancılık', 'Türkiye\'de Madenler', 'Türkiye\'de Enerji', 'Türkiye\'de Sanayi', 'Türkiye\'de Ulaşım', 'Türkiye\'de Ticaret-Turizm', 'Türkiye\'de Bölgeler', 'Türkiye\'de Mevsimler', 'Coğrafi Konum 1', 'Coğrafi Konum 2'] },
   'Vatandaşlık': { color: '#29B6F6', icon: '⚖️', topics: ['Temel Hukuk Kavramları', 'Anayasa ve Devlet Yapıları', 'Türk Anayasa Tarihi', '82 Anayasasının Temel İlkeleri', 'Temel Hak ve Hürriyetler', 'Yasama', 'Yürütme', 'Yargı', 'İdare Hukuku'] }
 };
@@ -1152,7 +1324,7 @@ const BADGES_DEF=[
 ];
 
 // ===== STATE =====
-let currentUser=null,entries=[],denemeList=[],bransDenemeList=[],scheduleSlots=[],userSettings={},pomodoroCount=0,aiHistory=[],stats={};
+let currentUser=null,entries=[],denemeList=[],bransDenemeList=[],gyDenemeList=[],gkDenemeList=[],scheduleSlots=[],userSettings={},pomodoroCount=0,aiHistory=[],stats={};
 let topicProgress={};
 let charts={};
 
@@ -1284,6 +1456,8 @@ function updateUserUI(){
   const av=userSettings.avatar||'👨‍🎓';
   document.getElementById('sidebarAvatar').textContent=av;document.getElementById('profileAvatar').textContent=av;
   document.getElementById('dashGreeting').textContent=`Merhaba ${n}! Bugün harika bir gün çalışmak için. 💪`;
+  const adminNav = document.getElementById('nav-fcadmin');
+  if (adminNav) { adminNav.style.display = (currentUser.email === 'adaysal2311@gmail.com') ? 'flex' : 'none'; }
 }
 
 // ===== DATA LOADING =====
@@ -1305,6 +1479,16 @@ async function loadAllData(retryCount=0){
     const bransSnap=await db.collection('users').doc(uid).collection('bransDeneme').orderBy('date','desc').get();
     bransDenemeList=bransSnap.docs.map(d=>{const o={id:d.id,...d.data()};if(!o.time&&o.createdAt&&o.createdAt.toDate){const dt=o.createdAt.toDate();o.time=dt.toTimeString().slice(0,8)}return o});
     bransDenemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99:99').localeCompare(a.time||'99:99:99')});
+    
+    // GY Deneme
+    const gySnap=await db.collection('users').doc(uid).collection('gyDeneme').orderBy('date','desc').get();
+    gyDenemeList=gySnap.docs.map(d=>{const o={id:d.id,...d.data()};if(!o.time&&o.createdAt&&o.createdAt.toDate){const dt=o.createdAt.toDate();o.time=dt.toTimeString().slice(0,8)}return o});
+    gyDenemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99:99').localeCompare(a.time||'99:99:99')});
+
+    // GK Deneme
+    const gkSnap=await db.collection('users').doc(uid).collection('gkDeneme').orderBy('date','desc').get();
+    gkDenemeList=gkSnap.docs.map(d=>{const o={id:d.id,...d.data()};if(!o.time&&o.createdAt&&o.createdAt.toDate){const dt=o.createdAt.toDate();o.time=dt.toTimeString().slice(0,8)}return o});
+    gkDenemeList.sort((a,b)=>{const dc=b.date.localeCompare(a.date);if(dc!==0)return dc;return(b.time||'99:99:99').localeCompare(a.time||'99:99:99')});
     // Schedule
     const schSnap=await db.collection('users').doc(uid).collection('schedule').get();
     scheduleSlots=schSnap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1353,10 +1537,12 @@ function navigateTo(pageId){
   if(pageId==='schedule')renderSchedule();
   if(pageId==='history')renderHistory();
   if(pageId==='badges')renderBadges();
-  if(pageId==='deneme'){renderDenemeChart();renderDenemeTable();renderBransChart();renderBransTable()}
+  if(pageId==='deneme'){renderDenemeChart();renderDenemeTable();renderBransChart();renderBransTable();renderGYChart();renderGYTable();renderGKChart();renderGKTable()}
   if(pageId==='syllabus')renderSyllabus();
   if(pageId==='profile')renderProfile();
   if(pageId==='social')showSocialTab('discover');
+  if(pageId==='flashcard')renderFlashcardPage();
+  if(pageId==='fcadmin') { renderFCAdminPanel(); }
 }
 
 // ===== DASHBOARD =====
@@ -1366,7 +1552,13 @@ function getAllStudyData(){
     all.push({date:d.date, subject:'Genel Deneme', topic:'Genel Deneme', total:(d.gyd||0)+(d.gyy||0)+(d.gkd||0)+(d.gky||0)||120, correct:(d.totalCorrect||(d.gyd||0)+(d.gkd||0)), wrong:(d.totalWrong||(d.gyy||0)+(d.gky||0)), blank:0, net:d.totalNet||0, duration:d.duration||0, _src:'deneme'});
   });
   bransDenemeList.forEach(d=>{
-    all.push({date:d.date, subject:d.subject||'Branş Deneme', topic:d.topic||'Branş Deneme', total:d.total||0, correct:d.correct||0, wrong:d.wrong||0, blank:0, net:d.net||0, duration:d.duration||0, _src:'brans'});
+    all.push({date:d.date, subject:d.subject||'Branş Deneme', topic:d.topic||'Branş Deneme', total:d.total||0, correct:d.correct||0, wrong:d.wrong||0, blank:d.blank||0, net:d.net||0, duration:d.duration||0, _src:'brans'});
+  });
+  gyDenemeList.forEach(d=>{
+    all.push({date:d.date, subject:'Genel Yetenek', topic:'GY Deneme', total:60, correct:d.correct||0, wrong:d.wrong||0, blank:d.blank||0, net:d.net||0, duration:d.duration||0, _src:'gy'});
+  });
+  gkDenemeList.forEach(d=>{
+    all.push({date:d.date, subject:'Genel Kültür', topic:'GK Deneme', total:60, correct:d.correct||0, wrong:d.wrong||0, blank:d.blank||0, net:d.net||0, duration:d.duration||0, _src:'gk'});
   });
   return all;
 }
@@ -1998,8 +2190,13 @@ let bransHistPage = 1;
 window.switchDenemeTab = function(tab) {
   document.getElementById('tabGenel').classList.toggle('active', tab==='genel');
   document.getElementById('tabBrans').classList.toggle('active', tab==='brans');
+  document.getElementById('tabGY').classList.toggle('active', tab==='gy');
+  document.getElementById('tabGK').classList.toggle('active', tab==='gk');
+  
   document.getElementById('tabContentGenel').style.display = tab==='genel' ? '' : 'none';
   document.getElementById('tabContentBrans').style.display = tab==='brans' ? '' : 'none';
+  document.getElementById('tabContentGY').style.display = tab==='gy' ? '' : 'none';
+  document.getElementById('tabContentGK').style.display = tab==='gk' ? '' : 'none';
 };
 
 function renderDenemeTable(){
@@ -2167,6 +2364,187 @@ window.deleteBransDeneme=async function(id){
   if(!confirm('Bu branş denemeyi silmek istediğine emin misin?'))return;
   try{await db.collection('users').doc(currentUser.uid).collection('bransDeneme').doc(id).delete();bransDenemeList=bransDenemeList.filter(d=>d.id!==id);renderBransChart();renderBransTable();showToast('Branş deneme silindi','info')}catch(e){showToast('Hata','error')}
 };
+
+// ===== GY DENEME LOGIC =====
+let gyHistFiltered = [];
+let gyHistPage = 1;
+
+document.getElementById('gyCorrect')?.addEventListener('input', updateGyGkNet);
+document.getElementById('gyWrong')?.addEventListener('input', updateGyGkNet);
+document.getElementById('gkCorrect')?.addEventListener('input', updateGyGkNet);
+document.getElementById('gkWrong')?.addEventListener('input', updateGyGkNet);
+
+function updateGyGkNet() {
+  const gyC = parseInt(document.getElementById('gyCorrect')?.value||0);
+  const gyW = parseInt(document.getElementById('gyWrong')?.value||0);
+  if(gyC+gyW<=60) {
+    document.getElementById('gyBlank').innerText = 60 - (gyC + gyW);
+    document.getElementById('gyNet').innerText = (gyC - (gyW/4)).toFixed(2);
+  }
+  const gkC = parseInt(document.getElementById('gkCorrect')?.value||0);
+  const gkW = parseInt(document.getElementById('gkWrong')?.value||0);
+  if(gkC+gkW<=60) {
+    document.getElementById('gkBlank').innerText = 60 - (gkC + gkW);
+    document.getElementById('gkNet').innerText = (gkC - (gkW/4)).toFixed(2);
+  }
+}
+
+document.getElementById('gySubmit')?.addEventListener('click', async () => {
+  const date = document.getElementById('gyDate').value;
+  const name = document.getElementById('gyName').value.trim();
+  const correct = parseInt(document.getElementById('gyCorrect').value||0);
+  const wrong = parseInt(document.getElementById('gyWrong').value||0);
+  const notes = document.getElementById('gyNotes').value.trim();
+  if(!date) return showToast('Tarih zorunludur', 'error');
+  if(correct+wrong > 60) return showToast('Toplam 60 soruyu geçemez', 'error');
+  if(correct<0 || wrong<0) return showToast('Geçersiz değer', 'error');
+  const blank = 60 - (correct+wrong);
+  const net = correct - (wrong/4);
+  const accuracy = correct>0 ? Math.round((correct/(correct+wrong))*100) : 0;
+  showLoading();
+  try {
+    const time = new Date().toTimeString().slice(0,8);
+    const docRef = await db.collection('users').doc(currentUser.uid).collection('gyDeneme').add({
+      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    gyDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes});
+    gyDenemeList.sort((a,b)=>b.date.localeCompare(a.date)||(b.time||'').localeCompare(a.time||''));
+    hideLoading(); showToast('GY Denemesi kaydedildi', 'success');
+    document.getElementById('gyCorrect').value=''; document.getElementById('gyWrong').value=''; document.getElementById('gyName').value=''; document.getElementById('gyNotes').value=''; updateGyGkNet();
+    renderGYChart(); renderGYTable();
+  } catch(e) { hideLoading(); showToast('Hata: '+e.message, 'error'); }
+});
+
+function renderGYChart() {
+  if(!gyDenemeList.length) return;
+  const sorted = [...gyDenemeList].reverse();
+  if(charts.gy) charts.gy.destroy();
+  charts.gy = new Chart(document.getElementById('gyChart'), {
+    type:'line', data:{
+      labels: sorted.map(d=>formatDateShort(d.date)),
+      datasets: [{label:'GY Net', data:sorted.map(d=>d.net), borderColor:'#4CAF50', backgroundColor:'rgba(76,175,80,0.1)', tension:0.3, fill:true}]
+    },
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#fff'}}}, scales:{x:{ticks:{color:'rgba(255,255,255,0.6)'}}, y:{ticks:{color:'rgba(255,255,255,0.6)'}}}}
+  });
+}
+
+function renderGYTable() { filterGYHist(); }
+window.filterGYHist = function() {
+  const start = document.getElementById('gyHistStart')?.value||'';
+  const end = document.getElementById('gyHistEnd')?.value||'';
+  let filtered = [...gyDenemeList];
+  if(start) filtered = filtered.filter(d=>d.date>=start);
+  if(end) filtered = filtered.filter(d=>d.date<=end);
+  gyHistFiltered = filtered;
+  gyHistPage = 1;
+  renderGYTablePage();
+};
+window.renderGYTablePage = function() {
+  const pageSize = parseInt(document.getElementById('gyHistPageSize')?.value||10);
+  const totalPages = Math.max(1, Math.ceil(gyHistFiltered.length/pageSize));
+  if(gyHistPage>totalPages) gyHistPage = totalPages;
+  const start = (gyHistPage-1)*pageSize;
+  const pageData = gyHistFiltered.slice(start, start+pageSize);
+  document.getElementById('gyTableBody').innerHTML = pageData.map(d=>
+    `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gy')">
+      <td>${formatDateShort(d.date)}</td>
+      <td>${d.name||'-'}</td>
+      <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
+      <td>%${d.accuracy}</td>
+      <td><button onclick="event.stopPropagation();deleteGYDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑</button></td>
+    </tr>`
+  ).join('');
+  renderPagination('gyHistPagination', totalPages, gyHistPage, p => { gyHistPage=p; renderGYTablePage(); });
+};
+window.deleteGYDeneme = async function(id) {
+  if(!confirm('Bu GY denemesini silmek istediğine emin misin?')) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('gyDeneme').doc(id).delete();
+    gyDenemeList = gyDenemeList.filter(d=>d.id!==id);
+    renderGYChart(); renderGYTable(); showToast('GY denemesi silindi', 'info');
+  } catch(e) { showToast('Hata: '+e.message, 'error'); }
+};
+
+// ===== GK DENEME LOGIC =====
+let gkHistFiltered = [];
+let gkHistPage = 1;
+
+document.getElementById('gkSubmit')?.addEventListener('click', async () => {
+  const date = document.getElementById('gkDate').value;
+  const name = document.getElementById('gkName').value.trim();
+  const correct = parseInt(document.getElementById('gkCorrect').value||0);
+  const wrong = parseInt(document.getElementById('gkWrong').value||0);
+  const notes = document.getElementById('gkNotes').value.trim();
+  if(!date) return showToast('Tarih zorunludur', 'error');
+  if(correct+wrong > 60) return showToast('Toplam 60 soruyu geçemez', 'error');
+  if(correct<0 || wrong<0) return showToast('Geçersiz değer', 'error');
+  const blank = 60 - (correct+wrong);
+  const net = correct - (wrong/4);
+  const accuracy = correct>0 ? Math.round((correct/(correct+wrong))*100) : 0;
+  showLoading();
+  try {
+    const time = new Date().toTimeString().slice(0,8);
+    const docRef = await db.collection('users').doc(currentUser.uid).collection('gkDeneme').add({
+      date, time, name, total:60, correct, wrong, blank, net, accuracy, notes, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    gkDenemeList.unshift({id:docRef.id, date, time, name, total:60, correct, wrong, blank, net, accuracy, notes});
+    gkDenemeList.sort((a,b)=>b.date.localeCompare(a.date)||(b.time||'').localeCompare(a.time||''));
+    hideLoading(); showToast('GK Denemesi kaydedildi', 'success');
+    document.getElementById('gkCorrect').value=''; document.getElementById('gkWrong').value=''; document.getElementById('gkName').value=''; document.getElementById('gkNotes').value=''; updateGyGkNet();
+    renderGKChart(); renderGKTable();
+  } catch(e) { hideLoading(); showToast('Hata: '+e.message, 'error'); }
+});
+
+function renderGKChart() {
+  if(!gkDenemeList.length) return;
+  const sorted = [...gkDenemeList].reverse();
+  if(charts.gk) charts.gk.destroy();
+  charts.gk = new Chart(document.getElementById('gkChart'), {
+    type:'line', data:{
+      labels: sorted.map(d=>formatDateShort(d.date)),
+      datasets: [{label:'GK Net', data:sorted.map(d=>d.net), borderColor:'#FF9800', backgroundColor:'rgba(255,152,0,0.1)', tension:0.3, fill:true}]
+    },
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#fff'}}}, scales:{x:{ticks:{color:'rgba(255,255,255,0.6)'}}, y:{ticks:{color:'rgba(255,255,255,0.6)'}}}}
+  });
+}
+
+function renderGKTable() { filterGKHist(); }
+window.filterGKHist = function() {
+  const start = document.getElementById('gkHistStart')?.value||'';
+  const end = document.getElementById('gkHistEnd')?.value||'';
+  let filtered = [...gkDenemeList];
+  if(start) filtered = filtered.filter(d=>d.date>=start);
+  if(end) filtered = filtered.filter(d=>d.date<=end);
+  gkHistFiltered = filtered;
+  gkHistPage = 1;
+  renderGKTablePage();
+};
+window.renderGKTablePage = function() {
+  const pageSize = parseInt(document.getElementById('gkHistPageSize')?.value||10);
+  const totalPages = Math.max(1, Math.ceil(gkHistFiltered.length/pageSize));
+  if(gkHistPage>totalPages) gkHistPage = totalPages;
+  const start = (gkHistPage-1)*pageSize;
+  const pageData = gkHistFiltered.slice(start, start+pageSize);
+  document.getElementById('gkTableBody').innerHTML = pageData.map(d=>
+    `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gk')">
+      <td>${formatDateShort(d.date)}</td>
+      <td>${d.name||'-'}</td>
+      <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
+      <td>%${d.accuracy}</td>
+      <td><button onclick="event.stopPropagation();deleteGKDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑</button></td>
+    </tr>`
+  ).join('');
+  renderPagination('gkHistPagination', totalPages, gkHistPage, p => { gkHistPage=p; renderGKTablePage(); });
+};
+window.deleteGKDeneme = async function(id) {
+  if(!confirm('Bu GK denemesini silmek istediğine emin misin?')) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('gkDeneme').doc(id).delete();
+    gkDenemeList = gkDenemeList.filter(d=>d.id!==id);
+    renderGKChart(); renderGKTable(); showToast('GK denemesi silindi', 'info');
+  } catch(e) { showToast('Hata: '+e.message, 'error'); }
+};
+
 
 // ===== ANALYTICS =====
 Chart.defaults.color='rgba(255,255,255,.7)';
@@ -3299,7 +3677,7 @@ function getUserStats(){
   const dailyQ={};allData.forEach(e=>{dailyQ[e.date]=(dailyQ[e.date]||0)+(e.total||0)});
   const maxDailyQuestions=Math.max(0,...Object.values(dailyQ));
   
-  const totalDeneme = denemeList.length + bransDenemeList.length;
+  const totalDeneme = denemeList.length + bransDenemeList.length + gyDenemeList.length + gkDenemeList.length;
   const studiedSubjects = new Set(allData.map(e=>e.subject).filter(Boolean)).size;
   
   return{totalEntries,totalQuestions,streak,totalPomodoros,bestAccuracy,maxDailyQuestions,nightQuestions,morningQuestions,totalDeneme,studiedSubjects};
@@ -3938,17 +4316,19 @@ window.editRecord = function(id, type) {
       </div>
       <div class="edit-form-group"><label>Notlar</label><input type="text" id="editNotes" value="${item.notes||''}"></div>
     `;
-  } else if (type === 'brans') {
-    item = bransDenemeList.find(d => d.id === id);
+  } else if (type === 'brans' || type === 'gy' || type === 'gk') {
+    if (type === 'brans') item = bransDenemeList.find(d => d.id === id);
+    else if (type === 'gy') item = gyDenemeList.find(d => d.id === id);
+    else if (type === 'gk') item = gkDenemeList.find(d => d.id === id);
     if (!item) return;
     formHtml = `
       <div class="edit-form-row">
         <div class="edit-form-group"><label>Tarih</label><input type="date" id="editDate" value="${item.date}"></div>
-        <div class="edit-form-group"><label>Ad</label><input type="text" id="editName" value="${item.name}"></div>
+        <div class="edit-form-group"><label>Ad</label><input type="text" id="editName" value="${item.name||''}"></div>
       </div>
       <div class="edit-form-row">
-        <div class="edit-form-group"><label>Konu</label><input type="text" id="editTopic" value="${item.topic}" readonly style="opacity:0.7"></div>
-        <div class="edit-form-group"><label>Soru</label><input type="number" id="editTotal" value="${item.total||0}"></div>
+        <div class="edit-form-group"><label>Konu</label><input type="text" id="editTopic" value="${type==='gy'?'Genel Yetenek':(type==='gk'?'Genel Kültür':item.topic)}" readonly style="opacity:0.7"></div>
+        <div class="edit-form-group"><label>Soru</label><input type="number" id="editTotal" value="${item.total||0}" ${type==='gy'||type==='gk'?'readonly style="opacity:0.7"':''}></div>
       </div>
       <div class="edit-form-row">
         <div class="edit-form-group"><label>Doğru</label><input type="number" id="editCorrect" value="${item.correct||0}"></div>
@@ -4002,7 +4382,7 @@ window.saveEditRecord = async function(id, type) {
       if(idx>-1) { denemeList[idx] = {...denemeList[idx], date, name, gyd, gyy, gkd, gky, notes, gyNet, gkNet, totalNet, puan, gyBlank, gkBlank, totalCorrect:gyd+gkd, totalWrong:gyy+gky}; }
       if(typeof renderDenemeTable==='function') renderDenemeTable();
       
-    } else if (type === 'brans') {
+    } else if (type === 'brans' || type === 'gy' || type === 'gk') {
       const date = document.getElementById('editDate').value;
       const name = document.getElementById('editName').value;
       const t = parseInt(document.getElementById('editTotal').value)||0;
@@ -4013,10 +4393,22 @@ window.saveEditRecord = async function(id, type) {
       const net = c - (w / 4);
       const accuracy = t>0 ? Math.round((c/t)*100) : 0;
       
-      await db.collection('users').doc(currentUser.uid).collection('bransDeneme').doc(id).update({ date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy });
-      const idx = bransDenemeList.findIndex(e=>e.id===id);
-      if(idx>-1) { bransDenemeList[idx] = {...bransDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
-      if(typeof renderBransTable==='function') renderBransTable();
+      const coll = type === 'brans' ? 'bransDeneme' : (type === 'gy' ? 'gyDeneme' : 'gkDeneme');
+      await db.collection('users').doc(currentUser.uid).collection(coll).doc(id).update({ date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy });
+      
+      if (type === 'brans') {
+        const idx = bransDenemeList.findIndex(e=>e.id===id);
+        if(idx>-1) { bransDenemeList[idx] = {...bransDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(typeof renderBransTable==='function') renderBransTable();
+      } else if (type === 'gy') {
+        const idx = gyDenemeList.findIndex(e=>e.id===id);
+        if(idx>-1) { gyDenemeList[idx] = {...gyDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(typeof renderGYTable==='function') renderGYTable();
+      } else if (type === 'gk') {
+        const idx = gkDenemeList.findIndex(e=>e.id===id);
+        if(idx>-1) { gkDenemeList[idx] = {...gkDenemeList[idx], date, name, total:t, correct:c, wrong:w, notes, blank, net, accuracy}; }
+        if(typeof renderGKTable==='function') renderGKTable();
+      }
     }
     
     document.getElementById('detailModal').classList.add('hidden');
@@ -4338,6 +4730,798 @@ window.renderDashboard = function() {
   generateSuggestions();
   updateHighlightsAndTicker();
 };
+
+// ===== FLASHCARD SYSTEM =====
+const FC_ADMIN_EMAIL = 'adaysal2311@gmail.com';
+let fcAllCards = [];
+let fcUserProgress = {};
+let fcSessionCards = [];
+let fcCurrentIndex = 0;
+let fcIsFlipped = false;
+let fcSessionCorrect = 0;
+let fcSessionWrong = 0;
+let fcCurrentSubject = null;
+let fcCurrentTopic = null;
+let fcStreak = 0;
+let fcDailyCount = 0;
+const FC_DAILY_GOAL = 20;
+
+function isAdmin() { return currentUser && currentUser.email === FC_ADMIN_EMAIL; }
+
+// Tab switching
+window.fcSwitchTab = function(tab) {
+  document.querySelectorAll('.fc-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('fcTabStudy').style.display = tab === 'study' ? '' : 'none';
+  document.getElementById('fcTabErrors').style.display = tab === 'errors' ? '' : 'none';
+  document.getElementById('fcTabStats').style.display = tab === 'stats' ? '' : 'none';
+  event.target.classList.add('active');
+  if (tab === 'errors') renderFCErrors();
+  if (tab === 'stats') renderFCStats();
+};
+
+// Load all flashcards from Firestore
+async function loadAllFlashcards() {
+  try {
+    const snap = await db.collection('flashcards').get();
+    fcAllCards = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) { console.warn('FC load error:', e); fcAllCards = []; }
+}
+
+// Load user progress
+async function loadFCProgress() {
+  if (!currentUser) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).collection('flashcardProgress').get();
+    fcUserProgress = {};
+    snap.docs.forEach(d => { fcUserProgress[d.id] = d.data(); });
+  } catch(e) { console.warn('FC progress load error:', e); }
+}
+
+// Save progress for a card
+async function saveFCProgress(cardId, result) {
+  if (!currentUser) return;
+  const now = new Date();
+  const prev = fcUserProgress[cardId] || { correctCount: 0, wrongCount: 0, history: [] };
+  const updated = {
+    status: result,
+    correctCount: (prev.correctCount || 0) + (result === 'correct' ? 1 : 0),
+    wrongCount: (prev.wrongCount || 0) + (result === 'wrong' ? 1 : 0),
+    lastSeen: firebase.firestore.Timestamp.fromDate(now),
+    lastCorrect: result === 'correct' ? firebase.firestore.Timestamp.fromDate(now) : (prev.lastCorrect || null)
+  };
+  const hist = prev.history || [];
+  hist.push({ date: now.toISOString(), result });
+  updated.history = hist.slice(-10);
+  fcUserProgress[cardId] = updated;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('flashcardProgress').doc(cardId).set(updated);
+  } catch(e) { console.warn('FC save error:', e); }
+}
+
+// Main render
+async function renderFlashcardPage() {
+  await loadAllFlashcards();
+  await loadFCProgress();
+  fcCurrentSubject = null;
+  fcCurrentTopic = null;
+  // Check daily count
+  const today = new Date().toISOString().slice(0, 10);
+  const savedDay = localStorage.getItem('fc_daily_date');
+  if (savedDay === today) {
+    fcDailyCount = parseInt(localStorage.getItem('fc_daily_count') || '0');
+  } else {
+    fcDailyCount = 0;
+    localStorage.setItem('fc_daily_date', today);
+    localStorage.setItem('fc_daily_count', '0');
+  }
+  renderFCDailyGoal();
+  checkFCNotifications();
+  renderFCSubjects();
+  renderFCAdminPanel();
+}
+
+function renderFCDailyGoal() {
+  const pct = Math.min(100, Math.round((fcDailyCount / FC_DAILY_GOAL) * 100));
+  const el = document.getElementById('fcDailyGoal');
+  if (!el) return;
+  el.innerHTML = `<div class="glass" style="padding:12px 18px;border-radius:12px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:1.5rem">${fcDailyCount >= FC_DAILY_GOAL ? '🎉' : '🎯'}</div>
+    <div style="flex:1">
+      <div style="font-size:.85rem;font-weight:600;margin-bottom:4px">Günlük Hedef: ${fcDailyCount}/${FC_DAILY_GOAL} kart</div>
+      <div class="fc-progress-ring"><div class="fc-progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div style="font-weight:700;color:var(--pink)">${pct}%</div>
+  </div>`;
+}
+
+// Check for 3-day unreviewed cards notification
+function checkFCNotifications() {
+  const el = document.getElementById('fcNotificationArea');
+  if (!el) return;
+  const today = localStorage.getItem('fc_notif_date');
+  const nowDate = new Date().toISOString().slice(0, 10);
+  if (today === nowDate && localStorage.getItem('fc_notif_dismissed') === 'true') { el.innerHTML = ''; return; }
+  const now = Date.now();
+  const threeDays = 3 * 24 * 60 * 60 * 1000;
+  let staleCount = 0;
+  const staleTopics = new Set();
+  fcAllCards.forEach(c => {
+    const prog = fcUserProgress[c.id];
+    if (!prog || !prog.lastSeen) { staleCount++; return; }
+    const lastMs = prog.lastSeen.toDate ? prog.lastSeen.toDate().getTime() : new Date(prog.lastSeen).getTime();
+    if (now - lastMs >= threeDays) { staleCount++; staleTopics.add(c.topic || c.subject); }
+  });
+  if (staleCount > 0) {
+    el.innerHTML = `<div class="fc-notification">
+      <div class="fc-notif-icon">⚠️</div>
+      <div class="fc-notif-text"><strong>${staleCount} kart</strong> 3+ gündür tekrar edilmedi! Konular: ${[...staleTopics].slice(0, 3).join(', ')}${staleTopics.size > 3 ? '...' : ''}</div>
+      <button class="fc-notif-close" onclick="this.parentElement.remove();localStorage.setItem('fc_notif_dismissed','true');localStorage.setItem('fc_notif_date','${nowDate}')">✕</button>
+    </div>`;
+  } else { el.innerHTML = ''; }
+}
+
+// Render subject grid
+function renderFCSubjects() {
+  document.getElementById('fcBreadcrumb').innerHTML = '<span class="fc-bc-active">🃏 Dersler</span>';
+  const content = document.getElementById('fcContent');
+  const subjectCounts = {};
+  fcAllCards.forEach(c => {
+    const s = c.subject || 'Diğer';
+    subjectCounts[s] = (subjectCounts[s] || 0) + 1;
+  });
+  let html = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    <button class="btn btn-secondary" onclick="renderFCKarmaMode()">🔀 Karma Çalışma Başlat</button>
+  </div>`;
+  html += '<div class="fc-subject-grid">';
+  Object.keys(SUBJECTS).forEach(s => {
+    const count = subjectCounts[s] || 0;
+    const info = SUBJECTS[s];
+    const prog = fcAllCards.filter(c => c.subject === s).map(c => fcUserProgress[c.id]).filter(Boolean);
+    const done = prog.filter(p => p.status === 'correct').length;
+    const pct = count > 0 ? Math.round((done / count) * 100) : 0;
+    html += `<div class="fc-subject-card" style="background:linear-gradient(135deg,${info.color}22,${info.color}08);border-color:${info.color}33" onclick="fcSelectSubject('${s}')">
+      <div class="fc-icon">${info.icon}</div>
+      <div class="fc-name">${s}</div>
+      <div class="fc-count">${count} kart</div>
+      <div class="fc-progress-ring"><div class="fc-progress-fill" style="width:${pct}%;background:${info.color}"></div></div>
+    </div>`;
+  });
+  html += '</div>';
+  if (Object.keys(subjectCounts).length === 0) {
+    html = '<div class="fc-empty"><div class="fc-empty-icon">📭</div><p>Henüz kart eklenmemiş.</p></div>';
+  }
+  content.innerHTML = html;
+}
+
+window.renderFCKarmaMode = function() {
+  document.getElementById('fcBreadcrumb').innerHTML = '<span onclick="renderFCSubjects()">🃏 Dersler</span><span class="fc-bc-sep">›</span><span class="fc-bc-active">🔀 Karma Mod Seçimi</span>';
+  const content = document.getElementById('fcContent');
+  
+  let html = `<div class="glass" style="padding:24px;border-radius:16px;max-width:600px;margin:0 auto">
+    <h3 style="margin-bottom:8px">🔀 Karma Mod</h3>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:20px">Çalışmak istediğin ders ve alt konuları seç.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;max-height:400px;overflow-y:auto;padding-right:8px" id="fcKarmaChecks">`;
+
+  Object.keys(SUBJECTS).forEach(s => {
+    const info = SUBJECTS[s];
+    html += `<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:12px">
+      <label style="display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer">
+        <input type="checkbox" class="fc-karma-subj" value="${s}" onchange="fcKarmaSubjToggle(this, '${s}')">
+        <span style="color:${info.color}">${info.icon} ${s}</span>
+      </label>
+      <div style="margin-left:24px;margin-top:8px;display:flex;flex-direction:column;gap:6px" id="fcKarmaTopics-${s}">`;
+    info.topics.forEach(t => {
+      html += `<label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer">
+        <input type="checkbox" class="fc-karma-topic fc-karma-topic-${s}" data-subj="${s}" value="${t}">
+        <span>${t}</span>
+      </label>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `</div>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end">
+      <button class="btn btn-primary" onclick="fcStartKarmaSession()">🚀 Karma Başla</button>
+    </div>
+  </div>`;
+  content.innerHTML = html;
+};
+
+window.fcKarmaSubjToggle = function(cb, subj) {
+  const topics = document.querySelectorAll(`.fc-karma-topic-${subj}`);
+  topics.forEach(t => t.checked = cb.checked);
+};
+
+window.fcStartKarmaSession = function() {
+  const selectedTopics = Array.from(document.querySelectorAll('.fc-karma-topic:checked')).map(cb => ({
+    subj: cb.getAttribute('data-subj'),
+    topic: cb.value
+  }));
+  if (selectedTopics.length === 0) return showToast('Lütfen en az bir konu seçin', 'error');
+
+  let cards = [];
+  selectedTopics.forEach(sel => {
+    cards = cards.concat(fcAllCards.filter(c => c.subject === sel.subj && c.topic === sel.topic));
+  });
+
+  if (cards.length === 0) return showToast('Seçilen konularda kart bulunamadı!', 'error');
+
+  fcCurrentSubject = 'Karma';
+  fcCurrentTopic = 'Karma';
+  fcSessionCards = fcShuffle(cards);
+  fcCurrentIndex = 0;
+  fcIsFlipped = false;
+  fcSessionCorrect = 0;
+  fcSessionWrong = 0;
+  fcStreak = 0;
+  document.getElementById('fcBreadcrumb').innerHTML = `<span onclick="renderFCSubjects()">🃏 Dersler</span><span class="fc-bc-sep">›</span><span class="fc-bc-active">🔀 Karma Mod (${cards.length} kart)</span>`;
+  renderFCCard();
+};
+
+// Select subject -> show topics
+window.fcSelectSubject = function(subject) {
+  fcCurrentSubject = subject;
+  fcCurrentTopic = null;
+  const info = SUBJECTS[subject];
+  document.getElementById('fcBreadcrumb').innerHTML = `<span onclick="renderFCSubjects()">🃏 Dersler</span><span class="fc-bc-sep">›</span><span class="fc-bc-active">${info.icon} ${subject}</span>`;
+  const content = document.getElementById('fcContent');
+  const cards = fcAllCards.filter(c => c.subject === subject);
+  const topicCounts = {};
+  cards.forEach(c => {
+    const t = c.topic || 'Genel';
+    topicCounts[t] = (topicCounts[t] || 0) + 1;
+  });
+  let html = '<div class="fc-topic-list">';
+  // "Tümü" option
+  if (cards.length > 0) {
+    html += `<div class="fc-topic-item" onclick="fcStartSession('${subject}',null)" style="border-color:${info.color}33">
+      <div class="fc-topic-name">📚 Tüm Kartlar</div>
+      <div class="fc-topic-count">${cards.length} kart</div>
+    </div>`;
+  }
+  const topics = SUBJECTS[subject]?.topics || [];
+  topics.forEach(t => {
+    const count = topicCounts[t] || 0;
+    if (count === 0) return;
+    const prog = cards.filter(c => c.topic === t).map(c => fcUserProgress[c.id]).filter(Boolean);
+    const done = prog.filter(p => p.status === 'correct').length;
+    html += `<div class="fc-topic-item" onclick="fcStartSession('${subject}','${t.replace(/'/g, "\\'")}')">
+      <div class="fc-topic-name">${t}</div>
+      <div class="fc-topic-count">${done}/${count} ✓</div>
+    </div>`;
+  });
+  // topics in data but not in SUBJECTS
+  Object.keys(topicCounts).forEach(t => {
+    if (!topics.includes(t) && t !== 'Genel') {
+      html += `<div class="fc-topic-item" onclick="fcStartSession('${subject}','${t.replace(/'/g, "\\'")}')">
+        <div class="fc-topic-name">${t}</div>
+        <div class="fc-topic-count">${topicCounts[t]} kart</div>
+      </div>`;
+    }
+  });
+  html += '</div>';
+  if (cards.length === 0) {
+    html = '<div class="fc-empty"><div class="fc-empty-icon">📭</div><p>Bu derste henüz kart yok.</p></div>';
+  }
+  content.innerHTML = html;
+};
+
+// Fisher-Yates + weighted shuffle
+function fcShuffle(cards) {
+  const now = Date.now();
+  const weighted = cards.map(c => {
+    const p = fcUserProgress[c.id];
+    let weight = 10;
+    
+    if (p) {
+      const lastMs = p.lastSeen?.toDate ? p.lastSeen.toDate().getTime() : (p.lastSeen ? new Date(p.lastSeen).getTime() : 0);
+      const daysAgo = (now - lastMs) / (1000 * 60 * 60 * 24);
+      
+      if (p.status === 'wrong') {
+        weight = 1000; // Yanlışlar her zaman en öncelikli
+      } else {
+        if (daysAgo <= 1) weight = 500;       // Dün veya bugün
+        else if (daysAgo <= 3) weight = 350;  // Son 3 gün
+        else if (daysAgo <= 7) weight = 200;  // Son 1 hafta
+        else weight = 100;                    // Daha eski (oran artırıldı)
+      }
+    } else {
+      weight = 150; // Hiç görülmemiş kartlar (oran artırıldı)
+    }
+    
+    return { card: c, weight, rand: Math.random() * weight };
+  });
+
+  weighted.sort((a, b) => b.rand - a.rand);
+
+  const result = weighted.map(w => w.card);
+  for (let i = 1; i < result.length; i++) {
+    if (result[i].id === result[i - 1].id && i + 1 < result.length) {
+      [result[i], result[i + 1]] = [result[i + 1], result[i]];
+    }
+  }
+  return result;
+}
+
+// Start session
+window.fcStartSession = function(subject, topic) {
+  fcCurrentSubject = subject;
+  fcCurrentTopic = topic;
+  let cards = fcAllCards.filter(c => c.subject === subject);
+  if (topic) cards = cards.filter(c => c.topic === topic);
+  fcSessionCards = fcShuffle(cards);
+  fcCurrentIndex = 0;
+  fcIsFlipped = false;
+  fcSessionCorrect = 0;
+  fcSessionWrong = 0;
+  fcStreak = 0;
+  const info = SUBJECTS[subject];
+  const topicLabel = topic || 'Tüm Kartlar';
+  document.getElementById('fcBreadcrumb').innerHTML = `<span onclick="renderFCSubjects()">🃏 Dersler</span><span class="fc-bc-sep">›</span><span onclick="fcSelectSubject('${subject}')">${info.icon} ${subject}</span><span class="fc-bc-sep">›</span><span class="fc-bc-active">${topicLabel}</span>`;
+  renderFCCard();
+};
+
+function renderFCCard() {
+  const content = document.getElementById('fcContent');
+  if (fcCurrentIndex >= fcSessionCards.length) {
+    // Session complete
+    const total = fcSessionCorrect + fcSessionWrong;
+    const pct = total > 0 ? Math.round((fcSessionCorrect / total) * 100) : 0;
+    content.innerHTML = `<div class="fc-session-complete">
+      <div class="fc-done-icon">🎉</div>
+      <h2>Oturum Tamamlandı!</h2>
+      <p>${total} kart çalışıldı</p>
+      <div class="fc-stats-bar">
+        <div class="fc-stat"><div class="fc-stat-val" style="color:var(--success)">${fcSessionCorrect}</div><div class="fc-stat-lbl">Doğru</div></div>
+        <div class="fc-stat"><div class="fc-stat-val" style="color:var(--error)">${fcSessionWrong}</div><div class="fc-stat-lbl">Yanlış</div></div>
+        <div class="fc-stat"><div class="fc-stat-val" style="color:var(--pink)">%${pct}</div><div class="fc-stat-lbl">Başarı</div></div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="fcStartSession('${fcCurrentSubject}',${fcCurrentTopic ? "'" + fcCurrentTopic.replace(/'/g, "\\'") + "'" : 'null'})">🔄 Tekrar Çalış</button>
+        ${fcSessionWrong > 0 ? '<button class="btn btn-secondary" onclick="fcStudyErrors()">❌ Hataları Çalış</button>' : ''}
+        <button class="btn btn-secondary" onclick="fcSelectSubject('${fcCurrentSubject}')">← Konulara Dön</button>
+      </div>
+    </div>`;
+    return;
+  }
+  const card = fcSessionCards[fcCurrentIndex];
+  const total = fcSessionCards.length;
+  const prog = fcUserProgress[card.id];
+  let lastSeenStr = 'İlk kez';
+  if (prog && prog.lastSeen) {
+    const d = prog.lastSeen.toDate ? prog.lastSeen.toDate() : new Date(prog.lastSeen);
+    const diff = Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60));
+    if (diff < 1) lastSeenStr = 'Az önce';
+    else if (diff < 24) lastSeenStr = `${diff} saat önce`;
+    else lastSeenStr = `${Math.floor(diff / 24)} gün önce`;
+  }
+  const noteHtml = card.note ? `<div style="margin-top:12px;font-size:.8rem;color:var(--text3);font-style:italic">📝 ${card.note}</div>` : '';
+  const streakHtml = fcStreak >= 3 ? `<div style="position:absolute;top:12px;right:16px;font-size:.85rem;color:#FFA726;font-weight:700">🔥 ${fcStreak} seri!</div>` : '';
+
+  content.innerHTML = `
+    <div class="fc-stats-bar">
+      <div class="fc-stat"><div class="fc-stat-val" style="color:var(--success)">${fcSessionCorrect}</div><div class="fc-stat-lbl">Doğru</div></div>
+      <div class="fc-stat"><div class="fc-stat-val" style="color:var(--error)">${fcSessionWrong}</div><div class="fc-stat-lbl">Yanlış</div></div>
+      <div class="fc-stat"><div class="fc-stat-val">${fcCurrentIndex + 1}/${total}</div><div class="fc-stat-lbl">Kart</div></div>
+    </div>
+    <div class="fc-study-area">
+      <div class="fc-card-container" onclick="fcFlip()">
+        <div class="fc-card-inner" id="fcCardInner">
+          <div class="fc-card-front">
+            ${streakHtml}
+            <div class="fc-card-counter">${fcCurrentIndex + 1}/${total}</div>
+            <div class="fc-card-label">SORU</div>
+            <div class="fc-card-text">${card.front}</div>
+            ${card.noteFront ? `<div style="margin-top:12px;font-size:.8rem;color:var(--text3);font-style:italic">📝 ${card.noteFront}</div>` : ''}
+            <div class="fc-card-meta">👁 ${lastSeenStr}</div>
+          </div>
+          <div class="fc-card-back">
+            <div class="fc-card-label">CEVAP</div>
+            <div class="fc-card-text">${card.back}</div>
+            ${card.noteBack ? `<div style="margin-top:12px;font-size:.8rem;color:var(--text3);font-style:italic">📝 ${card.noteBack}</div>` : ''}
+            ${noteHtml}
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.8rem;color:var(--text3);margin-top:-8px">Kartı çevirmek için tıkla</div>
+      <div class="fc-actions" id="fcActions">
+        <button class="fc-btn-wrong" onclick="fcMarkWrong()" title="Yanlış Bildim">✗</button>
+        <button class="fc-btn-flip" onclick="fcFlip()">🔄 Çevir</button>
+        <button class="fc-btn-correct" onclick="fcMarkCorrect()" title="Doğru Bildim">✓</button>
+      </div>
+    </div>`;
+}
+
+window.fcFlip = function() {
+  const inner = document.getElementById('fcCardInner');
+  if (!inner) return;
+  fcIsFlipped = !fcIsFlipped;
+  inner.classList.toggle('flipped', fcIsFlipped);
+};
+
+window.fcMarkCorrect = function() {
+  if (fcCurrentIndex >= fcSessionCards.length) return;
+  const card = fcSessionCards[fcCurrentIndex];
+  saveFCProgress(card.id, 'correct');
+  fcSessionCorrect++;
+  fcStreak++;
+  fcDailyCount++;
+  localStorage.setItem('fc_daily_count', String(fcDailyCount));
+  renderFCDailyGoal();
+  if (fcStreak === 5) showToast('🔥 5 doğru üst üste! Harika gidiyorsun!', 'success');
+  if (fcStreak === 10) showToast('🔥🔥 10 doğru seri! Mükemmel!', 'success');
+  fcCurrentIndex++;
+  fcIsFlipped = false;
+  renderFCCard();
+};
+
+window.fcMarkWrong = function() {
+  if (fcCurrentIndex >= fcSessionCards.length) return;
+  const card = fcSessionCards[fcCurrentIndex];
+  saveFCProgress(card.id, 'wrong');
+  fcSessionWrong++;
+  fcStreak = 0;
+  fcDailyCount++;
+  localStorage.setItem('fc_daily_count', String(fcDailyCount));
+  renderFCDailyGoal();
+  fcCurrentIndex++;
+  fcIsFlipped = false;
+  renderFCCard();
+};
+
+// Error box
+function renderFCErrors() {
+  const content = document.getElementById('fcErrorContent');
+  const wrongCards = fcAllCards.filter(c => {
+    const p = fcUserProgress[c.id];
+    return p && p.status === 'wrong';
+  });
+  if (wrongCards.length === 0) {
+    content.innerHTML = '<div class="fc-empty"><div class="fc-empty-icon">✨</div><p>Hata kutunuz boş! Harika gidiyorsun!</p></div>';
+    return;
+  }
+  // Group by subject
+  const grouped = {};
+  wrongCards.forEach(c => {
+    const s = c.subject || 'Diğer';
+    if (!grouped[s]) grouped[s] = [];
+    grouped[s].push(c);
+  });
+  let html = `<div style="margin-bottom:16px;font-size:.9rem;color:var(--text2)">Toplam <strong style="color:var(--error)">${wrongCards.length}</strong> yanlış kart</div>`;
+  html += `<button class="btn btn-primary" style="margin-bottom:16px" onclick="fcStudyErrors()">❌ Tüm Hataları Çalış (${wrongCards.length})</button>`;
+  Object.entries(grouped).forEach(([subj, cards]) => {
+    const info = SUBJECTS[subj] || { icon: '📖', color: '#999' };
+    html += `<div class="fc-error-box" style="border-color:${info.color}33;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="color:${info.color};margin:0">${info.icon} ${subj} (${cards.length})</h3>
+        <button class="btn btn-primary btn-sm" onclick="fcStudyErrors('${subj}')">Çalış</button>
+      </div>
+      <div class="fc-error-list">`;
+    cards.forEach(c => {
+      const p = fcUserProgress[c.id];
+      const wc = p ? p.wrongCount || 0 : 0;
+      html += `<div class="fc-error-item">
+        <div class="fc-err-q">${c.front}</div>
+        <div style="color:var(--text3);font-size:.75rem;margin-right:8px">${wc}x yanlış</div>
+        <div class="fc-err-actions">
+          <button style="background:rgba(76,175,80,.15);color:var(--success)" onclick="fcRemoveFromErrors('${c.id}')">✓ Çıkar</button>
+        </div>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  content.innerHTML = html;
+}
+
+window.fcStudyErrors = function(subj) {
+  const wrongCards = fcAllCards.filter(c => {
+    const p = fcUserProgress[c.id];
+    const isWrong = p && p.status === 'wrong';
+    if (!subj) return isWrong;
+    return isWrong && c.subject === subj;
+  });
+  if (wrongCards.length === 0) return showToast('Hata kutunuz boş!', 'info');
+  fcSwitchTabTo('study');
+  fcSessionCards = fcShuffle(wrongCards);
+  fcCurrentIndex = 0;
+  fcIsFlipped = false;
+  fcSessionCorrect = 0;
+  fcSessionWrong = 0;
+  fcStreak = 0;
+  const breadcrumbText = subj ? `Hatalar: ${subj}` : 'Hata Kutusu';
+  document.getElementById('fcBreadcrumb').innerHTML = `<span onclick="renderFCSubjects()">🃏 Dersler</span><span class="fc-bc-sep">›</span><span class="fc-bc-active">❌ ${breadcrumbText}</span>`;
+  renderFCCard();
+};
+
+function fcSwitchTabTo(tab) {
+  document.querySelectorAll('.fc-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('fcTabStudy').style.display = tab === 'study' ? '' : 'none';
+  document.getElementById('fcTabErrors').style.display = tab === 'errors' ? '' : 'none';
+  document.getElementById('fcTabStats').style.display = tab === 'stats' ? '' : 'none';
+  document.querySelectorAll('.fc-tab')[tab === 'study' ? 0 : (tab === 'errors' ? 1 : 2)].classList.add('active');
+}
+
+window.fcRemoveFromErrors = async function(cardId) {
+  const prev = fcUserProgress[cardId] || {};
+  prev.status = 'correct';
+  fcUserProgress[cardId] = prev;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('flashcardProgress').doc(cardId).update({ status: 'correct' });
+  } catch(e) {}
+  showToast('Kart hata kutusundan çıkarıldı', 'success');
+  renderFCErrors();
+};
+
+// Stats tab
+function renderFCStats() {
+  const content = document.getElementById('fcStatsContent');
+  const total = fcAllCards.length;
+  const seen = Object.values(fcUserProgress).filter(p => p.lastSeen).length;
+  const correct = Object.values(fcUserProgress).filter(p => p.status === 'correct').length;
+  const wrong = Object.values(fcUserProgress).filter(p => p.status === 'wrong').length;
+  const unseen = total - seen;
+  const allCorrect = Object.values(fcUserProgress).reduce((s, p) => s + (p.correctCount || 0), 0);
+  const allWrong = Object.values(fcUserProgress).reduce((s, p) => s + (p.wrongCount || 0), 0);
+  const totalAttempts = allCorrect + allWrong;
+  const overallAcc = totalAttempts > 0 ? Math.round((allCorrect / totalAttempts) * 100) : 0;
+
+  let html = `<div class="fc-stats-bar" style="margin-bottom:24px">
+    <div class="fc-stat"><div class="fc-stat-val">${total}</div><div class="fc-stat-lbl">Toplam Kart</div></div>
+    <div class="fc-stat"><div class="fc-stat-val" style="color:var(--success)">${correct}</div><div class="fc-stat-lbl">Öğrenildi</div></div>
+    <div class="fc-stat"><div class="fc-stat-val" style="color:var(--error)">${wrong}</div><div class="fc-stat-lbl">Hatalı</div></div>
+    <div class="fc-stat"><div class="fc-stat-val" style="color:var(--text3)">${unseen}</div><div class="fc-stat-lbl">Görülmedi</div></div>
+    <div class="fc-stat"><div class="fc-stat-val" style="color:var(--pink)">%${overallAcc}</div><div class="fc-stat-lbl">Doğru Oranı</div></div>
+  </div>`;
+
+  // Per-subject breakdown
+  html += '<h3 style="margin-bottom:12px;font-size:1rem">📚 Ders Bazlı İlerleme</h3>';
+  Object.keys(SUBJECTS).forEach(subj => {
+    const info = SUBJECTS[subj];
+    const subjCards = fcAllCards.filter(c => c.subject === subj);
+    if (subjCards.length === 0) return;
+    const subjCorrect = subjCards.filter(c => fcUserProgress[c.id]?.status === 'correct').length;
+    const subjWrong = subjCards.filter(c => fcUserProgress[c.id]?.status === 'wrong').length;
+    const pct = subjCards.length > 0 ? Math.round((subjCorrect / subjCards.length) * 100) : 0;
+    html += `<div class="glass" style="padding:14px 18px;border-radius:12px;margin-bottom:8px;border-left:3px solid ${info.color}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-weight:600">${info.icon} ${subj}</div>
+        <div style="font-size:.8rem;color:var(--text3)">${subjCorrect}/${subjCards.length} öğrenildi • ${subjWrong} hatalı</div>
+      </div>
+      <div class="fc-progress-ring"><div class="fc-progress-fill" style="width:${pct}%;background:${info.color}"></div></div>
+    </div>`;
+  });
+  content.innerHTML = html;
+}
+
+// ===== ADMIN PANEL =====
+async function renderFCAdminPanel() {
+  const panel = document.getElementById('fcAdminPanel');
+  if (!panel) return;
+  if (!isAdmin()) { panel.innerHTML = ''; return; }
+
+  if (fcAllCards.length === 0) {
+    await loadAllFlashcards();
+  }
+
+  let subjectOpts = Object.keys(SUBJECTS).map(s => `<option value="${s}">${s}</option>`).join('');
+  panel.innerHTML = `<div class="fc-admin-panel">
+    <h3>🔧 Yönetici Paneli</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Ders</label><select id="fcAdminSubject" onchange="fcAdminUpdateTopics(); fcAdminListCards()">${subjectOpts}</select></div>
+      <div class="form-group"><label>Alt Konu</label><select id="fcAdminTopic" onchange="fcAdminListCards()"></select></div>
+    </div>
+    <div style="margin-top:16px">
+      <h4 style="margin-bottom:8px;font-size:.9rem">📝 Tek Kart Ekle</h4>
+      <div class="form-row">
+        <div class="form-group"><label>Ön Yüz (Soru)</label><input type="text" id="fcAdminFront" placeholder="Soru metni"></div>
+        <div class="form-group"><label>Arka Yüz (Cevap)</label><input type="text" id="fcAdminBack" placeholder="Cevap metni"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Not - Ön (isteğe bağlı)</label><input type="text" id="fcAdminNoteFront" placeholder="Ön yüz notu"></div>
+        <div class="form-group"><label>Not - Arka (isteğe bağlı)</label><input type="text" id="fcAdminNoteBack" placeholder="Arka yüz notu"></div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="fcAdminAddSingle()" style="margin-top:8px">➕ Kart Ekle</button>
+    </div>
+    <div style="margin-top:24px">
+      <h4 style="margin-bottom:8px;font-size:.9rem">📋 JSON ile Toplu Ekle</h4>
+      <p style="font-size:.75rem;color:var(--text3);margin-bottom:8px">Format: <code>[{"subject":"Ders","topic":"Konu","front":"Soru","back":"Cevap","noteFront":"Ön Not","noteBack":"Arka Not"}]</code><br>(Ders/Konu yazılmazsa yukarıdaki seçimler geçerli olur)</p>
+      <textarea class="fc-admin-json" id="fcAdminJSON" placeholder='[{"subject":"Tarih", "topic":"II. Dünya Savaşı", "front":"Örnek soru?", "back":"Örnek cevap"}]'></textarea>
+      <button class="btn btn-primary btn-sm" onclick="fcAdminAddJSON()" style="margin-top:8px">📥 Toplu Ekle</button>
+    </div>
+    <div style="margin-top:24px">
+      <h4 style="margin-bottom:8px;font-size:.9rem">📋 Mevcut Kartlar</h4>
+      <input type="text" id="fcAdminSearch" onkeyup="fcAdminListCards()" placeholder="Kelime, ders, alt konu veya not ara..." style="width:100%;margin-bottom:12px;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.2);color:#fff;box-sizing:border-box;">
+      <div id="fcAdminCardList" class="fc-admin-cards"></div>
+    </div>
+  </div>
+  
+  <!-- Edit Modal (Inline for Admin) -->
+  <div class="modal-overlay hidden" id="fcEditModal">
+    <div class="modal-content glass" style="position:relative">
+      <h3>✏️ Kart Düzenle</h3>
+      <input type="hidden" id="fcEditId">
+      <div class="form-row">
+        <div class="form-group"><label>Ders</label><select id="fcEditSubject" onchange="fcEditUpdateTopics()">${subjectOpts}</select></div>
+        <div class="form-group"><label>Alt Konu</label><select id="fcEditTopic"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Ön Yüz (Soru)</label><input type="text" id="fcEditFront"></div>
+        <div class="form-group"><label>Arka Yüz (Cevap)</label><input type="text" id="fcEditBack"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Not - Ön</label><input type="text" id="fcEditNoteFront"></div>
+        <div class="form-group"><label>Not - Arka</label><input type="text" id="fcEditNoteBack"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('fcEditModal').classList.add('hidden')">İptal</button>
+        <button class="btn btn-primary btn-sm" onclick="fcAdminSaveEdit()">Kaydet</button>
+      </div>
+    </div>
+  </div>`;
+  fcAdminUpdateTopics();
+  fcAdminListCards();
+}
+
+window.fcAdminUpdateTopics = function() {
+  const subj = document.getElementById('fcAdminSubject').value;
+  const topicSel = document.getElementById('fcAdminTopic');
+  const topics = SUBJECTS[subj]?.topics || [];
+  topicSel.innerHTML = topics.map(t => `<option value="${t}">${t}</option>`).join('');
+};
+
+window.fcAdminAddSingle = async function() {
+  const subject = document.getElementById('fcAdminSubject').value;
+  const topic = document.getElementById('fcAdminTopic').value;
+  const front = document.getElementById('fcAdminFront').value.trim();
+  const back = document.getElementById('fcAdminBack').value.trim();
+  const noteFront = document.getElementById('fcAdminNoteFront').value.trim();
+  const noteBack = document.getElementById('fcAdminNoteBack').value.trim();
+  if (!front || !back) return showToast('Ön ve arka yüz zorunludur', 'error');
+  try {
+    const data = { subject, topic, front, back, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdBy: currentUser.email };
+    if (noteFront) data.noteFront = noteFront;
+    if (noteBack) data.noteBack = noteBack;
+    await db.collection('flashcards').add(data);
+    showToast('Kart eklendi!', 'success');
+    document.getElementById('fcAdminFront').value = '';
+    document.getElementById('fcAdminBack').value = '';
+    document.getElementById('fcAdminNoteFront').value = '';
+    document.getElementById('fcAdminNoteBack').value = '';
+    await loadAllFlashcards();
+    fcAdminListCards();
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+};
+
+window.fcAdminAddJSON = async function() {
+  const defaultSubject = document.getElementById('fcAdminSubject').value;
+  const defaultTopic = document.getElementById('fcAdminTopic').value;
+  const jsonStr = document.getElementById('fcAdminJSON').value.trim();
+  let cards;
+  try { cards = JSON.parse(jsonStr); } catch(e) { return showToast('Geçersiz JSON formatı!', 'error'); }
+  if (!Array.isArray(cards) || cards.length === 0) return showToast('JSON bir dizi olmalı ve boş olmamalı', 'error');
+  try {
+    showLoading();
+    const batch = db.batch();
+    let count = 0;
+    cards.forEach(c => {
+      if (!c.front || !c.back) return;
+      const ref = db.collection('flashcards').doc();
+      const data = { 
+        subject: c.subject || defaultSubject, 
+        topic: c.topic || defaultTopic, 
+        front: c.front, 
+        back: c.back, 
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(), 
+        createdBy: currentUser.email 
+      };
+      if (c.note) data.note = c.note;
+      if (c.noteFront) data.noteFront = c.noteFront;
+      if (c.noteBack) data.noteBack = c.noteBack;
+      batch.set(ref, data);
+      count++;
+    });
+    await batch.commit();
+    hideLoading();
+    showToast(`${count} kart başarıyla eklendi!`, 'success');
+    document.getElementById('fcAdminJSON').value = '';
+    await loadAllFlashcards();
+    fcAdminListCards();
+  } catch(e) { hideLoading(); showToast('Hata: ' + e.message, 'error'); }
+};
+
+window.fcEditUpdateTopics = function() {
+  const subj = document.getElementById('fcEditSubject').value;
+  const topicSel = document.getElementById('fcEditTopic');
+  const topics = SUBJECTS[subj]?.topics || [];
+  topicSel.innerHTML = topics.map(t => `<option value="${t}">${t}</option>`).join('');
+};
+
+function fcAdminListCards() {
+  const container = document.getElementById('fcAdminCardList');
+  if (!container) return;
+  const subject = document.getElementById('fcAdminSubject')?.value;
+  const topic = document.getElementById('fcAdminTopic')?.value;
+  const searchInput = document.getElementById('fcAdminSearch')?.value.toLowerCase().trim();
+  
+  let filtered = [];
+  if (searchInput) {
+    filtered = fcAllCards.filter(c => {
+      const combined = `${c.front} ${c.back} ${c.noteFront||''} ${c.noteBack||''} ${c.note||''} ${c.subject} ${c.topic}`.toLowerCase();
+      return combined.includes(searchInput);
+    });
+  } else {
+    filtered = fcAllCards.filter(c => c.subject === subject && c.topic === topic);
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="color:var(--text3);font-size:.85rem;padding:12px">Eşleşen kart bulunamadı.</div>';
+    return;
+  }
+  container.innerHTML = filtered.map(c => `<div class="fc-admin-card-item" style="flex-wrap:wrap">
+    <div style="width:100%;font-size:0.75rem;color:var(--pink);margin-bottom:4px">${c.subject} > ${c.topic}</div>
+    <div class="fc-ac-front">${c.front}</div>
+    <div class="fc-ac-back">${c.back}</div>
+    <div style="display:flex;gap:4px">
+      <button style="background:rgba(255,255,255,.1);color:#fff" onclick="fcAdminOpenEdit('${c.id}')">✏️</button>
+      <button style="background:rgba(255,82,82,.15);color:var(--error)" onclick="fcAdminDelete('${c.id}')">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+window.fcAdminOpenEdit = function(id) {
+  const card = fcAllCards.find(c => c.id === id);
+  if (!card) return;
+  document.getElementById('fcEditId').value = card.id;
+  document.getElementById('fcEditSubject').value = card.subject || '';
+  window.fcEditUpdateTopics();
+  document.getElementById('fcEditTopic').value = card.topic || '';
+  document.getElementById('fcEditFront').value = card.front || '';
+  document.getElementById('fcEditBack').value = card.back || '';
+  document.getElementById('fcEditNoteFront').value = card.noteFront || card.note || '';
+  document.getElementById('fcEditNoteBack').value = card.noteBack || '';
+  
+  document.getElementById('fcEditModal').classList.remove('hidden');
+};
+
+window.fcAdminSaveEdit = async function() {
+  const id = document.getElementById('fcEditId').value;
+  const subject = document.getElementById('fcEditSubject').value;
+  const topic = document.getElementById('fcEditTopic').value;
+  const front = document.getElementById('fcEditFront').value.trim();
+  const back = document.getElementById('fcEditBack').value.trim();
+  const noteFront = document.getElementById('fcEditNoteFront').value.trim();
+  const noteBack = document.getElementById('fcEditNoteBack').value.trim();
+  
+  if (!front || !back) return showToast('Ön ve arka yüz zorunludur', 'error');
+  try {
+    const data = { subject, topic, front, back, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+    if (noteFront) data.noteFront = noteFront; else data.noteFront = firebase.firestore.FieldValue.delete();
+    if (noteBack) data.noteBack = noteBack; else data.noteBack = firebase.firestore.FieldValue.delete();
+    
+    await db.collection('flashcards').doc(id).update(data);
+    showToast('Kart güncellendi!', 'success');
+    document.getElementById('fcEditModal').classList.add('hidden');
+    await loadAllFlashcards();
+    fcAdminListCards();
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+};
+
+window.fcAdminDelete = async function(id) {
+  if (!confirm('Bu kartı silmek istediğine emin misin?')) return;
+  try {
+    await db.collection('flashcards').doc(id).delete();
+    showToast('Kart silindi', 'info');
+    await loadAllFlashcards();
+    fcAdminListCards();
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+};
+
+// Dashboard notification integration
+const _origRenderDashboard = typeof renderDashboard === 'function' ? renderDashboard : null;
+if (_origRenderDashboard) {
+  const _wrappedRenderDashboard = renderDashboard;
+  // Will check FC notifications on dashboard load via the navigateTo hook
+}
 </script>
 </body>
 </html>
