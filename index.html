@@ -591,6 +591,96 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
 .fc-session-complete .fc-done-icon{font-size:4rem;margin-bottom:16px}
 .fc-session-complete h2{margin-bottom:8px}
 .fc-session-complete p{color:var(--text2);margin-bottom:20px}
+/* ===== KIM MILYONER OLMAK ISTER ===== */
+.mil-page{position:relative}
+.mil-menu{text-align:center;padding:30px 10px}
+.mil-logo{font-size:3rem;margin-bottom:8px}
+.mil-menu h1{font-size:1.6rem;background:linear-gradient(135deg,#FFD700,#FFA000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.mil-menu .mil-subtitle{color:var(--text2);font-size:.85rem;margin-bottom:24px}
+.mil-setup{max-width:420px;margin:0 auto;text-align:left}
+.mil-setup .form-group{margin-bottom:14px}
+.mil-btn-start{width:100%;padding:16px;font-size:1.1rem;font-weight:700;border:none;border-radius:14px;background:linear-gradient(135deg,#FFD700,#FF8F00);color:#1a0a1e;cursor:pointer;letter-spacing:.5px;transition:all .3s;margin-top:12px}
+.mil-btn-start:hover{transform:scale(1.03);box-shadow:0 0 30px rgba(255,215,0,.4)}
+.mil-btn-start:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.mil-sound-toggle{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--text);cursor:pointer;font-size:.85rem;margin-bottom:18px}
+.mil-sound-toggle:hover{background:rgba(255,255,255,.12)}
+.mil-stats-mini{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:24px}
+.mil-stat-card{padding:14px;text-align:center;border-radius:12px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15)}
+.mil-stat-card .mil-stat-val{font-size:1.3rem;font-weight:700;color:#FFD700}
+.mil-stat-card .mil-stat-lbl{font-size:.7rem;color:var(--text2);margin-top:2px}
+
+/* Game Area */
+.mil-game{display:none;position:relative;min-height:80vh}
+.mil-game-inner{display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start}
+@media(max-width:768px){.mil-game-inner{grid-template-columns:1fr;}.mil-ladder{order:-1;display:flex;flex-wrap:wrap;gap:4px;justify-content:center}.mil-ladder-item{padding:4px 10px!important;font-size:.7rem!important}}
+
+/* Question Area */
+.mil-q-area{display:flex;flex-direction:column;align-items:center;gap:16px}
+.mil-header-bar{display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px}
+.mil-jokers{display:flex;gap:8px}
+.mil-joker-btn{padding:8px 14px;border-radius:10px;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#FFD700;font-size:.8rem;cursor:pointer;transition:all .3s;font-weight:600}
+.mil-joker-btn:hover:not(:disabled){background:rgba(255,215,0,.2);transform:scale(1.05)}
+.mil-joker-btn:disabled{opacity:.3;cursor:not-allowed;border-color:rgba(255,255,255,.1);color:var(--text3)}
+.mil-timer-wrap{position:relative;width:64px;height:64px}
+.mil-timer-circle{width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:#FFD700;background:rgba(0,0,0,.3)}
+.mil-timer-circle.warning{color:#FF5252;border-color:#FF5252;animation:milPulse .5s infinite}
+.mil-timer-circle.hidden{opacity:.3}
+@keyframes milPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+.mil-question-box{width:100%;max-width:640px;padding:28px 32px;text-align:center;font-size:1.05rem;font-weight:600;line-height:1.5;color:#fff;background:linear-gradient(135deg,#1a237e,#0d47a1);border:2px solid rgba(255,215,0,.35);border-radius:16px;position:relative;box-shadow:0 4px 30px rgba(13,71,161,.4)}
+.mil-question-box::before{content:'';position:absolute;inset:-3px;border-radius:18px;background:linear-gradient(135deg,rgba(255,215,0,.3),transparent,rgba(255,215,0,.3));z-index:-1}
+.mil-question-num{font-size:.75rem;color:rgba(255,215,0,.7);margin-bottom:8px;letter-spacing:1px}
+
+.mil-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:640px}
+@media(max-width:500px){.mil-options{grid-template-columns:1fr}}
+.mil-option{display:flex;align-items:center;gap:12px;padding:14px 20px;border-radius:12px;border:2px solid rgba(255,215,0,.2);background:linear-gradient(135deg,#1a237e,#283593);color:#fff;cursor:pointer;font-size:.92rem;font-weight:500;transition:all .3s;position:relative;overflow:hidden}
+.mil-option:hover:not(.locked):not(.correct):not(.wrong){border-color:rgba(255,215,0,.5);background:linear-gradient(135deg,#283593,#3949ab);transform:translateY(-1px)}
+.mil-option .mil-opt-letter{width:28px;height:28px;border-radius:50%;background:rgba(255,215,0,.15);display:flex;align-items:center;justify-content:center;font-weight:700;color:#FFD700;font-size:.85rem;flex-shrink:0}
+.mil-option.locked{border-color:#FFA000;background:linear-gradient(135deg,#E65100,#F57C00);animation:milBlink 0.4s ease 3}
+.mil-option.correct{border-color:#4CAF50;background:linear-gradient(135deg,#1B5E20,#2E7D32)!important;animation:none}
+.mil-option.wrong{border-color:#F44336;background:linear-gradient(135deg,#B71C1C,#C62828)!important;animation:none}
+.mil-option.eliminated{opacity:.25;pointer-events:none;border-style:dashed}
+@keyframes milBlink{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* Audience Poll */
+.mil-audience-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;background:linear-gradient(135deg,#0d1b2a,#1b2838);border:2px solid rgba(255,215,0,.3);border-radius:18px;padding:28px;min-width:320px;max-width:400px;box-shadow:0 10px 50px rgba(0,0,0,.7)}
+.mil-audience-popup h3{text-align:center;color:#FFD700;margin-bottom:16px}
+.mil-audience-bar-wrap{margin-bottom:10px}
+.mil-audience-bar-label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2);margin-bottom:4px}
+.mil-audience-bar{height:22px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+.mil-audience-bar-fill{height:100%;border-radius:6px;transition:width .8s ease}
+.mil-audience-close{display:block;margin:16px auto 0;padding:8px 28px;border-radius:10px;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.1);color:#FFD700;cursor:pointer;font-weight:600}
+
+/* Ladder */
+.mil-ladder{display:flex;flex-direction:column;gap:3px}
+.mil-ladder-item{padding:8px 14px;font-size:.78rem;border-radius:8px;display:flex;justify-content:space-between;background:rgba(255,255,255,.04);color:var(--text3);border:1px solid transparent;transition:all .3s}
+.mil-ladder-item.current{background:linear-gradient(135deg,#FF8F00,#FFD700);color:#1a0a1e;font-weight:700;border-color:#FFD700;box-shadow:0 0 15px rgba(255,215,0,.3)}
+.mil-ladder-item.passed{background:rgba(76,175,80,.1);color:#66BB6A;border-color:rgba(76,175,80,.2)}
+.mil-ladder-item.guarantee{font-weight:600;color:#FFD700}
+.mil-ladder-item.guarantee.passed{color:#66BB6A}
+.mil-ladder-prize{font-weight:700}
+
+/* Withdraw & Actions */
+.mil-actions{display:flex;gap:10px;margin-top:8px}
+.mil-withdraw-btn{padding:10px 24px;border-radius:10px;border:1px solid rgba(255,152,0,.3);background:rgba(255,152,0,.1);color:#FFA726;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .3s}
+.mil-withdraw-btn:hover{background:rgba(255,152,0,.2);transform:scale(1.03)}
+
+/* Game Over */
+.mil-gameover{display:none;text-align:center;padding:40px 20px}
+.mil-gameover-icon{font-size:4rem;margin-bottom:12px}
+.mil-gameover h2{font-size:1.5rem;margin-bottom:8px}
+.mil-gameover .mil-prize-won{font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#FFD700,#FFA000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:16px 0}
+.mil-gameover .mil-go-details{color:var(--text2);font-size:.85rem;margin-bottom:24px}
+.mil-gameover-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.mil-go-btn{padding:12px 28px;border-radius:12px;border:none;cursor:pointer;font-weight:600;font-size:.9rem;transition:all .3s}
+.mil-go-btn.primary{background:linear-gradient(135deg,#FFD700,#FF8F00);color:#1a0a1e}
+.mil-go-btn.secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.1)}
+
+/* Stats Section */
+.mil-history{margin-top:30px}
+.mil-history h3{margin-bottom:16px;color:#FFD700}
+.mil-chart-wrap{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;margin-bottom:20px}
+.mil-chart-wrap canvas{max-height:220px}
 </style>
 </head>
 <body>
@@ -669,6 +759,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="nav-item" data-page="history"><span class="nav-icon">📒</span>Geçmiş</div>
       <div class="nav-item" data-page="pomodoro"><span class="nav-icon">⏱️</span>Pomodoro</div>
       <div class="nav-item" data-page="flashcard"><span class="nav-icon">🃏</span>Flashcard</div>
+      <div class="nav-item" data-page="milyoner"><span class="nav-icon">🎮</span>Milyoner</div>
       <div class="nav-item" id="nav-fcadmin" data-page="fcadmin" style="display:none"><span class="nav-icon">⚙️</span>FC Admin</div>
       <div class="nav-item" data-page="badges"><span class="nav-icon">🏆</span>Rozetler</div>
       <div class="nav-item" data-page="social"><span class="nav-icon">🌐</span>Sosyal</div>
@@ -714,7 +805,7 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
       <div class="stats-grid">
         <div class="stat-card glass"><div class="stat-icon">📝</div><div class="stat-value" id="dToday">0</div><div class="stat-label">Bugün Çözülen</div><div id="dTodayChange"></div></div>
         <div class="stat-card glass"><div class="stat-icon">🎯</div><div class="stat-value" id="dNet">0</div><div class="stat-label">Bugün Net</div><div id="dNetChange"></div></div>
-        <div class="stat-card glass"><div class="stat-icon">⏰</div><div class="stat-value" id="dHours">0</div><div class="stat-label">Bugün Saat</div><div id="dHoursChange"></div></div>
+        <div class="stat-card glass"><div class="stat-icon">⏳</div><div class="stat-value" id="dHours">0</div><div class="stat-label">Bugün Süre</div><div id="dHoursChange"></div></div>
         <div class="stat-card glass"><div class="stat-icon">📈</div><div class="stat-value" id="dTotal">0</div><div class="stat-label">Toplam Soru</div><div id="dTotalChange"></div></div>
       </div>
       <div id="suggestionContainer"></div>
@@ -1245,6 +1336,60 @@ label{font-size:.85rem;color:var(--text2);margin-bottom:6px;display:block;font-w
     </div>
 
     <!-- FC ADMIN -->
+    <!-- MILYONER -->
+    <div class="page mil-page" id="page-milyoner">
+      <!-- Main Menu -->
+      <div class="mil-menu" id="milMenu">
+        <div class="mil-logo">💎</div>
+        <h1>Kim Milyoner Olmak İster?</h1>
+        <p class="mil-subtitle">Flashcard bilgilerini test et, 1 Milyon TL'yi kazan!</p>
+        <button class="mil-sound-toggle" id="milSoundToggle" onclick="milToggleSound()">🔊 Ses Açık</button>
+        <div class="mil-setup glass" style="padding:24px;border-radius:16px">
+          <div class="form-group"><label>Ders</label><select id="milSubject" onchange="milUpdateTopics()"></select></div>
+          <div class="form-group"><label>Alt Konu</label><select id="milTopic"></select></div>
+          <div id="milCardCount" style="font-size:.8rem;color:var(--text3);margin-bottom:8px"></div>
+          <button class="mil-btn-start" id="milStartBtn" onclick="milStartGame()">▶️ OYUNA BAŞLA</button>
+        </div>
+        <div class="mil-stats-mini" id="milStatsMini"></div>
+        <div class="mil-history" id="milHistorySection">
+          <h3>📊 Oyun Geçmişi</h3>
+          <div class="mil-chart-wrap"><canvas id="milChartPrize"></canvas></div>
+          <div class="mil-chart-wrap"><canvas id="milChartLifelines"></canvas></div>
+        </div>
+      </div>
+      <!-- Game Area -->
+      <div class="mil-game" id="milGame">
+        <div class="mil-game-inner">
+          <div class="mil-q-area">
+            <div class="mil-header-bar">
+              <div class="mil-jokers" id="milJokers"></div>
+              <div class="mil-timer-wrap"><div class="mil-timer-circle" id="milTimer">30</div></div>
+            </div>
+            <div class="mil-question-box">
+              <div class="mil-question-num" id="milQNum">SORU 1 / 15</div>
+              <div id="milQText">Soru metni</div>
+            </div>
+            <div class="mil-options" id="milOptions"></div>
+            <div class="mil-actions">
+              <button class="mil-withdraw-btn" onclick="milWithdraw()">🏦 Çekil (Parayı Al)</button>
+            </div>
+          </div>
+          <div class="mil-ladder" id="milLadder"></div>
+        </div>
+      </div>
+      <!-- Game Over -->
+      <div class="mil-gameover" id="milGameover">
+        <div class="mil-gameover-icon" id="milGoIcon">🏆</div>
+        <h2 id="milGoTitle">Tebrikler!</h2>
+        <div class="mil-prize-won" id="milGoPrize">0 TL</div>
+        <div class="mil-go-details" id="milGoDetails"></div>
+        <div class="mil-gameover-btns">
+          <button class="mil-go-btn primary" onclick="milBackToMenu()">🏠 Ana Menü</button>
+          <button class="mil-go-btn secondary" onclick="milStartGame()">🔄 Tekrar Oyna</button>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="page-fcadmin">
       <div id="fcAdminPanel"></div>
     </div>
@@ -1290,7 +1435,7 @@ const CATEGORIES = {
 const SUBJECTS = {
   'Türkçe': { color: '#FF6B9D', icon: '📝', topics: ['Sözcükte ve Söz Öbeklerinde Anlam', 'Cümlede Anlam', 'Paragrafta Anlam ve Yorum', 'Anlatım Teknikleri ve Düşünceyi Geliştirme Yolları', 'Ses Bilgisi', 'Yazım Kuralları', 'Noktalama İşaretleri', 'Sözcük Yapısı ve Ekler', 'Sözcük Türleri (İsim, Sıfat, Zamir, Zarf, Edat, Bağlaç, Ünlem)', 'Cümlenin Ögeleri', 'Cümle Çeşitleri', 'Anlatım Bozuklukları'] },
   'Matematik': { color: '#AB47BC', icon: '📐', topics: ['Temel Kavramlar', 'Sayılar ve Çözümleme', 'Bölme ve Bölünebilme Kuralları', 'EBOB - EKOK', 'Rasyonel ve Ondalıklı Sayılar', 'Birinci Dereceden Denklemler', 'Basit Eşitsizlikler ve Mutlak Değer', 'Üslü ve Köklü Sayılar', 'Çarpanlara Ayırma ve Özdeşlikler', 'Oran - Orantı', 'Denklem Çözme (Problem Türleri)', 'Kümeler', 'Fonksiyonlar ve İşlem', 'Veri Analizi, Grafik ve Sayısal Mantık', 'Temel Geometri Kavramları, Üçgenler, Dörtgenler, Çember ve Daire'] },
-  'Tarih': { color: '#FF9800', icon: '🏛️', topics: ['İslamiyet Öncesi Türk Devletleri Kültürü ve Uygarlığı', 'İlk Türk-İslam Devletleri', 'Osmanlı Devleti Siyasi Tarihi', 'Osmanlı Devleti’nde Kültür ve Medeniyet', 'XIX. Yüzyılda Osmanlı Devleti', 'XX. Yüzyılda Osmanlı Devleti (I. Dünya Savaşı, Cepheler)', 'II. Dünya Savaşı', 'Millî Mücadele Dönemi (Hazırlık ve Savaşlar Dönemi)', 'Atatürk İnkılap ve İlkeleri', 'Atatürk Dönemi Türk Dış Politikası', 'Çağdaş Türk ve Dünya Tarihi'] },
+  'Tarih': { color: '#FF9800', icon: '🏛️', topics: ['İslamiyet Öncesi Türk Devletleri Kültürü ve Uygarlığı', 'İlk Türk-İslam Devletleri', 'Osmanlı Devleti Kuruluş Dönemi', 'Osmanlı Devleti Yükselme Dönemi', 'Osmanlı Devleti Duraklama Dönemi', 'Osmanlı Devleti Gerileme Dönemi', 'Osmanlı Devleti Dağılma Dönemi', 'Osmanlı Devleti\'nde Kültür ve Medeniyet', 'XIX. Yüzyılda Osmanlı Devleti', 'XX. Yüzyılda Osmanlı Devleti (I. Dünya Savaşı, Cepheler)', 'II. Dünya Savaşı', 'Millî Mücadele Dönemi (Hazırlık ve Savaşlar Dönemi)', 'Atatürk İnkılap ve İlkeleri', 'Atatürk Dönemi Türk Dış Politikası', 'Çağdaş Türk ve Dünya Tarihi'] },
   'Coğrafya': { color: '#4CAF50', icon: '🌍', topics: ['Jeolojik Zamanlar', 'İç Kuvvetler (Orojenez-Epirojenez)', 'İç Kuvvetler (Volkanizma-Deprem)', 'Dış Kuvvetler (Akarsu-Rüzgar)', 'Dış Kuvvetler (Buzul-Karstik)', 'Dış Kuvvetler (Dalga ve Akıntılar)', 'Türkiye\'nin Dağları', 'Türkiye\'nin Platoları', 'Türkiye\'nin Ovaları', 'İklim Elemanları (Sıcaklık)', 'İklim Elemanları (Basınç-Rüzgarlar)', 'İklim Elemanları (Nem-Yağış)', 'Türkiye\'nin İklimleri', 'Türkiye\'de Sular (Akarsular)', 'Türkiye\'de Sular (Göller)', 'Türkiye\'de Sular (Denizler-Körfezler)', 'Türkiye\'de Topraklar', 'Türkiye\'de Bitkiler', 'Doğal Afetler 1', 'Doğal Afetler 2', 'Türkiye\'de Nüfus', 'Türkiye\'de Nüfusun Dağılışı', 'Türkiye\'ye Göçler', 'Türkiye\'de Yerleşmeler', 'Türkiye\'de Tarım', 'Türkiye\'de Hayvancılık', 'Türkiye\'de Madenler', 'Türkiye\'de Enerji', 'Türkiye\'de Sanayi', 'Türkiye\'de Ulaşım', 'Türkiye\'de Ticaret-Turizm', 'Türkiye\'de Bölgeler', 'Türkiye\'de Mevsimler', 'Coğrafi Konum 1', 'Coğrafi Konum 2'] },
   'Vatandaşlık': { color: '#29B6F6', icon: '⚖️', topics: ['Temel Hukuk Kavramları', 'Anayasa ve Devlet Yapıları', 'Türk Anayasa Tarihi', '82 Anayasasının Temel İlkeleri', 'Temel Hak ve Hürriyetler', 'Yasama', 'Yürütme', 'Yargı', 'İdare Hukuku'] }
 };
@@ -1542,6 +1687,7 @@ function navigateTo(pageId){
   if(pageId==='profile')renderProfile();
   if(pageId==='social')showSocialTab('discover');
   if(pageId==='flashcard')renderFlashcardPage();
+  if(pageId==='milyoner'){ if(fcAllCards.length===0) loadAllFlashcards().then(()=>milInitPage()); else milInitPage(); }
   if(pageId==='fcadmin') { renderFCAdminPanel(); }
 }
 
@@ -1578,7 +1724,7 @@ function renderDashboard(){
   const yD=yesterdayAll.reduce((s,e)=>s+(e.duration||0),0);
   document.getElementById('dToday').textContent=tQ;
   document.getElementById('dNet').textContent=tN.toFixed(1);
-  document.getElementById('dHours').textContent=(tD/60).toFixed(1);
+  document.getElementById('dHours').textContent=formatDuration(tD) || '0dk';
   document.getElementById('dTotal').textContent=allQ;
   // Change indicators vs yesterday
   function changeHTML(curr, prev, suffix='') {
@@ -1634,7 +1780,7 @@ function renderWeeklySummary(allData) {
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;font-size:.85rem">
       <div><div style="font-size:1.2rem;font-weight:700">${twQ}</div><div style="color:var(--text3);font-size:.75rem">Soru</div><div style="font-size:.7rem">${cmp(twQ,lwQ)}</div></div>
       <div><div style="font-size:1.2rem;font-weight:700;color:var(--pink)">${twN.toFixed(1)}</div><div style="color:var(--text3);font-size:.75rem">Net</div><div style="font-size:.7rem">${cmp(twN,lwN)}</div></div>
-      <div><div style="font-size:1.2rem;font-weight:700">${(twD/60).toFixed(1)}</div><div style="color:var(--text3);font-size:.75rem">Saat</div><div style="font-size:.7rem">${cmp(twD,lwD)}</div></div>
+      <div><div style="font-size:1.2rem;font-weight:700">${formatDuration(twD) || '0dk'}</div><div style="color:var(--text3);font-size:.75rem">Süre</div><div style="font-size:.7rem">${cmp(twD,lwD)}</div></div>
     </div>
     <div style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">Geçen haftayla karşılaştırma</div>`;
 }
@@ -1884,7 +2030,7 @@ window.showDetailModal = function(id, type) {
           <div style="font-weight:600;margin-bottom:10px;color:var(--text2);">📊 Bu Konudaki Toplam İlerleme</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.85rem;">
             <div>📚 Toplam Çalışma: <strong>${topicStudyCount} kez</strong></div>
-            <div>⏱️ Toplam Süre: <strong>${topicDuration} dk</strong></div>
+            <div>⏱️ Toplam Süre: <strong>${formatDuration(topicDuration)}</strong></div>
             <div>📝 Çözülen Soru: <strong>${topicTotal}</strong></div>
             <div>🎯 Ort. Başarı: <strong>%${topicAvgAcc}</strong></div>
           </div>
@@ -1951,7 +2097,7 @@ window.showDetailModal = function(id, type) {
           <div style="font-weight:600;margin-bottom:10px;color:var(--text2);">📊 Bu Konudaki Toplam İlerleme</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.85rem;">
             <div>📚 Çalışma: <strong>${topicStudyCount} kez</strong></div>
-            <div>⏱️ Süre: <strong>${topicDuration} dk</strong></div>
+            <div>⏱️ Süre: <strong>${formatDuration(topicDuration)}</strong></div>
             <div>📝 Soru: <strong>${topicTotal}</strong></div>
             <div>🎯 Ort. Başarı: <strong>%${topicAvgAcc}</strong></div>
           </div>
@@ -2227,7 +2373,7 @@ function renderDenemeTablePage() {
   const body = document.getElementById('denemeTableBody');
   body.innerHTML = pageData.map(d => {
     const p = d.puan || calcKPSSPuan(d.totalNet||0);
-    return `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','deneme')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td><td>${d.name||'-'}</td><td>${(d.gyNet||0).toFixed(1)}</td><td>${(d.gkNet||0).toFixed(1)}</td><td><strong class="text-gradient">${(d.totalNet||0).toFixed(1)}</strong></td><td><strong style="color:#FFD700">${p.toFixed(1)}</strong></td><td><button onclick="event.stopPropagation();deleteDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
+    return `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','deneme')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+formatDuration(d.duration):''}</small></td><td>${d.name||'-'}</td><td>${(d.gyNet||0).toFixed(1)}</td><td>${(d.gkNet||0).toFixed(1)}</td><td><strong class="text-gradient">${(d.totalNet||0).toFixed(1)}</strong></td><td><strong style="color:#FFD700">${p.toFixed(1)}</strong></td><td><button onclick="event.stopPropagation();deleteDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
   }).join('');
   // Pagination
   const pag = document.getElementById('denHistPagination');
@@ -2340,7 +2486,7 @@ function renderBransTablePage() {
   const start = (bransHistPage - 1) * pageSize;
   const pageData = bransHistFiltered.slice(start, start + pageSize);
   const body = document.getElementById('bransTableBody');
-  body.innerHTML = pageData.map(d => `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','brans')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td><td>${d.name||'-'}</td><td>${d.topic}</td><td>${d.total}</td><td><strong class="text-gradient">${(d.net||0).toFixed(1)}</strong></td><td>%${d.accuracy||0}</td><td><button onclick="event.stopPropagation();deleteBransDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
+  body.innerHTML = pageData.map(d => `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','brans')"><td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+formatDuration(d.duration):''}</small></td><td>${d.name||'-'}</td><td>${d.topic}</td><td>${d.total}</td><td><strong class="text-gradient">${(d.net||0).toFixed(1)}</strong></td><td>%${d.accuracy||0}</td><td><button onclick="event.stopPropagation();deleteBransDeneme('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`).join('');
   // Pagination
   const pag = document.getElementById('bransHistPagination');
   if(!pag) return;
@@ -2453,7 +2599,7 @@ window.renderGYTablePage = function() {
   const pageData = gyHistFiltered.slice(start, start+pageSize);
   document.getElementById('gyTableBody').innerHTML = pageData.map(d=>
     `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gy')">
-      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td>
+      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+formatDuration(d.duration):''}</small></td>
       <td>${d.name||'-'}</td>
       <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
       <td>%${d.accuracy}</td>
@@ -2534,7 +2680,7 @@ window.renderGKTablePage = function() {
   const pageData = gkHistFiltered.slice(start, start+pageSize);
   document.getElementById('gkTableBody').innerHTML = pageData.map(d=>
     `<tr style="cursor:pointer;" onclick="showDetailModal('${d.id}','gk')">
-      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+d.duration+'dk':''}</small></td>
+      <td>${formatDateShort(d.date)}<br><small style="color:var(--text3)">${d.time||''}${d.duration?' &bull; ⏱️ '+formatDuration(d.duration):''}</small></td>
       <td>${d.name||'-'}</td>
       <td><strong class="text-gradient">${d.net.toFixed(2)}</strong></td>
       <td>%${d.accuracy}</td>
@@ -2714,7 +2860,7 @@ function renderAnalytics(period){
     <div class="total-stat"><div class="ts-val">${tQ}</div><div class="ts-lbl">Toplam Soru</div></div>
     <div class="total-stat"><div class="ts-val">${tN.toFixed(1)}</div><div class="ts-lbl">Toplam Net</div></div>
     <div class="total-stat"><div class="ts-val">%${avgAcc}</div><div class="ts-lbl">Doğru Oranı</div></div>
-    <div class="total-stat"><div class="ts-val">${(tD/60).toFixed(1)}h</div><div class="ts-lbl">Toplam Süre</div></div>`;
+    <div class="total-stat"><div class="ts-val">${formatDuration(tD) || '0dk'}</div><div class="ts-lbl">Toplam Süre</div></div>`;
   window._lastAnalyticsData=data;
   // Populate topic filter dropdowns
   const _tqSel=document.getElementById('topicQSubjectFilter');
@@ -2742,7 +2888,9 @@ function renderTimeChart(data){
   if(charts.time)charts.time.destroy();
   const byDate={};data.forEach(e=>{if(!byDate[e.date])byDate[e.date]=0;byDate[e.date]+=(e.duration||0)/60});
   const sorted=Object.entries(byDate).sort((a,b)=>a[0].localeCompare(b[0]));
-  charts.time=new Chart(document.getElementById('chartTime'),{type:'bar',data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Saat',data:sorted.map(s=>parseFloat(s[1].toFixed(1))),backgroundColor:'rgba(255,107,157,.4)',borderColor:'#FF6B9D',borderWidth:1,borderRadius:6}]},options:chartOpts()});
+  const cOpts = chartOpts();
+  cOpts.plugins.tooltip = { callbacks: { label: function(ctx) { return 'Süre: ' + formatDuration(ctx.raw * 60); } } };
+  charts.time=new Chart(document.getElementById('chartTime'),{type:'bar',data:{labels:sorted.map(s=>formatDateShort(s[0])),datasets:[{label:'Süre',data:sorted.map(s=>parseFloat(s[1].toFixed(1))),backgroundColor:'rgba(255,107,157,.4)',borderColor:'#FF6B9D',borderWidth:1,borderRadius:6}]},options:cOpts});
 }
 
 function renderTopicChart(data){
@@ -3516,7 +3664,7 @@ function renderHistoryPage(){
   body.innerHTML=pageData.map(e=>{
     const isKonu=(!e.total||e.total===0);
     const timeStr=e.time||'--:--';
-    if(isKonu) return `<tr style="cursor:pointer;opacity:.85" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td style="color:var(--text3);font-size:.8rem">${timeStr}</td><td>${e.subject}</td><td>${e.topic}</td><td colspan="4" style="text-align:center;color:#29B6F6">📖 Konu Dinleme — ${e.duration||0} dk</td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
+    if(isKonu) return `<tr style="cursor:pointer;opacity:.85" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td style="color:var(--text3);font-size:.8rem">${timeStr}</td><td>${e.subject}</td><td>${e.topic}</td><td colspan="4" style="text-align:center;color:#29B6F6">📖 Konu Dinleme — ${formatDuration(e.duration)}</td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
     return `<tr style="cursor:pointer;" onclick="showDetailModal('${e.id}','entry')"><td>${formatDateShort(e.date)}</td><td style="color:var(--text3);font-size:.8rem">${timeStr}</td><td>${e.subject}</td><td>${e.topic}</td><td>${e.total}</td><td style="color:var(--success)">${e.correct}</td><td style="color:var(--error)">${e.wrong}</td><td><strong>${(e.net||0).toFixed(1)}</strong></td><td>${formatDuration(e.duration)}</td><td><button onclick="event.stopPropagation();deleteEntry('${e.id}')" style="background:none;border:none;cursor:pointer;color:var(--error)">🗑️</button></td></tr>`;
   }).join('');
   
@@ -3742,7 +3890,7 @@ function fixTurkish(t){const r={'Ä±':'ı','Ä°':'İ','Ã¶':'ö','Ã–':'Ö'
 
 // ===== UTILS =====
 function formatDateShort(d){if(!d)return'-';const parts=d.split('-');return`${parts[2]}/${parts[1]}`}
-function formatDuration(m){if(!m)return'-';const h=Math.floor(m/60);const min=m%60;return h>0?`${h}s ${min}dk`:`${min}dk`}
+function formatDuration(m){if(!m||m<=0)return'0dk';const h=Math.floor(m/60);const min=m%60;return h>0?(min>0?`${h}s ${min}dk`:`${h}s`):`${min}dk`}
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML}
 
 // ===== SOCIAL FEATURES LOGIC =====
@@ -5313,6 +5461,522 @@ function renderFCStats() {
   });
   content.innerHTML = html;
 }
+
+// ===== KIM MILYONER OLMAK ISTER =====
+const MIL_PRIZES = [100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,250000,500000,1000000];
+const MIL_GUARANTEES = [4, 9]; // indices (soru 5 ve 10)
+const MIL_EXTRA_JOKER_AT = 6; // soru 7'de ekstra joker
+let milState = null;
+let milSoundEnabled = true;
+let milTimerInterval = null;
+let milGameHistory = [];
+let milCharts = {};
+let milAudioCtx = null;
+
+function milGetAudioCtx() {
+  if (!milAudioCtx) milAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return milAudioCtx;
+}
+
+// Sound effects using Web Audio API
+function milPlaySound(type) {
+  if (!milSoundEnabled) return;
+  try {
+    const ctx = milGetAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.value = 0.15;
+    const now = ctx.currentTime;
+    if (type === 'correct') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(523, now); osc.frequency.setValueAtTime(659, now+0.1); osc.frequency.setValueAtTime(784, now+0.2); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.5); osc.start(now); osc.stop(now+0.5);
+    } else if (type === 'wrong') {
+      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now+0.6); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.7); osc.start(now); osc.stop(now+0.7);
+    } else if (type === 'lock') {
+      osc.type = 'triangle'; osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.15); osc.start(now); osc.stop(now+0.15);
+    } else if (type === 'tick') {
+      osc.type = 'square'; osc.frequency.setValueAtTime(1200, now); gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.05); osc.start(now); osc.stop(now+0.05);
+    } else if (type === 'milestone') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(523, now); osc.frequency.setValueAtTime(659, now+0.15); osc.frequency.setValueAtTime(784, now+0.3); osc.frequency.setValueAtTime(1047, now+0.45); gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.8); osc.start(now); osc.stop(now+0.8);
+    } else if (type === 'million') {
+      osc.type = 'sine'; const notes = [523,659,784,1047,784,1047,1319]; notes.forEach((f,i) => { osc.frequency.setValueAtTime(f, now+i*0.15); }); gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.01, now+1.2); osc.start(now); osc.stop(now+1.2);
+    } else if (type === 'start') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(554, now+0.12); osc.frequency.setValueAtTime(659, now+0.24); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.5); osc.start(now); osc.stop(now+0.5);
+    } else if (type === 'warning') {
+      osc.type = 'square'; osc.frequency.setValueAtTime(600, now); osc.frequency.setValueAtTime(400, now+0.1); osc.frequency.setValueAtTime(600, now+0.2); gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.35); osc.start(now); osc.stop(now+0.35);
+    }
+  } catch(e) {}
+}
+
+window.milToggleSound = function() {
+  milSoundEnabled = !milSoundEnabled;
+  document.getElementById('milSoundToggle').textContent = milSoundEnabled ? '🔊 Ses Açık' : '🔇 Ses Kapalı';
+  if (milSoundEnabled) milPlaySound('lock');
+};
+
+function milInitPage() {
+  const sel = document.getElementById('milSubject');
+  if (!sel || sel.options.length > 0) return;
+  let opts = '<option value="karma">🔀 Karma (Tüm Dersler)</option>';
+  Object.keys(SUBJECTS).forEach(s => { opts += `<option value="${s}">${SUBJECTS[s].icon} ${s}</option>`; });
+  sel.innerHTML = opts;
+  milUpdateTopics();
+  milLoadHistory();
+}
+
+window.milUpdateTopics = function() {
+  const subj = document.getElementById('milSubject').value;
+  const topicSel = document.getElementById('milTopic');
+  if (subj === 'karma') {
+    topicSel.innerHTML = '<option value="karma">Tüm Konular</option>';
+  } else {
+    const topics = SUBJECTS[subj]?.topics || [];
+    topicSel.innerHTML = '<option value="karma">Tüm Konular</option>' + topics.map(t => `<option value="${t}">${t}</option>`).join('');
+  }
+  milUpdateCardCount();
+};
+
+function milUpdateCardCount() {
+  const cards = milGetFilteredCards();
+  const el = document.getElementById('milCardCount');
+  const btn = document.getElementById('milStartBtn');
+  if (cards.length < 4) {
+    el.innerHTML = `<span style="color:var(--error)">⚠️ ${cards.length} kart bulundu. Oyun için en az 4 kart gerekli.</span>`;
+    btn.disabled = true;
+  } else {
+    el.textContent = `✅ ${cards.length} kart mevcut`;
+    btn.disabled = false;
+  }
+}
+
+function milGetFilteredCards() {
+  const subj = document.getElementById('milSubject')?.value || 'karma';
+  const topic = document.getElementById('milTopic')?.value || 'karma';
+  let cards = [...fcAllCards];
+  if (subj !== 'karma') cards = cards.filter(c => c.subject === subj);
+  if (topic !== 'karma') cards = cards.filter(c => c.topic === topic);
+  return cards.filter(c => c.front && c.back);
+}
+
+function milGenerateQuestions(cards) {
+  const shuffled = [...cards].sort(() => Math.random() - 0.5);
+  const questions = [];
+  const usedIds = new Set();
+  for (let i = 0; i < Math.min(15, shuffled.length) && questions.length < 15; i++) {
+    const card = shuffled[i];
+    if (usedIds.has(card.id)) continue;
+    // Get wrong options from other cards' backs
+    const otherBacks = cards.filter(c => c.id !== card.id && c.back !== card.back).map(c => c.back);
+    if (otherBacks.length < 3) continue;
+    // Pick 3 unique random wrong answers
+    const wrongAnswers = [];
+    const usedBacks = new Set([card.back]);
+    while (wrongAnswers.length < 3 && otherBacks.length > 0) {
+      const idx = Math.floor(Math.random() * otherBacks.length);
+      const ans = otherBacks[idx];
+      if (!usedBacks.has(ans)) { wrongAnswers.push(ans); usedBacks.add(ans); }
+      otherBacks.splice(idx, 1);
+    }
+    if (wrongAnswers.length < 3) continue;
+    // Shuffle options
+    const options = [{ text: card.back, correct: true }, ...wrongAnswers.map(w => ({ text: w, correct: false }))];
+    options.sort(() => Math.random() - 0.5);
+    questions.push({ question: card.front, options, cardId: card.id });
+    usedIds.add(card.id);
+  }
+  return questions;
+}
+
+window.milStartGame = function() {
+  const cards = milGetFilteredCards();
+  if (cards.length < 4) return showToast('Yeterli kart yok!', 'error');
+  const questions = milGenerateQuestions(cards);
+  if (questions.length < 5) return showToast('Yeterli soru üretilemedi. Daha fazla kart ekleyin.', 'error');
+  
+  milState = {
+    questions,
+    current: 0,
+    jokers: { fifty: true, audience: true, phone: true, swap: false },
+    usedLifelines: [],
+    startTime: Date.now(),
+    locked: false,
+    eliminated: [],
+    timerSeconds: 0
+  };
+  
+  document.getElementById('milMenu').style.display = 'none';
+  document.getElementById('milGameover').style.display = 'none';
+  document.getElementById('milGame').style.display = 'block';
+  
+  milPlaySound('start');
+  milRenderLadder();
+  milRenderQuestion();
+};
+
+function milGetTimeForQuestion(idx) {
+  if (idx < 5) return 30;
+  if (idx < 10) return 45;
+  return 0; // no timer
+}
+
+function milRenderLadder() {
+  const ladder = document.getElementById('milLadder');
+  let html = '';
+  for (let i = MIL_PRIZES.length - 1; i >= 0; i--) {
+    const isGuarantee = MIL_GUARANTEES.includes(i);
+    const isCurrent = i === milState.current;
+    const isPassed = i < milState.current;
+    let cls = '';
+    if (isCurrent) cls = 'current';
+    else if (isPassed) cls = 'passed';
+    if (isGuarantee) cls += ' guarantee';
+    html += `<div class="mil-ladder-item ${cls}"><span>${i + 1}</span><span class="mil-ladder-prize">${milFormatPrize(MIL_PRIZES[i])}</span></div>`;
+  }
+  ladder.innerHTML = html;
+}
+
+function milFormatPrize(n) {
+  return n.toLocaleString('tr-TR') + ' TL';
+}
+
+function milRenderQuestion() {
+  if (!milState || milState.current >= milState.questions.length) { milEndGame('win'); return; }
+  const q = milState.questions[milState.current];
+  const idx = milState.current;
+  
+  document.getElementById('milQNum').textContent = `SORU ${idx + 1} / ${milState.questions.length}`;
+  document.getElementById('milQText').textContent = q.question;
+  
+  const letters = ['A', 'B', 'C', 'D'];
+  let optHtml = '';
+  q.options.forEach((opt, i) => {
+    const isEliminated = milState.eliminated.includes(i);
+    optHtml += `<div class="mil-option ${isEliminated ? 'eliminated' : ''}" data-idx="${i}" onclick="milSelectOption(${i})">
+      <span class="mil-opt-letter">${letters[i]}</span>
+      <span>${opt.text}</span>
+    </div>`;
+  });
+  document.getElementById('milOptions').innerHTML = optHtml;
+  
+  // Jokers
+  const extraUnlocked = idx >= MIL_EXTRA_JOKER_AT;
+  if (extraUnlocked && !milState.jokers.swap && !milState.usedLifelines.includes('swap')) {
+    milState.jokers.swap = true;
+  }
+  let jHtml = '';
+  jHtml += `<button class="mil-joker-btn" onclick="milUseFifty()" ${!milState.jokers.fifty ? 'disabled' : ''}>✂️ 50:50</button>`;
+  jHtml += `<button class="mil-joker-btn" onclick="milUseAudience()" ${!milState.jokers.audience ? 'disabled' : ''}>👥 Seyirci</button>`;
+  jHtml += `<button class="mil-joker-btn" onclick="milUsePhone()" ${!milState.jokers.phone ? 'disabled' : ''}>📞 Telefon</button>`;
+  if (extraUnlocked || milState.usedLifelines.includes('swap')) {
+    jHtml += `<button class="mil-joker-btn" onclick="milUseSwap()" ${!milState.jokers.swap ? 'disabled' : ''}>🔄 Pas</button>`;
+  }
+  document.getElementById('milJokers').innerHTML = jHtml;
+  
+  milState.locked = false;
+  milState.eliminated = [];
+  milRenderLadder();
+  milStartTimer();
+}
+
+function milStartTimer() {
+  clearInterval(milTimerInterval);
+  const timerEl = document.getElementById('milTimer');
+  const timeLimit = milGetTimeForQuestion(milState.current);
+  if (timeLimit === 0) {
+    timerEl.textContent = '∞';
+    timerEl.classList.add('hidden');
+    timerEl.classList.remove('warning');
+    return;
+  }
+  timerEl.classList.remove('hidden', 'warning');
+  milState.timerSeconds = timeLimit;
+  timerEl.textContent = milState.timerSeconds;
+  milTimerInterval = setInterval(() => {
+    milState.timerSeconds--;
+    timerEl.textContent = milState.timerSeconds;
+    if (milState.timerSeconds <= 5 && milState.timerSeconds > 0) {
+      timerEl.classList.add('warning');
+      milPlaySound('warning');
+    }
+    if (milState.timerSeconds <= 0) {
+      clearInterval(milTimerInterval);
+      milPlaySound('wrong');
+      milEndGame('timeout');
+    }
+  }, 1000);
+}
+
+window.milSelectOption = function(idx) {
+  if (!milState || milState.locked) return;
+  const q = milState.questions[milState.current];
+  const optEls = document.querySelectorAll('.mil-option');
+  
+  milState.locked = true;
+  clearInterval(milTimerInterval);
+  milPlaySound('lock');
+  
+  // Lock animation
+  optEls[idx].classList.add('locked');
+  
+  // Reveal after delay
+  setTimeout(() => {
+    const correctIdx = q.options.findIndex(o => o.correct);
+    if (q.options[idx].correct) {
+      optEls[idx].classList.remove('locked');
+      optEls[idx].classList.add('correct');
+      const isGuarantee = MIL_GUARANTEES.includes(milState.current);
+      const isMillion = milState.current === 14;
+      if (isMillion) milPlaySound('million');
+      else if (isGuarantee) milPlaySound('milestone');
+      else milPlaySound('correct');
+      
+      setTimeout(() => {
+        milState.current++;
+        if (milState.current >= milState.questions.length) {
+          milEndGame('win');
+        } else {
+          milRenderQuestion();
+        }
+      }, 1500);
+    } else {
+      optEls[idx].classList.remove('locked');
+      optEls[idx].classList.add('wrong');
+      optEls[correctIdx].classList.add('correct');
+      milPlaySound('wrong');
+      setTimeout(() => milEndGame('wrong'), 2000);
+    }
+  }, 2000);
+};
+
+// Lifelines
+window.milUseFifty = function() {
+  if (!milState || !milState.jokers.fifty || milState.locked) return;
+  milState.jokers.fifty = false;
+  milState.usedLifelines.push('fifty');
+  const q = milState.questions[milState.current];
+  const wrongIndices = q.options.map((o, i) => o.correct ? -1 : i).filter(i => i !== -1 && !milState.eliminated.includes(i));
+  // Eliminate 2 random wrong options
+  wrongIndices.sort(() => Math.random() - 0.5);
+  const toEliminate = wrongIndices.slice(0, 2);
+  milState.eliminated.push(...toEliminate);
+  const optEls = document.querySelectorAll('.mil-option');
+  toEliminate.forEach(i => optEls[i].classList.add('eliminated'));
+  // Update joker buttons
+  document.querySelector('.mil-joker-btn[onclick="milUseFifty()"]').disabled = true;
+  milPlaySound('lock');
+};
+
+window.milUseAudience = function() {
+  if (!milState || !milState.jokers.audience || milState.locked) return;
+  milState.jokers.audience = false;
+  milState.usedLifelines.push('audience');
+  const q = milState.questions[milState.current];
+  const correctIdx = q.options.findIndex(o => o.correct);
+  const letters = ['A', 'B', 'C', 'D'];
+  const colors = ['#29B6F6', '#66BB6A', '#FFA726', '#EF5350'];
+  
+  // Generate weighted percentages
+  const pcts = [0, 0, 0, 0];
+  const correctPct = 55 + Math.floor(Math.random() * 25);
+  pcts[correctIdx] = correctPct;
+  let remaining = 100 - correctPct;
+  q.options.forEach((o, i) => {
+    if (i === correctIdx || milState.eliminated.includes(i)) return;
+    const share = i === q.options.length - 1 ? remaining : Math.floor(Math.random() * remaining * 0.7);
+    pcts[i] = share;
+    remaining -= share;
+  });
+  // Distribute leftover
+  if (remaining > 0) {
+    const nonElim = q.options.map((o, i) => i).filter(i => i !== correctIdx && !milState.eliminated.includes(i));
+    if (nonElim.length > 0) pcts[nonElim[0]] += remaining;
+  }
+  
+  let popupHtml = `<div class="mil-audience-popup" id="milAudiencePopup"><h3>👥 Seyirci Oylaması</h3>`;
+  q.options.forEach((o, i) => {
+    const isElim = milState.eliminated.includes(i);
+    popupHtml += `<div class="mil-audience-bar-wrap">
+      <div class="mil-audience-bar-label"><span>${letters[i]}: ${o.text.substring(0, 30)}${o.text.length > 30 ? '...' : ''}</span><span>${isElim ? '-' : pcts[i] + '%'}</span></div>
+      <div class="mil-audience-bar"><div class="mil-audience-bar-fill" style="width:${isElim ? 0 : pcts[i]}%;background:${colors[i]}"></div></div>
+    </div>`;
+  });
+  popupHtml += `<button class="mil-audience-close" onclick="document.getElementById('milAudiencePopup').remove()">Tamam</button></div>`;
+  document.body.insertAdjacentHTML('beforeend', popupHtml);
+  document.querySelector('.mil-joker-btn[onclick="milUseAudience()"]').disabled = true;
+  milPlaySound('lock');
+};
+
+window.milUsePhone = function() {
+  if (!milState || !milState.jokers.phone || milState.locked) return;
+  milState.jokers.phone = false;
+  milState.usedLifelines.push('phone');
+  const q = milState.questions[milState.current];
+  const correctOpt = q.options.find(o => o.correct);
+  const hint = correctOpt.text.substring(0, Math.ceil(correctOpt.text.length * 0.5)) + '...';
+  
+  let popupHtml = `<div class="mil-audience-popup" id="milPhonePopup">
+    <h3>📞 Telefon Jokeri</h3>
+    <p style="color:var(--text2);text-align:center;font-size:.85rem;margin-bottom:12px">"Hmm, bu sorunun cevabı şu şekilde başlıyor sanırım..."</p>
+    <div style="text-align:center;padding:16px;background:rgba(255,215,0,.08);border-radius:12px;font-size:1.1rem;font-weight:600;color:#FFD700">"${hint}"</div>
+    <button class="mil-audience-close" onclick="document.getElementById('milPhonePopup').remove()">Tamam</button>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', popupHtml);
+  document.querySelector('.mil-joker-btn[onclick="milUsePhone()"]').disabled = true;
+  milPlaySound('lock');
+};
+
+window.milUseSwap = function() {
+  if (!milState || !milState.jokers.swap || milState.locked) return;
+  milState.jokers.swap = false;
+  milState.usedLifelines.push('swap');
+  // Replace current question with a new one
+  const cards = milGetFilteredCards();
+  const usedIds = new Set(milState.questions.map(q => q.cardId));
+  const available = cards.filter(c => !usedIds.has(c.id) && c.front && c.back);
+  if (available.length > 0) {
+    const card = available[Math.floor(Math.random() * available.length)];
+    const otherBacks = cards.filter(c => c.id !== card.id && c.back !== card.back).map(c => c.back);
+    if (otherBacks.length >= 3) {
+      const wrongAnswers = [];
+      const usedBacks = new Set([card.back]);
+      const tempBacks = [...otherBacks];
+      while (wrongAnswers.length < 3 && tempBacks.length > 0) {
+        const idx = Math.floor(Math.random() * tempBacks.length);
+        if (!usedBacks.has(tempBacks[idx])) { wrongAnswers.push(tempBacks[idx]); usedBacks.add(tempBacks[idx]); }
+        tempBacks.splice(idx, 1);
+      }
+      if (wrongAnswers.length === 3) {
+        const options = [{ text: card.back, correct: true }, ...wrongAnswers.map(w => ({ text: w, correct: false }))];
+        options.sort(() => Math.random() - 0.5);
+        milState.questions[milState.current] = { question: card.front, options, cardId: card.id };
+      }
+    }
+  }
+  milState.eliminated = [];
+  milRenderQuestion();
+  showToast('Soru değiştirildi!', 'success');
+};
+
+window.milWithdraw = function() {
+  if (!milState || milState.locked) return;
+  clearInterval(milTimerInterval);
+  milEndGame('withdraw');
+};
+
+function milGetWinnings(questionIdx, outcome) {
+  if (outcome === 'win') return MIL_PRIZES[MIL_PRIZES.length - 1];
+  if (outcome === 'withdraw') return questionIdx > 0 ? MIL_PRIZES[questionIdx - 1] : 0;
+  // wrong or timeout: fall to last guarantee
+  if (questionIdx > MIL_GUARANTEES[1]) return MIL_PRIZES[MIL_GUARANTEES[1]];
+  if (questionIdx > MIL_GUARANTEES[0]) return MIL_PRIZES[MIL_GUARANTEES[0]];
+  return 0;
+}
+
+function milEndGame(outcome) {
+  clearInterval(milTimerInterval);
+  const prize = milGetWinnings(milState.current, outcome);
+  const duration = Math.round((Date.now() - milState.startTime) / 1000);
+  
+  // Save to Firestore
+  milSaveGame({
+    date: new Date().toISOString().slice(0, 10),
+    time: new Date().toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'}),
+    subject: document.getElementById('milSubject').value,
+    topic: document.getElementById('milTopic').value,
+    questionsReached: milState.current + 1,
+    totalQuestions: milState.questions.length,
+    prize,
+    outcome,
+    usedLifelines: milState.usedLifelines,
+    duration
+  });
+  
+  document.getElementById('milGame').style.display = 'none';
+  document.getElementById('milGameover').style.display = 'block';
+  
+  let icon, title;
+  if (outcome === 'win') { icon = '🏆'; title = '1 MİLYON TL! TEBRİKLER!'; }
+  else if (outcome === 'withdraw') { icon = '🏦'; title = 'Akıllıca Çekildiniz!'; }
+  else if (outcome === 'timeout') { icon = '⏰'; title = 'Süre Doldu!'; }
+  else { icon = '😔'; title = 'Yanlış Cevap!'; }
+  
+  document.getElementById('milGoIcon').textContent = icon;
+  document.getElementById('milGoTitle').textContent = title;
+  document.getElementById('milGoPrize').textContent = milFormatPrize(prize);
+  document.getElementById('milGoDetails').innerHTML = `${milState.current} soru doğru cevaplanıdı &bull; ${Math.floor(duration/60)}dk ${duration%60}sn &bull; ${milState.usedLifelines.length} joker kullanıldı`;
+}
+
+async function milSaveGame(data) {
+  if (!currentUser) return;
+  try {
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    await db.collection('users').doc(currentUser.uid).collection('milyoner').add(data);
+    milGameHistory.unshift(data);
+  } catch(e) { console.error('Milyoner save error:', e); }
+}
+
+async function milLoadHistory() {
+  if (!currentUser) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).collection('milyoner').orderBy('createdAt', 'desc').limit(20).get();
+    milGameHistory = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    milRenderStats();
+  } catch(e) {}
+}
+
+function milRenderStats() {
+  const mini = document.getElementById('milStatsMini');
+  if (!mini) return;
+  if (milGameHistory.length === 0) {
+    mini.innerHTML = '';
+    document.getElementById('milHistorySection').style.display = 'none';
+    return;
+  }
+  document.getElementById('milHistorySection').style.display = '';
+  
+  const maxPrize = Math.max(...milGameHistory.map(g => g.prize || 0));
+  const avgQ = milGameHistory.reduce((s, g) => s + (g.questionsReached || 0), 0) / milGameHistory.length;
+  const totalGames = milGameHistory.length;
+  
+  mini.innerHTML = `
+    <div class="mil-stat-card"><div class="mil-stat-val">${totalGames}</div><div class="mil-stat-lbl">Toplam Oyun</div></div>
+    <div class="mil-stat-card"><div class="mil-stat-val">${milFormatPrize(maxPrize)}</div><div class="mil-stat-lbl">En Yüksek</div></div>
+    <div class="mil-stat-card"><div class="mil-stat-val">${avgQ.toFixed(1)}</div><div class="mil-stat-lbl">Ort. Soru</div></div>`;
+  
+  // Prize chart
+  if (milCharts.prize) milCharts.prize.destroy();
+  const last10 = milGameHistory.slice(0, 10).reverse();
+  milCharts.prize = new Chart(document.getElementById('milChartPrize'), {
+    type: 'bar',
+    data: {
+      labels: last10.map(g => g.date ? formatDateShort(g.date) : '?'),
+      datasets: [{ label: 'Kazanılan (TL)', data: last10.map(g => g.prize || 0), backgroundColor: 'rgba(255,215,0,.4)', borderColor: '#FFD700', borderWidth: 1, borderRadius: 6 }]
+    },
+    options: { ...chartOpts(), plugins: { legend: { labels: { color: '#fff' } } } }
+  });
+  
+  // Lifeline usage chart
+  if (milCharts.lifelines) milCharts.lifelines.destroy();
+  const lifelineCounts = { fifty: 0, audience: 0, phone: 0, swap: 0 };
+  milGameHistory.forEach(g => { (g.usedLifelines || []).forEach(l => { if (lifelineCounts[l] !== undefined) lifelineCounts[l]++; }); });
+  milCharts.lifelines = new Chart(document.getElementById('milChartLifelines'), {
+    type: 'doughnut',
+    data: {
+      labels: ['50:50', 'Seyirci', 'Telefon', 'Pas'],
+      datasets: [{ data: [lifelineCounts.fifty, lifelineCounts.audience, lifelineCounts.phone, lifelineCounts.swap], backgroundColor: ['#29B6F6', '#66BB6A', '#FFA726', '#EF5350'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#fff', padding: 12 } } } }
+  });
+}
+
+window.milBackToMenu = function() {
+  document.getElementById('milGame').style.display = 'none';
+  document.getElementById('milGameover').style.display = 'none';
+  document.getElementById('milMenu').style.display = '';
+  milLoadHistory();
+};
 
 // ===== ADMIN PANEL =====
 async function renderFCAdminPanel() {
